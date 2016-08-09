@@ -22,6 +22,23 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             amount: -100,
             name: "zp",
             paid: true,
+            time: new Date(),
+            groupId:1
+        },
+
+    ];
+
+    var groups = [
+        {
+            id:1,
+            amount: 1,
+            name: "ddd",
+            time: new Date()
+        },
+        {
+            id:2,
+            amount: 100,
+            name: "zp",
             time: new Date()
         },
 
@@ -39,7 +56,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.expectedExpences = 0;
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
-    setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+    setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
 
 
     $scope.prev = function () {
@@ -49,13 +66,13 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.currentMonth = 11;
         }
 
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.current = function () {
         $scope.currentMonth = today.getMonth();
         $scope.currentYear = today.getFullYear();
 
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.next = function () {
         $scope.currentMonth++;
@@ -64,7 +81,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.currentMonth = 0;
         }
 
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
 
     $scope.edit = function () {
@@ -77,7 +94,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.delete = function (record) {
 
         records = removeItem(record, records);
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
 
 
     }
@@ -87,31 +104,53 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
 
     $scope.saveRecord = function (record) {
         record.edit = false;
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
 
     }
     $scope.save = function () {
-        records.push({
-            amount: parseInt($scope.amount),
-            name: $scope.name,
-            paid: $scope.paid,
-            time: $scope.time
-        });
-        $scope.amount = 1;
-        $scope.name = 'a';
-        $scope.paid = '';
-        $scope.time = new Date();
+        if($scope.repeat)
+        {
 
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+        }
+        else if($scope.group)
+        {
+            groups.push({
+                amount: parseInt($scope.amount),
+                name: $scope.name,
+                time: $scope.time
+            });
+        }
+        else {
+
+
+            records.push({
+                amount: parseInt($scope.amount),
+                name: $scope.name,
+                paid: $scope.paid,
+                time: $scope.time
+            });
+            $scope.amount = 1;
+            $scope.name = 'a';
+            $scope.paid = false;
+            $scope.time = new Date();
+        }
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
 
     }
 }]);
 
-function setCurrentRecords($scope, records) {
+function setCurrentRecords($scope, records,groups) {
+
     $scope.currentRecords = records;
+    $scope.currentGroups = groups;
     $scope.expectedExpences = calculate($scope.currentRecords);
     $scope.currentAmount = calculateCurrent($scope.currentRecords);
     $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
+}
+
+function assignRecordsIntoGroups(records,groups)
+{
+
 }
 
 function calculate(records) {

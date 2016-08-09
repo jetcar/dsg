@@ -55,6 +55,14 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-2"><label>Repeat <input type="checkbox" ng-model="repeat"></label></div>
+        <div class="col-md-2"><label>Group <input type="checkbox" ng-model="group"></label></div>
+
+    </div>
+
+</div>
 
 <div class="row" ng-repeat="record in currentRecords">
     <div class="col-md-12">
@@ -73,7 +81,7 @@
                 Paid
             </label>
         </div>
-        <div class="col-md-2" >
+        <div class="col-md-2">
             <button ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
             <button ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
         </div>
