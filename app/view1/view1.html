@@ -69,13 +69,13 @@
         </div>
         <div class="col-md-2">
             <label>
-                <input type="checkbox" ng-model="record.paid">
+                <input type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
                 Paid
             </label>
         </div>
-        <div class="col-md-2" ng-hide="hideEdit">
-            <button ng-click="delete(record)">Delete</button>
-            <!--<button ng-click="edit(record)">Edit</button>-->
+        <div class="col-md-2" >
+            <button ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
+            <button ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
         </div>
 
     </div>

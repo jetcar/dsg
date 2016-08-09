@@ -11,26 +11,35 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.controller('View1Ctrl', ['$scope', function ($scope) {
 
-    $scope.records = [
+    var records = [
         {
             amount: 1,
             name: "ddd",
             paid: true,
             time: new Date()
-        }
+        },
+        {
+            amount: -100,
+            name: "zp",
+            paid: true,
+            time: new Date()
+        },
 
     ];
 
 
     $scope.time = new Date();
     $scope.hideEdit = true;
-
+    $scope.amount = 0;
     var today = new Date();
-    $scope.currentMonth =  today.getMonth();
+    $scope.currentMonth = today.getMonth();
     $scope.currentYear = today.getFullYear();
 
-    $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
-
+    $scope.currentRecords = [];
+    $scope.expectedExpences = 0;
+    $scope.currentAmount = 0;
+    $scope.leftAmount = 0;
+    setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
 
 
     $scope.prev = function () {
@@ -40,13 +49,13 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.currentMonth = 11;
         }
 
-        $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
     }
     $scope.current = function () {
         $scope.currentMonth = today.getMonth();
         $scope.currentYear = today.getFullYear();
 
-        $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
     }
     $scope.next = function () {
         $scope.currentMonth++;
@@ -55,7 +64,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.currentMonth = 0;
         }
 
-        $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
     }
 
     $scope.edit = function () {
@@ -67,30 +76,65 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
 
     $scope.delete = function (record) {
 
-        $scope.records =removeItem(record,$scope.records);
-        $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
+        records = removeItem(record, records);
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
 
 
     }
+    $scope.showEdit = function (record) {
+        record.edit = true;
+    }
 
+    $scope.saveRecord = function (record) {
+        record.edit = false;
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
+
+    }
     $scope.save = function () {
-        $scope.records.push({
-            amount: $scope.amount,
+        records.push({
+            amount: parseInt($scope.amount),
             name: $scope.name,
             paid: $scope.paid,
             time: $scope.time
         });
-        $scope.amount = '';
-        $scope.name = '';
+        $scope.amount = 1;
+        $scope.name = 'a';
         $scope.paid = '';
         $scope.time = new Date();
 
-        $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
+        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth));
 
     }
 }]);
 
-function removeItem(item,array) {
+function setCurrentRecords($scope, records) {
+    $scope.currentRecords = records;
+    $scope.expectedExpences = calculate($scope.currentRecords);
+    $scope.currentAmount = calculateCurrent($scope.currentRecords);
+    $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
+}
+
+function calculate(records) {
+    var result = 0;
+    for(var i = 0;i < records.length;i++)
+    {
+        if(!records[i].paid)
+            result += records[i].amount;
+    }
+    return result;
+}
+
+function calculateCurrent(records) {
+    var result = 0;
+    for(var i = 0;i < records.length;i++)
+    {
+        if(records[i].paid)
+            result += (-records[i].amount);
+    }
+    return result;
+}
+
+function removeItem(item, array) {
     var result = [];
     for (var i = 0; i < array.length; i++) {
         if (array[i] != item)
