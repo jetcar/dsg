@@ -2,7 +2,7 @@
     <div class="col-lg-2">
         <button ng-click="prev()">Prev</button>
     </div>
-    <div class="col-md-2">{{currentYear()}} {{currentMonth()+1}}</div>
+    <div class="col-md-2">{{currentYear}} {{currentMonth+1}}</div>
     <div class="col-md-2">
         <button ng-click="current()">Current</button>
     </div>
@@ -74,8 +74,8 @@
             </label>
         </div>
         <div class="col-md-2" ng-hide="hideEdit">
-            <button ng-click="save()">Edit</button>
-
+            <button ng-click="delete(record)">Delete</button>
+            <!--<button ng-click="edit(record)">Edit</button>-->
         </div>
 
     </div>

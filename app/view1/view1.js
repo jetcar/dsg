@@ -26,12 +26,9 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.hideEdit = true;
 
     var today = new Date();
-    $scope.currentMonth = function () {
-        return today.getMonth();
-    };
-    $scope.currentYear = function () {
-        return today.getFullYear();
-    }
+    $scope.currentMonth =  today.getMonth();
+    $scope.currentYear = today.getFullYear();
+
     $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
 
 
@@ -46,7 +43,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
     }
     $scope.current = function () {
-        $scope.currentMonth = mm;
+        $scope.currentMonth = today.getMonth();
         $scope.currentYear = today.getFullYear();
 
         $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
@@ -68,6 +65,14 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.hideEdit = false;
     }
 
+    $scope.delete = function (record) {
+
+        $scope.records =removeItem(record,$scope.records);
+        $scope.currentRecords = filter($scope.records, $scope.currentYear, $scope.currentMonth);
+
+
+    }
+
     $scope.save = function () {
         $scope.records.push({
             amount: $scope.amount,
@@ -85,11 +90,21 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     }
 }]);
 
+function removeItem(item,array) {
+    var result = [];
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] != item)
+            result.push(array[i]);
+    }
+    return result;
+}
+
 function filter(records, year, month) {
     var result = [];
     for (var i = 0; i < records.length; i++) {
-        if (records[i].time.getMonth() == month() && records[i].time.getFullYear() == year())
+        if (records[i].time.getMonth() == month && records[i].time.getFullYear() == year)
             result.push(records[i]);
     }
+    return result;
 
 }
