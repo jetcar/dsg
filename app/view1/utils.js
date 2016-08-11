@@ -1,21 +1,14 @@
 /**
  * Created by KRUG020 on 11.08.2016.
  */
-
-
-function addMonths (date, amount) {
+function addMonths(date, amount) {
     var month = date.getMonth() + amount;
     var year = date.getFullYear();
-    if (month > 11) {
-        year += month % 11;
-    }
     return new Date(year, month, 1);
 }
-
-function addRecordFromPrevMonths(records, year, month) {
-    var currentMonth = new Date().getMonth();
-    var currentYear = new Date().getFullYear();
-    var prevMonthsRecords = filter(records, currentYear, currentMonth, year, month);
+function addRecordFromPrevMonths(records, date) {
+    var currentTime = new Date();
+    var prevMonthsRecords = filter(records, new Date(currentTime.getFullYear(),currentTime.getMonth()), date);
     var prevExpences = calculateExpences(prevMonthsRecords);
     var prevCurrent = calculateCurrent(prevMonthsRecords);
     var prevLeftAmount = prevCurrent - prevExpences;
@@ -23,28 +16,22 @@ function addRecordFromPrevMonths(records, year, month) {
     for (var i = 0; i < records.length; i++) {
         result.push(records[i]);
     }
-    if(prevLeftAmount > 0)
-    {
-    result.push({
-        amount: prevLeftAmount * -1,
-        name: 'from prev month',
-        paid: true,
-        time: new Date(year, month, 1),
-    })
+    if (prevLeftAmount > 0) {
+        result.push({
+            amount: prevLeftAmount * -1,
+            name: 'from prev month',
+            paid: true,
+            time: date,
+        })
     }
-
     return result;
-
-
 }
-
 function setCurrentRecords(records, currentDate) {
     var nextMonth = addMonths(currentDate, 1);
-    var recordsWithPrevValues = addRecordFromPrevMonths(records, currentDate.getFullYear(), currentDate.getMonth());
-    var currentMonthRecords = filter(recordsWithPrevValues, currentDate.getFullYear(), currentDate.getMonth(), nextMonth.getFullYear(), nextMonth.getMonth());
+    var recordsWithPrevValues = addRecordFromPrevMonths(records, currentDate);
+    var currentMonthRecords = filter(recordsWithPrevValues, currentDate, nextMonth);
     return recordsWithoutGroups(currentMonthRecords);
 }
-
 function assignRecordsIntoGroups(records, groups) {
     var groupsDict = {};
     for (var i = 0; i < groups.length; i++) {
@@ -56,7 +43,6 @@ function assignRecordsIntoGroups(records, groups) {
     var result = [];
     for (var i = 0; i < records.length; i++) {
         if (records[i].groupId > 0) {
-
             groupsDict[records[i].groupId].records.push(records[i]);
             if (records[i].paid)
                 groupsDict[records[i].groupId].leftAmount -= records[i].amount;
@@ -64,7 +50,6 @@ function assignRecordsIntoGroups(records, groups) {
     }
     return groups;
 }
-
 function recordsWithoutGroups(records) {
     var result = [];
     for (var i = 0; i < records.length; i++) {
@@ -73,7 +58,6 @@ function recordsWithoutGroups(records) {
     }
     return result;
 }
-
 function calculateExpences(records) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
@@ -82,7 +66,6 @@ function calculateExpences(records) {
     }
     return result;
 }
-
 function calculateCurrent(records) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
@@ -91,7 +74,6 @@ function calculateCurrent(records) {
     }
     return result;
 }
-
 function removeItem(item, array) {
     var result = [];
     for (var i = 0; i < array.length; i++) {
@@ -100,13 +82,10 @@ function removeItem(item, array) {
     }
     return result;
 }
-
-function filter(records, fromyear, frommonth, toyear, tomonth) {
+function filter(records, from, to) {
     var result = [];
     for (var i = 0; i < records.length; i++) {
-        if (fromyear == toyear && records[i].time.getMonth() >= frommonth && records[i].time.getFullYear() >= fromyear, records[i].time.getMonth() < tomonth)
-            result.push(records[i]);
-        else if (records[i].time.getMonth() >= frommonth && records[i].time.getFullYear() >= fromyear, records[i].time.getMonth() < tomonth && records[i].time.getFullYear() < toyear)
+        if (records[i].time >= from && records[i].time < to)
             result.push(records[i]);
     }
     return result;

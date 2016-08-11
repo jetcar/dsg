@@ -33,9 +33,11 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         time: new Date()
     },];
 
-    $scope.currentTime = new Date();
-    $scope.currentYear = $scope.currentTime.getMonth();
-    $scope.currentMonth = $scope.currentTime.getFullYear();
+    var date = new Date();
+    $scope.currentTime = new Date(date.getFullYear(),date.getMonth());
+    $scope.currentYear = $scope.currentTime.getFullYear();
+    $scope.currentMonth = $scope.currentTime.getMonth();
+    $scope.day = $scope.currentTime.getDate();
     $scope.hideEdit = true;
     $scope.amount = 0;
     $scope.currentRecords = [];
@@ -43,39 +45,40 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
 
-    $scope.$watch('currentRecords', function(newValue, oldValue){
-        var currentMonthsRecords = filter(records,$scope.currentTime.getFullYear(),$scope.currentTime.getMonth(),addMonths($scope.currentTime,1).getFullYear(),addMonths($scope.currentTime,1).getMonth());
-        $scope.currentGroups = assignRecordsIntoGroups(currentMonthsRecords, groups);
+    $scope.$watch('currentRecords', function (newValue, oldValue) {
+        var currentMonthsRecords = filter(records, $scope.currentTime, addMonths($scope.currentTime, 1));
+        var currentGroups = filter(groups, $scope.currentTime, addMonths($scope.currentTime, 1));
+        $scope.currentGroups = assignRecordsIntoGroups(currentMonthsRecords, currentGroups);
         $scope.expectedExpences = calculateExpences($scope.currentRecords);
         $scope.currentAmount = calculateCurrent($scope.currentRecords);
         $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
 
     });
 
-    $scope.$watch('currentTime', function(newValue, oldValue){
-        $scope.currentYear = newValue.getMonth();
-        $scope.currentMonth = newValue.getFullYear();
+    $scope.$watch('currentTime', function (newValue, oldValue) {
+        $scope.currentYear = newValue.getFullYear();
+        $scope.currentMonth = newValue.getMonth();
 
     });
 
-    $scope.currentRecords = setCurrentRecords(records,$scope.currentTime);
+    $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
 
     $scope.prev = function () {
-        $scope.currentTime = addMonths($scope.currentTime,-1);
+        $scope.currentTime = addMonths($scope.currentTime, -1);
 
-        $scope.currentRecords = Utils.setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
     }
 
     $scope.current = function () {
-        $scope.currentTime = new Date();
+        $scope.currentTime = new Date(date.getFullYear(),date.getMonth());
 
-        $scope.currentRecords = Utils.setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
     }
 
     $scope.next = function () {
-        $scope.currentTime = addMonths($scope.currentTime,1);
+        $scope.currentTime = addMonths($scope.currentTime, 1);
 
-        $scope.currentRecords = Utils.setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
     }
 
     $scope.edit = function () {
@@ -88,7 +91,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.delete = function (record) {
         records = removeItem(record, records);
 
-        $scope.currentRecords = Utils.setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
     }
 
     $scope.showEdit = function (record) {
@@ -98,7 +101,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.saveRecord = function (record) {
         record.edit = false;
 
-        $scope.currentRecords = Utils.setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
     }
 
     $scope.save = function () {
@@ -107,22 +110,22 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             groups.push({
                 amount: parseInt($scope.amount),
                 name: $scope.name,
-                time: new Date($scope.currentYear,$scope.currentMonth,$scope.day)
+                time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             });
         } else {
             records.push({
                 amount: parseInt($scope.amount),
                 name: $scope.name,
                 paid: $scope.paid,
-                time: new Date($scope.currentYear,$scope.currentMonth,$scope.day)
+                time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             });
             $scope.amount = 1;
             $scope.name = 'a';
             $scope.paid = false;
-            $scope.day = new Date().getDate();
+            $scope.day = $scope.currentTime.getDate();
         }
 
-        $scope.currentRecords = setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
     }
 
     $scope.saveFromFroup = function (group) {
@@ -130,15 +133,15 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             amount: parseInt(group.recordAmount),
             name: group.recordName,
             paid: group.recordPaid,
-            time: new Date($scope.currentYear,$scope.currentMonth,group.recordDay),
-            groupId : group.id
+            time: new Date($scope.currentYear, $scope.currentMonth, group.recordDay),
+            groupId: group.id
         });
         group.recordAmount = 1;
         group.recordName = 'a';
         group.recordPaid = false;
         group.recordDay = new Date().getDate();
 
-        $scope.currentRecords = Utils.setCurrentRecords(records,$scope.currentTime);
+        $scope.currentRecords = Utils.setCurrentRecords(records, $scope.currentTime);
 
     }
 }
