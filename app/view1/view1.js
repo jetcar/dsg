@@ -42,19 +42,19 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.expectedExpences = 0;
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
-    setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+    setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     $scope.prev = function () {
         $scope.currentMonth--;
         if ($scope.currentMonth < 0) {
             $scope.currentYear--;
             $scope.currentMonth = 11;
         }
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.current = function () {
         $scope.currentMonth = today.getMonth();
         $scope.currentYear = today.getFullYear();
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.next = function () {
         $scope.currentMonth++;
@@ -62,7 +62,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.currentYear++;
             $scope.currentMonth = 0;
         }
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.edit = function () {
         if ($scope.hideEdit == false)
@@ -72,14 +72,14 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     }
     $scope.delete = function (record) {
         records = removeItem(record, records);
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.showEdit = function (record) {
         record.edit = true;
     }
     $scope.saveRecord = function (record) {
         record.edit = false;
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
     $scope.save = function () {
         if ($scope.repeat) {
@@ -101,7 +101,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.paid = false;
             $scope.day = new Date().getDate();
         }
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
 
     $scope.saveFromFroup = function (group) {
@@ -117,15 +117,48 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         group.recordName = 'a';
         group.recordPaid = false;
         group.recordDay = new Date().getDate();
-        setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
+        setCurrentRecords($scope, filter(addRecordFromPrevMonth(records,$scope.currentYear, $scope.currentMonth), $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     
     }
 }
 ]);
+
+var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
+    "July", "Aug", "Sepr", "Oct", "Nov", "Dec"
+];
+
+function addRecordFromPrevMonth(records,year,month) {
+    var prevMonth = month-1;
+    var prevYear = year;
+    if(prevMonth < 0)
+    {
+        prevMonth = 11;
+        prevYear = year-1;
+    }
+    var prevMonthRecords = filter(records,prevYear,prevMonth);
+    var prevExpences = calculateExpences(prevMonthRecords);
+    var prevCurrent = calculateCurrent(prevMonthRecords);
+    var prevLeftAmount = prevCurrent - prevExpences;
+    var result = [];
+    for(var i = 0;i < records.length;i++)
+    {
+        result.push(records[i]);
+    }
+    result.push({
+        amount: prevLeftAmount * -1,
+        name: 'from ' + monthNames[prevMonth],
+        paid: true,
+        time: new Date(year,month,1),
+    })
+
+    return result;
+
+
+}
 function setCurrentRecords($scope, records, groups) {
     $scope.currentRecords = recordsWithoutGroups(records);
     $scope.currentGroups = assignRecordsIntoGroups(records, groups);
-    $scope.expectedExpences = calculate($scope.currentRecords);
+    $scope.expectedExpences = calculateExpences($scope.currentRecords);
     $scope.currentAmount = calculateCurrent($scope.currentRecords);
     $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
 }
@@ -156,7 +189,7 @@ function recordsWithoutGroups(records) {
     }
     return result;
 }
-function calculate(records) {
+function calculateExpences(records) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
         if (!records[i].paid)
