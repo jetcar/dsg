@@ -49,8 +49,8 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         var currentMonthsRecords = filter(records, $scope.currentTime, addMonths($scope.currentTime, 1));
         var currentGroups = filter(groups, $scope.currentTime, addMonths($scope.currentTime, 1));
         $scope.currentGroups = assignRecordsIntoGroups(currentMonthsRecords, currentGroups);
-        $scope.expectedExpences = calculateExpences($scope.currentRecords);
-        $scope.currentAmount = calculateCurrent($scope.currentRecords);
+        $scope.expectedExpences = calculateExpences(newValue);
+        $scope.currentAmount = calculateCurrent(newValue);
         $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
 
     });
