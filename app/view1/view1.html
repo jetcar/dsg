@@ -28,36 +28,36 @@
 </div>
 <br>
 <div class="row-fluid ">
-    <div class="col-lg-2">{{expectedExpences}}</div>
-    <div class="col-md-2">{{currentAmount}}</div>
-    <div class="col-md-2">{{leftAmount}}</div>
+    <div class="col-lg-2">Expences:{{expectedExpences}}</div>
+    <div class="col-md-2">Current:{{currentAmount}}</div>
+    <div class="col-md-2">Left:{{leftAmount}}</div>
     <div class="col-md-2"></div>
 </div>
 <br>
 <div class="row-fluid ">
-    <div class="col-md-2">Amount</div>
-    <div class="col-md-2">Name</div>
-    <div class="col-md-2">Time</div>
-    <div class="col-md-2">Paid</div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2"></div>
     <div class="col-md-2">
         <label>
             <button ng-click="edit()">Edit</button>
         </label>
     </div>
 </div>
-<br>
+
 
 <div class="row-fluid group" ng-repeat="group in currentGroups">
     <div class="row">
         <div class="col-md-12">
             <div class="col-md-2">
-                {{group.amount}}
+                Limit:{{group.amount}}
             </div>
             <div class="col-md-2">
-                {{group.name}}
+               Group Name:{{group.name}}
             </div>
             <div class="col-md-2">
-                {{group.leftAmount}}
+                Left:{{group.leftAmount}}
             </div>
             <div class="col-md-2">
             </div>
@@ -70,13 +70,13 @@
     </div>
     <div class="row-fluid record"  ng-repeat="record in group.records">
         <div class="col-md-2">
-            {{record.amount}}
+            Amount:{{record.amount}}
         </div>
         <div class="col-md-2">
             {{record.name}}
         </div>
         <div class="col-md-2">
-            {{record.time}}
+            {{record.time | date:"d MMM"}}
         </div>
         <div class="col-md-2">
             <label>
@@ -99,7 +99,7 @@
                 <input type="text" ng-model="group.recordName">
             </div>
             <div class="col-md-2">
-                <input type="datetime" ng-model="group.recordTime">
+                <input type="number" ng-model="group.recordDay">
             </div>
             <div class="col-md-2">
                 <label>
@@ -118,13 +118,13 @@
 <div class="row-fluid " style="border: solid;border-width: 1px;" ng-repeat="record in currentRecords">
     <div class="col-md-12">
         <div class="col-md-2">
-            {{record.amount}}
+            Amount:{{record.amount}}
         </div>
         <div class="col-md-2">
-            {{record.name}}
+            Name:{{record.name}}
         </div>
         <div class="col-md-2">
-            {{record.time}}
+            {{record.time | date:"d MMM"}}
         </div>
         <div class="col-md-2">
             <label>
@@ -148,7 +148,7 @@
             <input type="text" ng-model="name">
         </div>
         <div class="col-md-2">
-            <input type="datetime" ng-model="time">
+            <input type="number" ng-model="day">
         </div>
         <div class="col-md-2">
             <label>

@@ -32,7 +32,7 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         name: "zp",
         time: new Date()
     },];
-    $scope.time = new Date();
+    $scope.day = new Date().getDate();
     $scope.hideEdit = true;
     $scope.amount = 0;
     var today = new Date();
@@ -87,19 +87,19 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             groups.push({
                 amount: parseInt($scope.amount),
                 name: $scope.name,
-                time: $scope.time
+                time: new Date($scope.currentYear,$scope.currentMonth,$scope.day)
             });
         } else {
             records.push({
                 amount: parseInt($scope.amount),
                 name: $scope.name,
                 paid: $scope.paid,
-                time: $scope.time
+                time: new Date($scope.currentYear,$scope.currentMonth,$scope.day)
             });
             $scope.amount = 1;
             $scope.name = 'a';
             $scope.paid = false;
-            $scope.time = new Date();
+            $scope.day = new Date().getDate();
         }
         setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     }
@@ -110,13 +110,13 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             amount: parseInt(group.recordAmount),
             name: group.recordName,
             paid: group.recordPaid,
-            time: group.recordTime,
+            time: new Date($scope.currentYear,$scope.currentMonth,group.recordDay),
             groupId : group.id
         });
         group.recordAmount = 1;
         group.recordName = 'a';
         group.recordPaid = false;
-        group.recordTime = new Date();
+        group.recordDay = new Date().getDate();
         setCurrentRecords($scope, filter(records, $scope.currentYear, $scope.currentMonth), filter(groups, $scope.currentYear, $scope.currentMonth));
     
     }
@@ -135,7 +135,7 @@ function assignRecordsIntoGroups(records, groups) {
         groupsDict[groups[i].id] = groups[i];
         groups[i].records = [];
         groups[i].leftAmount = groups[i].amount;
-        groups[i].recordTime = new Date();
+        groups[i].recordDay = new Date().getDate();
     }
     var result = [];
     for (var i = 0; i < records.length; i++) {
