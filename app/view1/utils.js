@@ -26,6 +26,39 @@ function addRecordFromPrevMonths(records, date) {
     }
     return result;
 }
+function processSequences(sequences,records, date) {
+    var currentTime = new Date();
+    var currentMonth = new Date(currentTime.getFullYear(),currentTime.getMonth());
+
+    var newRecords = [];
+    for(var i = 0; i < records.length;i++)
+    {
+        newRecords.push(records[i]);
+    }
+    while (currentMonth < date) {
+        currentMonth = addMonths(currentMonth,1);
+        for (var i = 0; i < sequences.length; i++) {
+            if (sequences[i].groupId > 0)
+                continue;
+            if (!sequences[i].hasOwnProperty('endDate') && sequences[i].time <= date) {
+                newRecords.push({
+                    amount: sequences[i].amount,
+                    name: sequences[i].name,
+                    time: currentMonth,
+                });
+            }
+            else if (sequences[i].endDate > date && sequences[i].time <= date) {
+                newRecords.push({
+                    amount: sequences[i].amount,
+                    name: sequences[i].name,
+                    time: currentMonth,
+                });
+            }
+        }
+    }
+    return newRecords;
+}
+
 function setCurrentRecords(records, currentDate) {
     var nextMonth = addMonths(currentDate, 1);
     var recordsWithPrevValues = addRecordFromPrevMonths(records, currentDate);

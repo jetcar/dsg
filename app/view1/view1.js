@@ -33,8 +33,18 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         time: new Date()
     },];
 
+    var sequences = [
+        {
+            id: 1,
+            amount: 10,
+            name: "eda",
+            time: new Date()
+
+        }
+    ]
+
     var date = new Date();
-    $scope.currentTime = new Date(date.getFullYear(),date.getMonth());
+    $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
     $scope.currentYear = $scope.currentTime.getFullYear();
     $scope.currentMonth = $scope.currentTime.getMonth();
     $scope.day = $scope.currentTime.getDate();
@@ -61,24 +71,28 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
 
     });
 
-    $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+    var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+    $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
 
     $scope.prev = function () {
         $scope.currentTime = addMonths($scope.currentTime, -1);
 
-        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
     }
 
     $scope.current = function () {
-        $scope.currentTime = new Date(date.getFullYear(),date.getMonth());
+        $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
 
-        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
     }
 
     $scope.next = function () {
         $scope.currentTime = addMonths($scope.currentTime, 1);
 
-        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
     }
 
     $scope.edit = function () {
@@ -91,7 +105,8 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.delete = function (record) {
         records = removeItem(record, records);
 
-        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
     }
 
     $scope.showEdit = function (record) {
@@ -101,11 +116,20 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     $scope.saveRecord = function (record) {
         record.edit = false;
 
-        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
     }
 
     $scope.save = function () {
         if ($scope.repeat) {
+            sequences.push(
+                {
+                    amount: parseInt($scope.amount),
+                    name: $scope.name,
+                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
+                }
+            );
+
         } else if ($scope.group) {
             groups.push({
                 amount: parseInt($scope.amount),
@@ -125,7 +149,8 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
             $scope.day = $scope.currentTime.getDate();
         }
 
-        $scope.currentRecords = setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
     }
 
     $scope.saveFromFroup = function (group) {
@@ -141,7 +166,8 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
         group.recordPaid = false;
         group.recordDay = new Date().getDate();
 
-        $scope.currentRecords = Utils.setCurrentRecords(records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequences, records, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
 
     }
 }
