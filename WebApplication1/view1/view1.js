@@ -9,12 +9,11 @@ app.config(['$routeProvider', function ($routeProvider) {
 ]);
 app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$http,$location) {
 
-
     var records = [];
-    $http.get("api/records").then(function (data) {
+    $http.get("api/records",{withCredentials : true}).then(function (data) {
         records = data;
     },function (error) {
-        $location.path( "/view2.js" );
+        $location.path( "/view2" );
 
     });
     var groups = [{

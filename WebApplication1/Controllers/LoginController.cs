@@ -72,11 +72,10 @@ namespace WebApplication1.Controllers
                 ApplicationDbContext.SaveChanges();
 
                 SignInManager.SignIn(user, true, true);
-                var response = Request.CreateResponse(HttpStatusCode.Moved);
-                response.Headers.Location = new Uri(Request.RequestUri.AbsolutePath);
-                return response;
             }
-            return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            var response = Request.CreateResponse(HttpStatusCode.Moved);
+            response.Headers.Location = new Uri(Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, ""));
+            return response;
         }
 
 
