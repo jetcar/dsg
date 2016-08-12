@@ -8,14 +8,13 @@ function addMonths(date, amount) {
 }
 function addRecordFromPrevMonths(records, date) {
     var currentTime = new Date();
-    var prevMonthsRecords = filter(records, new Date(currentTime.getFullYear(),currentTime.getMonth()), date);
+    var prevMonthsRecords = filterByDate(records, new Date(currentTime.getFullYear(),currentTime.getMonth()), date);
     var prevExpences = calculateExpences(prevMonthsRecords);
     var prevCurrent = calculateCurrent(prevMonthsRecords);
     var prevLeftAmount = prevCurrent - prevExpences;
-    var result = [];
-    for (var i = 0; i < records.length; i++) {
-        result.push(records[i]);
-    }
+
+    var result = records.map(function(item){return item;});
+
     if (prevLeftAmount > 0) {
         result.push({
             amount: prevLeftAmount * -1,
@@ -30,21 +29,18 @@ function processSequences(sequences,records, date) {
     var currentTime = new Date();
     var currentMonth = new Date(currentTime.getFullYear(),currentTime.getMonth());
 
-    var newRecords = [];
-    for(var i = 0; i < records.length;i++)
-    {
-        newRecords.push(records[i]);
-    }
+    var newRecords = records.map(function(item){return item;});
+
     while (currentMonth < date) {
         currentMonth = addMonths(currentMonth,1);
         for (var i = 0; i < sequences.length; i++) {
-            if (sequences[i].groupId > 0)
-                continue;
+
             if (!sequences[i].hasOwnProperty('endDate') && sequences[i].time <= date) {
                 newRecords.push({
                     amount: sequences[i].amount,
                     name: sequences[i].name,
                     time: currentMonth,
+                    sequence:sequences[i].id,
                 });
             }
             else if (sequences[i].endDate > date && sequences[i].time <= date) {
@@ -52,6 +48,8 @@ function processSequences(sequences,records, date) {
                     amount: sequences[i].amount,
                     name: sequences[i].name,
                     time: currentMonth,
+                    sequence:sequences[i].id,
+
                 });
             }
         }
@@ -62,9 +60,16 @@ function processSequences(sequences,records, date) {
 function setCurrentRecords(records, currentDate) {
     var nextMonth = addMonths(currentDate, 1);
     var recordsWithPrevValues = addRecordFromPrevMonths(records, currentDate);
-    var currentMonthRecords = filter(recordsWithPrevValues, currentDate, nextMonth);
-    return recordsWithoutGroups(currentMonthRecords);
+    var currentMonthRecords = filterByDate(recordsWithPrevValues, currentDate, nextMonth);
+    var recordsWithutGroups = currentMonthRecords.filter(function (item) {
+        if(item.groupId > 0)
+            return false;
+        return true;
+    });
+    return recordsWithutGroups;
 }
+
+
 function assignRecordsIntoGroups(records, groups) {
     var groupsDict = {};
     for (var i = 0; i < groups.length; i++) {
@@ -83,14 +88,7 @@ function assignRecordsIntoGroups(records, groups) {
     }
     return groups;
 }
-function recordsWithoutGroups(records) {
-    var result = [];
-    for (var i = 0; i < records.length; i++) {
-        if (!(records[i].groupId > 0))
-            result.push(records[i]);
-    }
-    return result;
-}
+
 function calculateExpences(records) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
@@ -115,11 +113,14 @@ function removeItem(item, array) {
     }
     return result;
 }
-function filter(records, from, to) {
-    var result = [];
-    for (var i = 0; i < records.length; i++) {
-        if (records[i].time >= from && records[i].time < to)
-            result.push(records[i]);
-    }
+function filterByDate(records, from, to) {
+    var result = records.filter(function (item)
+    {
+        if (item.time >= from && item.time < to)
+            return true;
+           return false;
+
+    });
+
     return result;
 }
