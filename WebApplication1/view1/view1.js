@@ -7,20 +7,16 @@ app.config(['$routeProvider', function ($routeProvider) {
     });
 }
 ]);
-app.controller('View1Ctrl', ['$scope', function ($scope) {
-    var records = [{
-        amount: 1,
-        name: "ddd",
-        paid: true,
-        time: new Date(),
-        groupId: 1
+app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$http,$location) {
 
-    }, {
-        amount: -100,
-        name: "zp",
-        paid: true,
-        time: new Date(),
-    },];
+
+    var records = [];
+    $http.get("api/records").then(function (data) {
+        records = data;
+    },function (error) {
+        $location.path( "/view2.js" );
+
+    });
     var groups = [{
         id: 1,
         amount: 100,
@@ -130,28 +126,39 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
 
     $scope.save = function () {
         if ($scope.repeat) {
+            var sequence = {
+                amount: parseInt($scope.amount),
+                name: $scope.name,
+                time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
+                group:$scope.group,
+            };
             sequences.push(
-                {
-                    amount: parseInt($scope.amount),
-                    name: $scope.name,
-                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
-                    group:$scope.group,
-                }
+                sequence
             );
+            $http.post("api/sequences",sequence,{withCredentials : true});
 
         } else if ($scope.group) {
-            groups.push({
+            var group = {
                 amount: parseInt($scope.amount),
                 name: $scope.name,
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
-            });
+            };
+            groups.push(group);
+
+            $http.post("api/groups",group,{withCredentials : true});
+
         } else {
-            records.push({
+            var record ={
                 amount: parseInt($scope.amount),
                 name: $scope.name,
                 paid: $scope.paid,
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
+            };
+            records.push(record);
+            $http.post("api/records",record,{withCredentials : true}).then(function (item) {
+                record.id = item.id;
             });
+
             $scope.amount = 1;
             $scope.name = 'a';
             $scope.paid = false;
@@ -162,13 +169,18 @@ app.controller('View1Ctrl', ['$scope', function ($scope) {
     }
 
     $scope.saveFromFroup = function (group) {
-        records.push({
+        var record ={
             amount: parseInt(group.recordAmount),
             name: group.recordName,
             paid: group.recordPaid,
             time: new Date($scope.currentYear, $scope.currentMonth, group.recordDay),
             groupId: group.id
+        };
+        records.push(record);
+        $http.post("api/records",record,{withCredentials : true}).then(function (item) {
+            record.id = item.id;
         });
+
         group.recordAmount = 1;
         group.recordName = 'a';
         group.recordPaid = false;
