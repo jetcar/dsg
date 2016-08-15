@@ -87,7 +87,7 @@ function processSequences(sequences,records, date) {
                 newRecords.push({
                     amount: sequences[i].amount,
                     name: sequences[i].name,
-                    time: currentMonth,
+                    time: new Date(currentTime.getFullYear(),currentTime.getMonth(),sequences[i].time.getDate()),
                     sequence:sequences[i].id,
                 });
             }
@@ -95,7 +95,7 @@ function processSequences(sequences,records, date) {
                 newRecords.push({
                     amount: sequences[i].amount,
                     name: sequences[i].name,
-                    time: currentMonth,
+                    time: new Date(currentTime.getFullYear(),currentTime.getMonth(),sequences[i].time.getDate()),
                     sequence:sequences[i].id,
 
                 });
