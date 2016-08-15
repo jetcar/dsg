@@ -154,6 +154,9 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 withCredentials: true, headers: {
                     'Authorization': 'Bearer ' + getAccessToken()
                 }
+            }).then(function(item)
+            {
+                sequence.id = item.data.id;
             });
 
         } else if ($scope.group) {
@@ -169,6 +172,9 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 withCredentials: true, headers: {
                     'Authorization': 'Bearer ' + getAccessToken()
                 }
+            }).then(function(item)
+            {
+                group.id = item.data.id;
             });
 
         } else {
