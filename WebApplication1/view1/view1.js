@@ -10,6 +10,34 @@ app.config(['$routeProvider', function ($routeProvider) {
 app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
 
     var records = [];
+    var groups = [];
+    var sequences = [];
+
+    function error(message) {
+        $location.path("/view2");
+    }
+
+    function getSequences(data) {
+        sequences = data.data.map(function (item) {
+            item.time = new Date(item.time);
+            return item;
+        });
+
+        UpdateView();
+    }
+    function getGroups(data) {
+        groups = data.data.map(function (item) {
+            item.time = new Date(item.time);
+            return item;
+        });
+
+        $http.get("api/sequences", {
+            withCredentials: true, headers: {
+                'Authorization': 'Bearer ' + getAccessToken()
+            }
+        }).then(getSequences, error);
+    }
+
 
 
     $http.get("api/records", {
@@ -17,45 +45,20 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             'Authorization': 'Bearer ' + getAccessToken()
         }
     }).then(function (data) {
-        records = data.data.map(function(item){
+        records = data.data.map(function (item) {
             item.time = new Date(item.time);
             return item;
         });
-        UpdateView();
-    }, function (error) {
-        $location.path("/view2");
 
-    });
+        $http.get("api/groups", {
+            withCredentials: true, headers: {
+                'Authorization': 'Bearer ' + getAccessToken()
+            }
+        }).then(getGroups, error);
+
+    }, error);
 
 
-    var groups = [{
-        id: 1,
-        amount: 100,
-        name: "ddd",
-        time: new Date()
-    }, {
-        id: 2,
-        amount: 100,
-        name: "zp",
-        time: new Date()
-    },];
-
-    var sequences = [
-        {
-            id: 1,
-            amount: 10,
-            name: "eda",
-            time: new Date()
-
-        },
-        {
-            id: 2,
-            amount: 100,
-            name: "edagroup",
-            time: new Date(),
-            group: true,
-        },
-    ]
 
     var date = new Date();
     $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
@@ -140,27 +143,33 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             var sequence = {
                 amount: parseInt($scope.amount),
                 name: $scope.name,
+                userid: "null",
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
                 group: $scope.group,
             };
             sequences.push(
                 sequence
             );
-            $http.post("api/sequences", sequence, {withCredentials: true, headers: {
-                'Authorization': 'Bearer ' + getAccessToken()
-            }});
+            $http.post("api/sequences", sequence, {
+                withCredentials: true, headers: {
+                    'Authorization': 'Bearer ' + getAccessToken()
+                }
+            });
 
         } else if ($scope.group) {
             var group = {
                 amount: parseInt($scope.amount),
                 name: $scope.name,
+                userid: "null",
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             };
             groups.push(group);
 
-            $http.post("api/groups", group, {withCredentials: true, headers: {
-                'Authorization': 'Bearer ' + getAccessToken()
-            }});
+            $http.post("api/groups", group, {
+                withCredentials: true, headers: {
+                    'Authorization': 'Bearer ' + getAccessToken()
+                }
+            });
 
         } else {
             var record = {
@@ -171,9 +180,11 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             };
             records.push(record);
-            $http.post("api/records", record, {withCredentials: true, headers: {
-                'Authorization': 'Bearer ' + getAccessToken()
-            }}).then(function (item) {
+            $http.post("api/records", record, {
+                withCredentials: true, headers: {
+                    'Authorization': 'Bearer ' + getAccessToken()
+                }
+            }).then(function (item) {
                 record.id = item.data.id;
             });
 
@@ -191,6 +202,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             amount: parseInt(group.recordAmount),
             name: group.recordName,
             paid: group.recordPaid,
+            userid: "null",
             time: new Date($scope.currentYear, $scope.currentMonth, group.recordDay),
             groupId: group.id
         };

@@ -57,19 +57,63 @@ namespace WebApplication1.Controllers
             }
         }
         // GET api/Me
-        public List<Record> Get()
+        [Route("api/records")]
+        [HttpGet]
+        public List<Record> GetRecords()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
 
-            return ApplicationDbContext.Records.Where(x=>x.UserId == user.Id).ToList();
+            return ApplicationDbContext.Records.Where(x => x.UserId == user.Id).ToList();
+        }
+        [Route("api/groups")]
+        [HttpGet]
+        public List<Group> GetGroups()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+
+            return ApplicationDbContext.Groups.Where(x => x.UserId == user.Id).ToList();
+        }
+        [Route("api/sequences")]
+        [HttpGet]
+        public List<Sequence> GetSequences()
+        {
+            var user = UserManager.FindById(User.Identity.GetUserId());
+
+            return ApplicationDbContext.Sequences.Where(x => x.UserId == user.Id).ToList();
         }
 
+        [Route("api/records")]
         public Record Post(Record record)
         {
             if (ModelState.IsValid)
             {
                 record.UserId = User.Identity.GetUserId();
                 ApplicationDbContext.Records.Add(record);
+                ApplicationDbContext.SaveChanges();
+                return record;
+            }
+            return null;
+        }
+        [Route("api/groups")]
+        public Group Post(Group record)
+        {
+            if (ModelState.IsValid)
+            {
+                record.UserId = User.Identity.GetUserId();
+                ApplicationDbContext.Groups.Add(record);
+                ApplicationDbContext.SaveChanges();
+                return record;
+            }
+            return null;
+        }
+
+        [Route("api/sequences")]
+        public Sequence Post(Sequence record)
+        {
+            if (ModelState.IsValid)
+            {
+                record.UserId = User.Identity.GetUserId();
+                ApplicationDbContext.Sequences.Add(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
