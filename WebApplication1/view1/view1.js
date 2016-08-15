@@ -14,7 +14,11 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
     var sequences = [];
 
     function error(message) {
+
         $location.path("/view2");
+    }
+    function logError(data) {
+        console.log(data);
     }
 
     function getSequences(data) {
@@ -157,7 +161,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             }).then(function(item)
             {
                 sequence.id = item.data.id;
-            });
+            },logError);
 
         } else if ($scope.group) {
             var group = {
@@ -175,7 +179,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             }).then(function(item)
             {
                 group.id = item.data.id;
-            });
+            },logError);
 
         } else {
             var record = {
@@ -192,7 +196,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 }
             }).then(function (item) {
                 record.id = item.data.id;
-            });
+            },logError);
 
             $scope.amount = 1;
             $scope.name = 'a';
@@ -215,7 +219,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         records.push(record);
         $http.post("api/records", record, {withCredentials: true}).then(function (item) {
             record.id = item.id;
-        });
+        },logError);
 
         group.recordAmount = 1;
         group.recordName = 'a';

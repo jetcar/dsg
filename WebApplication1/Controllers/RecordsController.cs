@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -92,7 +93,7 @@ namespace WebApplication1.Controllers
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
-            return null;
+            throw new ModelValidationException(ModelState.Values.First().Errors.First().ErrorMessage);
         }
         [Route("api/groups")]
         public Group Post(Group record)
@@ -104,7 +105,7 @@ namespace WebApplication1.Controllers
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
-            return null;
+            throw new ModelValidationException(ModelState.Values.First().Errors.First().ErrorMessage);
         }
 
         [Route("api/sequences")]
@@ -117,7 +118,7 @@ namespace WebApplication1.Controllers
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
-            return null;
+            throw new ModelValidationException(ModelState.Values.First().Errors.First().ErrorMessage);
         }
 
     }
