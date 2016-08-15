@@ -1,49 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.OAuth;
+using WebApplication1.Providers;
 
 namespace WebApplication1.Controllers
 {
     public class LoginController : ApiController
     {
         private ApplicationDbContext _applicationDbContext;
-        private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
         public LoginController()
         {
         }
 
-        public LoginController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationDbContext applicationDbContext)
+        public LoginController(ApplicationUserManager userManager, ApplicationDbContext applicationDbContext)
         {
             UserManager = userManager;
-            SignInManager = signInManager;
             _applicationDbContext = applicationDbContext;
 
         }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.Current.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
-        }
         public ApplicationDbContext ApplicationDbContext
         {
             get
             {
-                return _applicationDbContext ?? HttpContext.Current.GetOwinContext().Get<ApplicationDbContext>();
+                return _applicationDbContext ?? HttpContext.Current.GetOwinContext().GetUserManager<ApplicationDbContext>();
             }
             private set
             {
@@ -63,22 +59,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-        public async Task<HttpResponseMessage> Get(string userid, string code)
-        {
-            var user = await UserManager.FindByIdAsync(userid);
-            if (user.Token == code)
-            {
-                user.Token = null;
-                ApplicationDbContext.SaveChanges();
-
-                SignInManager.SignIn(user, true, true);
-            }
-            var response = Request.CreateResponse(HttpStatusCode.Moved);
-            response.Headers.Location = new Uri(Request.RequestUri.AbsoluteUri.Replace(Request.RequestUri.PathAndQuery, ""));
-            return response;
-        }
-
-
         public async Task<string> Post(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -96,7 +76,7 @@ namespace WebApplication1.Controllers
                 user.Token = code;
                 ApplicationDbContext.SaveChanges();
 
-                var callbackUrl = Request.RequestUri.OriginalString + String.Format("?userid={0}&code={1}", user.Id, code);
+                var callbackUrl = String.Format("http://localhost:82/account/login?userid={0}&code={1}", user.Id, code);
                 await
                     UserManager.SendEmailAsync(user.Id, "Confirm your account",
                         "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
@@ -105,5 +85,8 @@ namespace WebApplication1.Controllers
             }
             return "fail";
         }
+
+       
     }
+
 }

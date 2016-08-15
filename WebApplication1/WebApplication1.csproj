@@ -236,12 +236,15 @@
     <Compile Include="Migrations\201608121134356_RemoveForeignKeys.Designer.cs">
       <DependentUpon>201608121134356_RemoveForeignKeys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608151148357_userid_required.cs" />
+    <Compile Include="Migrations\201608151148357_userid_required.Designer.cs">
+      <DependentUpon>201608151148357_userid_required.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Repositories\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\RecordViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Services\MyEmailService.cs" />
@@ -1013,7 +1016,6 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="index.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -1367,9 +1369,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1379,6 +1378,8 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
+    <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1403,6 +1404,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608121134356_RemoveForeignKeys.resx">
       <DependentUpon>201608121134356_RemoveForeignKeys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608151148357_userid_required.resx">
+      <DependentUpon>201608151148357_userid_required.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Web.Configuration;
+using System.Web.Http;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -11,6 +13,7 @@ using Owin;
 using WebApplication1.Models;
 using WebApplication1.Providers;
 using WebApplication1.Repositories;
+using AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode;
 
 namespace WebApplication1
 {
@@ -24,7 +27,7 @@ namespace WebApplication1
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"),
-                AuthorizeEndpointPath = new PathString("/Account/Login"),
+                AuthorizeEndpointPath = new PathString("/Account/Authorize"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 AllowInsecureHttp = true

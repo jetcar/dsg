@@ -7,15 +7,27 @@ app.config(['$routeProvider', function ($routeProvider) {
     });
 }
 ]);
-app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$http,$location) {
+app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
 
     var records = [];
-    $http.get("api/records",{withCredentials : true}).then(function (data) {
-        records = data;
-    },function (error) {
-        $location.path( "/view2" );
+
+
+    $http.get("api/records", {
+        withCredentials: true, headers: {
+            'Authorization': 'Bearer ' + getAccessToken()
+        }
+    }).then(function (data) {
+        records = data.data.map(function(item){
+            item.time = new Date(item.time);
+            return item;
+        });
+        UpdateView();
+    }, function (error) {
+        $location.path("/view2");
 
     });
+
+
     var groups = [{
         id: 1,
         amount: 100,
@@ -41,7 +53,7 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
             amount: 100,
             name: "edagroup",
             time: new Date(),
-            group:true,
+            group: true,
         },
     ]
 
@@ -61,11 +73,11 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
         var recordsWithGroups = filterByDate(records, $scope.currentTime, addMonths($scope.currentTime, 1));
 
         var groupSequences = sequences.filter(function (item) {
-            if(item.group)
+            if (item.group)
                 return true;
             return false;
         });
-        var groupsWithSequences = processSequences(groupSequences,groups,$scope.currentTime);
+        var groupsWithSequences = processSequences(groupSequences, groups, $scope.currentTime);
         var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
         $scope.expectedExpences = calculateExpences(newValue);
@@ -129,12 +141,14 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
                 amount: parseInt($scope.amount),
                 name: $scope.name,
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
-                group:$scope.group,
+                group: $scope.group,
             };
             sequences.push(
                 sequence
             );
-            $http.post("api/sequences",sequence,{withCredentials : true});
+            $http.post("api/sequences", sequence, {withCredentials: true, headers: {
+                'Authorization': 'Bearer ' + getAccessToken()
+            }});
 
         } else if ($scope.group) {
             var group = {
@@ -144,18 +158,23 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
             };
             groups.push(group);
 
-            $http.post("api/groups",group,{withCredentials : true});
+            $http.post("api/groups", group, {withCredentials: true, headers: {
+                'Authorization': 'Bearer ' + getAccessToken()
+            }});
 
         } else {
-            var record ={
+            var record = {
                 amount: parseInt($scope.amount),
                 name: $scope.name,
                 paid: $scope.paid,
+                userid: "null",
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             };
             records.push(record);
-            $http.post("api/records",record,{withCredentials : true}).then(function (item) {
-                record.id = item.id;
+            $http.post("api/records", record, {withCredentials: true, headers: {
+                'Authorization': 'Bearer ' + getAccessToken()
+            }}).then(function (item) {
+                record.id = item.data.id;
             });
 
             $scope.amount = 1;
@@ -168,7 +187,7 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
     }
 
     $scope.saveFromFroup = function (group) {
-        var record ={
+        var record = {
             amount: parseInt(group.recordAmount),
             name: group.recordName,
             paid: group.recordPaid,
@@ -176,7 +195,7 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
             groupId: group.id
         };
         records.push(record);
-        $http.post("api/records",record,{withCredentials : true}).then(function (item) {
+        $http.post("api/records", record, {withCredentials: true}).then(function (item) {
             record.id = item.id;
         });
 
@@ -188,12 +207,10 @@ app.controller('View1Ctrl', ['$scope','$http','$location', function ($scope,$htt
         UpdateView();
 
     }
-    function UpdateView()
-    {
-        var sequencesWithoutGroups = sequences.filter(function (item)
-        {
-           if(item.group)
-               return false;
+    function UpdateView() {
+        var sequencesWithoutGroups = sequences.filter(function (item) {
+            if (item.group)
+                return false;
             return true;
         });
         var recordsWithSequences = processSequences(sequencesWithoutGroups, records, $scope.currentTime);

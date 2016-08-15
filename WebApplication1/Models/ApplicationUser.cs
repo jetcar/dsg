@@ -20,6 +20,14 @@ namespace WebApplication1.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
+            // Add custom user claims here
+            return userIdentity;
+        }
     }
 
     [Table("Record")]
@@ -38,6 +46,7 @@ namespace WebApplication1.Models
 
         public int? GroupId { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
 
@@ -58,6 +67,7 @@ namespace WebApplication1.Models
         [Required]
         public DateTime Time { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
 
@@ -77,6 +87,7 @@ namespace WebApplication1.Models
         [Required]
         public DateTime Time { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
 

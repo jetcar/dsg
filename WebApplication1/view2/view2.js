@@ -13,7 +13,7 @@ angular.module('myApp.view2', ['ngRoute'])
 
         $scope.email = "test@sdg.ee";
         $scope.login = function () {
-            $http.post('api/login', {email: $scope.email});
+            $http.post('/api/login', { email: $scope.email });
 
         }
     }]);

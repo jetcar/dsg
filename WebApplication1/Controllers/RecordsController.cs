@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -54,22 +57,37 @@ namespace WebApplication1.Controllers
             }
         }
         // GET api/Me
-        public Record Get()
+        public List<Record> Get()
         {
             var user = UserManager.FindById(User.Identity.GetUserId());
 
-            return new Record();
+            return ApplicationDbContext.Records.Where(x=>x.UserId == user.Id).ToList();
         }
 
         public Record Post(Record record)
         {
             if (ModelState.IsValid)
             {
+                record.UserId = User.Identity.GetUserId();
                 ApplicationDbContext.Records.Add(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
             return null;
         }
+
     }
+    public class CustomAuthorizeAttribute : AuthorizationFilterAttribute
+    {
+        public override void OnAuthorization(HttpActionContext actionContext)
+        {
+            base.OnAuthorization(actionContext);
+        }
+
+        public override Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
+        {
+            return base.OnAuthorizationAsync(actionContext, cancellationToken);
+        }
+    }
+
 }
