@@ -2,21 +2,27 @@
     if (!getAccessToken()) {
         // The following code looks for a fragment in the URL to get the access token which will be
         // used to call the protected Web API resource
-        var fragment = getFragment();
-
-        if (fragment.access_token) {
-            // returning with access token, restore old hash, or at least hide token
-            window.location.hash = fragment.state || '';
-            setAccessToken(fragment.access_token);
-        } else {
+        {
+            var current = window.location;
             // no token - so bounce to Authorize endpoint in AccountController to sign in or register
-            window.location = "/token";
+            window.location = "/Account/Authorize?client_id=web&response_type=token&state=" +
+                encodeURIComponent(window.location.hash);
+
+            var fragment = getFragment();
+
+            if (fragment.access_token) {
+                // returning with access token, restore old hash, or at least hide token
+                window.location.hash = fragment.state || '';
+                setAccessToken(fragment.access_token);
+            }
+
+            window.location = current;
         }
     }
 }
 
 
-function setAccessToken (accessToken) {
+function setAccessToken(accessToken) {
     sessionStorage.setItem("accessToken", accessToken);
 };
 
