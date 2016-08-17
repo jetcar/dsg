@@ -76,7 +76,7 @@ namespace WebApplication1.Controllers
                 user.Token = token;
                 ApplicationDbContext.SaveChanges();
                 var action = RedirectToRoute("account/login", new { userid = user.Id, code = token });
-                var callbackUrl = action.Request.RequestUri.ToString();
+                var callbackUrl = action.Request.RequestUri.ToString().Replace(action.Request.RequestUri.PathAndQuery,"") + $"/account/login?userid={user.Id}&code={token}";
                 await
                     UserManager.SendEmailAsync(user.Id, "Confirm your account",
                         "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");

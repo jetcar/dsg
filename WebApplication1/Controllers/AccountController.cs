@@ -91,12 +91,12 @@ namespace WebApplication1.Controllers
         {
             if (userid == null)
             {
-                return Redirect("/");
+                return Redirect("/index.html");
             }
             var user = await UserManager.FindByIdAsync(userid);
             if (user == null)
             {
-                return Redirect("/");
+                return Redirect("/index.html");
             }
             if (user.Token == code)
             {
@@ -105,7 +105,7 @@ namespace WebApplication1.Controllers
                 await SignInManager.SignInAsync(user, true, true);
             }
 
-            return Redirect("/");
+            return Redirect("/index.html");
         }
 
        
@@ -116,7 +116,7 @@ namespace WebApplication1.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return Redirect("/");
+            return Redirect("/index.html");
         }
 
 

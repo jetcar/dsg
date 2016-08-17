@@ -13,11 +13,14 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
     var groups = [];
     var sequences = [];
 
-    if (getAccessToken().length) {
+    if (getAccessToken() == null) {
         $location.path("/view2");
     }
+    run();
 
     function error(message) {
+
+        console.log(message);
 
         $location.path("/view2");
     }
@@ -162,10 +165,9 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 withCredentials: true, headers: {
                     'Authorization': 'Bearer ' + getAccessToken()
                 }
-            }).then(function(item)
-            {
+            }).then(function (item) {
                 sequence.id = item.data.id;
-            },logError);
+            }, logError);
 
         } else if ($scope.group) {
             var group = {
@@ -180,10 +182,9 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 withCredentials: true, headers: {
                     'Authorization': 'Bearer ' + getAccessToken()
                 }
-            }).then(function(item)
-            {
+            }).then(function (item) {
                 group.id = item.data.id;
-            },logError);
+            }, logError);
 
         } else {
             var record = {
@@ -200,7 +201,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 }
             }).then(function (item) {
                 record.id = item.data.id;
-            },logError);
+            }, logError);
 
             $scope.amount = 1;
             $scope.name = 'a';
@@ -221,9 +222,9 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             groupId: group.id
         };
         records.push(record);
-        $http.post("api/records", record, {withCredentials: true}).then(function (item) {
+        $http.post("api/records", record, { withCredentials: true }).then(function (item) {
             record.id = item.id;
-        },logError);
+        }, logError);
 
         group.recordAmount = 1;
         group.recordName = 'a';
