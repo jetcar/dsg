@@ -85,7 +85,7 @@ namespace WebApplication1.Services
             {
                 DeliveryMethod = SmtpDeliveryMethod.Network,
                 Host = "localhost",
-                Port = 255
+                Port = 25
             };
         }
 

@@ -13,6 +13,10 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
     var groups = [];
     var sequences = [];
 
+    if (getAccessToken().length) {
+        $location.path("/view2");
+    }
+
     function error(message) {
 
         $location.path("/view2");

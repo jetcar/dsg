@@ -72,11 +72,11 @@ namespace WebApplication1.Controllers
                     user = await UserManager.FindByEmailAsync(model.Email);
 
                 }
-                string code = Guid.NewGuid().ToString();
-                user.Token = code;
+                string token = Guid.NewGuid().ToString();
+                user.Token = token;
                 ApplicationDbContext.SaveChanges();
-
-                var callbackUrl = String.Format("http://localhost:82/account/login?userid={0}&code={1}", user.Id, code);
+                var action = RedirectToRoute("account/login", new { userid = user.Id, code = token });
+                var callbackUrl = action.Request.RequestUri.ToString();
                 await
                     UserManager.SendEmailAsync(user.Id, "Confirm your account",
                         "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
@@ -86,7 +86,7 @@ namespace WebApplication1.Controllers
             return "fail";
         }
 
-       
+
     }
 
 }
