@@ -1,7 +1,7 @@
 'use strict';
 angular.module('myApp.view1', ['ngRoute']);
 app.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/view1', {
+    $routeProvider.when('/records', {
         templateUrl: 'scripts/view1/view1.html',
         controller: 'View1Ctrl'
     });
@@ -18,7 +18,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
 
         console.log(message);
 
-        $location.path("/view2");
+        $location.path("/login");
     }
     function logError(data) {
         console.log(data);

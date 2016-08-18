@@ -104,10 +104,9 @@ namespace WebApplication1.Controllers
                 user.Token = Guid.NewGuid().ToString();
                 ApplicationDbContext.SaveChanges();
                 Response.Cookies.Add(new HttpCookie("token", user.Token + "|" + user.Id));
-                await SignInManager.SignInAsync(user, true, true);
             }
 
-            return Redirect("/index.html");
+            return Redirect("/index.html#!/records");
         }
 
 
