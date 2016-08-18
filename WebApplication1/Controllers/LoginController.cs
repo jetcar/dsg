@@ -73,7 +73,7 @@ namespace WebApplication1.Controllers
 
                 }
                 string token = Guid.NewGuid().ToString();
-                user.Token = token;
+                user.EmailToken = token;
                 ApplicationDbContext.SaveChanges();
                 var action = RedirectToRoute("account/login", new { userid = user.Id, code = token });
                 var callbackUrl = action.Request.RequestUri.ToString().Replace(action.Request.RequestUri.PathAndQuery,"") + $"/account/login?userid={user.Id}&code={token}";

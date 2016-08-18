@@ -98,17 +98,19 @@ namespace WebApplication1.Controllers
             {
                 return Redirect("/index.html");
             }
-            if (user.Token == code)
+            if (user.EmailToken == code)
             {
-                user.Token = null;
+                user.EmailToken = null;
+                user.Token = Guid.NewGuid().ToString();
                 ApplicationDbContext.SaveChanges();
+                Response.Cookies.Add(new HttpCookie("token", user.Token + "|" + user.Id));
                 await SignInManager.SignInAsync(user, true, true);
             }
 
             return Redirect("/index.html");
         }
 
-       
+
         //
         // POST: /Account/LogOff
         [HttpPost]
@@ -150,7 +152,7 @@ namespace WebApplication1.Controllers
             }
         }
 
-      
+
 
     }
 }

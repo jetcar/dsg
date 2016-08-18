@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,10 +20,9 @@ using WebApplication1.Repositories;
 
 namespace WebApplication1.Controllers
 {
-    [Authorize]
+    [TokenAuthorize]
     public class RecordsController : ApiController
     {
-        private ApplicationUserManager _userManager;
         private ApplicationDbContext _applicationDbContext;
 
         public RecordsController()
@@ -35,6 +35,7 @@ namespace WebApplication1.Controllers
             _applicationDbContext = applicationDbContext;
         }
 
+        private ApplicationUserManager _userManager;
         public ApplicationUserManager UserManager
         {
             get
@@ -62,7 +63,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public List<Record> GetRecords()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(User.GetUserId());
 
             return ApplicationDbContext.Records.Where(x => x.UserId == user.Id).ToList();
         }
@@ -70,7 +71,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public List<Group> GetGroups()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(User.GetUserId());
 
             return ApplicationDbContext.Groups.Where(x => x.UserId == user.Id).ToList();
         }
@@ -78,7 +79,7 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public List<Sequence> GetSequences()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = UserManager.FindById(User.GetUserId());
 
             return ApplicationDbContext.Sequences.Where(x => x.UserId == user.Id).ToList();
         }
@@ -88,7 +89,7 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-                record.UserId = User.Identity.GetUserId();
+                record.UserId = User.GetUserId();
                 ApplicationDbContext.Records.Add(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
@@ -100,7 +101,7 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-                record.UserId = User.Identity.GetUserId();
+                record.UserId = User.GetUserId();
                 ApplicationDbContext.Groups.Add(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
@@ -113,7 +114,7 @@ namespace WebApplication1.Controllers
         {
             if (ModelState.IsValid)
             {
-                record.UserId = User.Identity.GetUserId();
+                record.UserId = User.GetUserId();
                 ApplicationDbContext.Sequences.Add(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
@@ -122,17 +123,5 @@ namespace WebApplication1.Controllers
         }
 
     }
-    public class CustomAuthorizeAttribute : AuthorizationFilterAttribute
-    {
-        public override void OnAuthorization(HttpActionContext actionContext)
-        {
-            base.OnAuthorization(actionContext);
-        }
-
-        public override Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
-        {
-            return base.OnAuthorizationAsync(actionContext, cancellationToken);
-        }
-    }
-
+    
 }

@@ -13,10 +13,6 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
     var groups = [];
     var sequences = [];
 
-    if (getAccessToken() == null) {
-        $location.path("/view2");
-    }
-    run();
 
     function error(message) {
 
@@ -43,18 +39,14 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         });
 
         $http.get("api/sequences", {
-            withCredentials: true, headers: {
-                'Authorization': 'Bearer ' + getAccessToken()
-            }
+            withCredentials: true
         }).then(getSequences, error);
     }
 
 
 
     $http.get("api/records", {
-        withCredentials: true, headers: {
-            'Authorization': 'Bearer ' + getAccessToken()
-        }
+        withCredentials: true
     }).then(function (data) {
         records = data.data.map(function (item) {
             item.time = new Date(item.time);
@@ -62,9 +54,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         });
 
         $http.get("api/groups", {
-            withCredentials: true, headers: {
-                'Authorization': 'Bearer ' + getAccessToken()
-            }
+            withCredentials: true
         }).then(getGroups, error);
 
     }, error);
@@ -162,9 +152,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
                 sequence
             );
             $http.post("api/sequences", sequence, {
-                withCredentials: true, headers: {
-                    'Authorization': 'Bearer ' + getAccessToken()
-                }
+                withCredentials: true
             }).then(function (item) {
                 sequence.id = item.data.id;
             }, logError);
@@ -179,9 +167,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             groups.push(group);
 
             $http.post("api/groups", group, {
-                withCredentials: true, headers: {
-                    'Authorization': 'Bearer ' + getAccessToken()
-                }
+                withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;
             }, logError);
@@ -196,9 +182,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             };
             records.push(record);
             $http.post("api/records", record, {
-                withCredentials: true, headers: {
-                    'Authorization': 'Bearer ' + getAccessToken()
-                }
+                withCredentials: true
             }).then(function (item) {
                 record.id = item.data.id;
             }, logError);
