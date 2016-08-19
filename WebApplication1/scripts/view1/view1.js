@@ -125,7 +125,28 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
 
     $scope.delete = function (record) {
         records = removeItem(record, records);
+        $http.delete("api/records?id=" + record.id,
+        {
+            withCredentials: true
+        });
+        UpdateView();
+    }
 
+    $scope.deleteGroup = function (group) {
+        groups = removeItem(group, groups);
+        $http.delete("api/groups?id=" + group.id,
+        {
+            withCredentials: true
+        });
+        UpdateView();
+    }
+
+    $scope.deleteSequence = function (sequence) {
+        groups = removeItem(sequence, sequences);
+        $http.delete("api/sequences?id=" + sequence.id,
+        {
+            withCredentials: true
+        });
         UpdateView();
     }
 

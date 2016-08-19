@@ -96,6 +96,50 @@ namespace WebApplication1.Controllers
             }
             throw new ModelValidationException(ModelState.Values.First().Errors.First().ErrorMessage);
         }
+        [Route("api/records")]
+        [HttpDelete]
+        public string Delete(int id)
+        {
+            var userId = User.GetUserId();
+            var record = ApplicationDbContext.Records.FirstOrDefault(x => x.Id == id && x.UserId == userId);
+            if (record != null)
+            {
+                ApplicationDbContext.Records.Remove(record);
+                ApplicationDbContext.SaveChanges();
+            }
+            return "ok";
+
+        }
+
+        [Route("api/groups")]
+        [HttpDelete]
+        public string DeleteGroup(int id)
+        {
+            var userId = User.GetUserId();
+            var @group = ApplicationDbContext.Groups.FirstOrDefault(x => x.Id == id && x.UserId == userId);
+            if (@group != null)
+            {
+                ApplicationDbContext.Groups.Remove(@group);
+                ApplicationDbContext.SaveChanges();
+            }
+            return "ok";
+
+        }
+
+        [Route("api/sequences")]
+        [HttpDelete]
+        public string DeleteSequence(int id)
+        {
+            var userId = User.GetUserId();
+            var sequence = ApplicationDbContext.Sequences.FirstOrDefault(x => x.Id == id && x.UserId == userId);
+            if (sequence != null)
+            {
+                ApplicationDbContext.Sequences.Remove(sequence);
+                ApplicationDbContext.SaveChanges();
+            }
+            return "ok";
+
+        }
         [Route("api/groups")]
         public Group Post(Group record)
         {
@@ -123,5 +167,5 @@ namespace WebApplication1.Controllers
         }
 
     }
-    
+
 }
