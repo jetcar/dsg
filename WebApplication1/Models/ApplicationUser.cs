@@ -12,8 +12,32 @@ namespace WebApplication1.Models
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        [MaxLength(256)]
         public string Token { get; set; }
+        [MaxLength(256)]
         public string EmailToken { get; set; }
+
+        [MaxLength(256)]
+        public override string Id { get; set; }
+
+        [MaxLength(256)]
+        public override string Email { get; set; }
+
+        public override bool EmailConfirmed { get; set; }
+
+        [MaxLength(1256)]
+        public override string PasswordHash { get; set; }
+
+        [MaxLength(1256)]
+        public override string PhoneNumber { get; set; }
+
+        [MaxLength(256)]
+        public override string UserName { get; set; }
+
+        [MaxLength(1256)]
+        public override string SecurityStamp { get; set; }
+
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
@@ -49,6 +73,7 @@ namespace WebApplication1.Models
         public int? GroupId { get; set; }
 
         [Required]
+        [MaxLength(256)]
         public string UserId { get; set; }
 
 
@@ -70,6 +95,7 @@ namespace WebApplication1.Models
         public DateTime Time { get; set; }
 
         [Required]
+        [MaxLength(256)]
         public string UserId { get; set; }
 
 

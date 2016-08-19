@@ -1,10 +1,12 @@
 ﻿using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using MySql.Data.Entity;
 using WebApplication1.Models;
 
 namespace WebApplication1.Repositories
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    [DbConfigurationType(typeof(MySqlEFConfiguration))]
+        public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
