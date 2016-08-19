@@ -30,7 +30,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             return item;
         });
 
-        UpdateView();
+        updateView();
     }
     function getGroups(data) {
         groups = data.data.map(function (item) {
@@ -96,28 +96,28 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
 
     });
 
-    UpdateView();
+    updateView();
 
     $scope.prev = function () {
         $scope.currentTime = addMonths($scope.currentTime, -1);
 
-        UpdateView();
+        updateView();
     }
 
     $scope.current = function () {
         $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
 
-        UpdateView();
+        updateView();
     }
 
     $scope.next = function () {
         $scope.currentTime = addMonths($scope.currentTime, 1);
 
-        UpdateView();
+        updateView();
     }
 
     $scope.edit = function () {
-        if ($scope.hideEdit == false)
+        if ($scope.hideEdit === false)
             $scope.hideEdit = true;
         else
             $scope.hideEdit = false;
@@ -129,7 +129,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         {
             withCredentials: true
         });
-        UpdateView();
+        updateView();
     }
 
     $scope.deleteGroup = function (group) {
@@ -138,7 +138,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         {
             withCredentials: true
         });
-        UpdateView();
+        updateView();
     }
 
     $scope.deleteSequence = function (sequence) {
@@ -147,7 +147,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         {
             withCredentials: true
         });
-        UpdateView();
+        updateView();
     }
 
     $scope.showEdit = function (record) {
@@ -157,7 +157,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
     $scope.saveRecord = function (record) {
         record.edit = false;
 
-        UpdateView();
+        updateView();
     }
 
     $scope.save = function () {
@@ -214,7 +214,7 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
             $scope.day = $scope.currentTime.getDate();
         }
 
-        UpdateView();
+        updateView();
     }
 
     $scope.saveFromFroup = function (group) {
@@ -236,10 +236,10 @@ app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $
         group.recordPaid = false;
         group.recordDay = new Date().getDate();
 
-        UpdateView();
+        updateView();
 
     }
-    function UpdateView() {
+    function updateView() {
         var sequencesWithoutGroups = sequences.filter(function (item) {
             if (item.group)
                 return false;
