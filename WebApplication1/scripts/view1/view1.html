@@ -15,15 +15,15 @@
 
 <div class="row-fluid ">
     <div class="col-lg-2">
-        <button ng-click="prev()">Prev</button>
+        <button class="btn" ng-click="prev()">Prev</button>
     </div>
     <div class="col-md-2">{{currentYear}} {{currentMonth+1}}</div>
     <div class="col-md-2">
-        <button ng-click="current()">Current</button>
+        <button class="btn" ng-click="current()">Current</button>
     </div>
     <div class="col-md-2"></div>
     <div class="col-md-2">
-        <button ng-click="next()">Next</button>
+        <button class="btn" ng-click="next()">Next</button>
     </div>
 </div>
 <br>
@@ -41,7 +41,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-2">
         <label>
-            <button ng-click="edit()">Edit</button>
+            <button  class="btn" ng-click="edit()">Edit</button>
         </label>
     </div>
 </div>
@@ -62,8 +62,8 @@
             <div class="col-md-2">
             </div>
             <div class="col-md-2">
-                <button ng-hide="hideEdit" ng-click="delete(group)">Delete</button>
-                <button ng-show="group.edit" ng-click="saveRecord(group)">Save</button>
+                <button  class="btn" ng-hide="hideEdit" ng-click="delete(group)">Delete</button>
+                <button  class="btn" ng-show="group.edit" ng-click="saveRecord(group)">Save</button>
             </div>
 
         </div>
@@ -80,36 +80,36 @@
         </div>
         <div class="col-md-2">
             <label>
-                <input type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
+                <input class="form-control" type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
                 Paid
             </label>
         </div>
         <div class="col-md-2">
-            <button ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
-            <button ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
+            <button  class="btn" ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
+            <button  class="btn" ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
         </div>
 
     </div>
     <div class="row-fluid" style="margin-top: 20px;">
         <div class="col-md-12">
             <div class="col-md-2">
-                <input type="number" ng-model="group.recordAmount">
+                <input class="form-control" type="number" ng-model="group.recordAmount">
             </div>
             <div class="col-md-2">
-                <input type="text" ng-model="group.recordName">
+                <input class="form-control" type="text" ng-model="group.recordName">
             </div>
             <div class="col-md-2">
-                <input type="number" ng-model="group.recordDay">
+                <input class="form-control" type="number" ng-model="group.recordDay">
             </div>
             <div class="col-md-2">
                 <label>
-                    <input type="checkbox" ng-model="group.recordPaid">
+                    <input class="form-control" type="checkbox" ng-model="group.recordPaid">
                     Paid
                 </label>
             </div>
             <div class="col-md-2">
                 <label>
-                    <button ng-click="saveFromFroup(group)">Add</button>
+                    <button  class="btn" ng-click="saveFromFroup(group)">Add</button>
                 </label>
             </div>
         </div>
@@ -128,45 +128,45 @@
         </div>
         <div class="col-md-2">
             <label>
-                <input type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
+                <input class="form-control" type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
                 Paid
             </label>
         </div>
         <div class="col-md-2">
-            <button ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
-            <button ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
+            <button  class="btn" ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
+            <button  class="btn" ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
         </div>
 
     </div>
 </div>
 <div class="row-fluid" style="margin-top: 20px;">
-    <div class="col-md-12">
+    <div class="col-md-12 input-group">
         <div class="col-md-2">
-            <input type="number" ng-model="amount">
+            <input class="form-control" type="number" ng-model="amount">
         </div>
         <div class="col-md-2">
-            <input type="text" ng-model="name">
+            <input class="form-control" type="text" ng-model="name">
         </div>
         <div class="col-md-2">
-            <input type="number" ng-model="day">
+            <input class="form-control" type="number" ng-model="day">
         </div>
         <div class="col-md-2">
             <label>
-                <input type="checkbox" ng-model="paid">
+                <input class="form-control" type="checkbox" ng-model="paid">
                 Paid
             </label>
         </div>
         <div class="col-md-2">
             <label>
-                <button ng-click="save()">Add</button>
+                <button  class="btn"  ng-click="save()">Add</button>
             </label>
         </div>
     </div>
 </div>
 <div class="row-fluid ">
     <div class="col-md-12">
-        <div class="col-md-2"><label>Repeat <input type="checkbox" ng-model="repeat"></label></div>
-        <div class="col-md-2"><label>Group <input type="checkbox" ng-model="group"></label></div>
+        <div class="col-md-2"><label>Repeat <input class="form-control" type="checkbox" ng-model="repeat"></label></div>
+        <div class="col-md-2"><label>Group <input class="form-control" type="checkbox" ng-model="group"></label></div>
 
     </div>
 

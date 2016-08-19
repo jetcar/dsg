@@ -215,6 +215,10 @@
     <Compile Include="Migrations\201608191123116_initial.Designer.cs">
       <DependentUpon>201608191123116_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608191214010_addPaid.cs" />
+    <Compile Include="Migrations\201608191214010_addPaid.Designer.cs">
+      <DependentUpon>201608191214010_addPaid.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Repositories\ApplicationDbContext.cs" />
@@ -299,6 +303,12 @@
     <EmbeddedResource Include="Migrations\201608191123116_initial.resx">
       <DependentUpon>201608191123116_initial.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608191214010_addPaid.resx">
+      <DependentUpon>201608191214010_addPaid.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="style\bootstrap.css.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

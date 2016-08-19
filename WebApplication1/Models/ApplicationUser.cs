@@ -76,6 +76,8 @@ namespace WebApplication1.Models
         [MaxLength(256)]
         public string UserId { get; set; }
 
+        public bool Paid { get; set; }
+
 
 
     }
