@@ -233,10 +233,8 @@
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="scripts\angular-route.js" />
-    <Content Include="scripts\angular.js" />
+    <Content Include="scripts\angular.min.js" />
     <Content Include="scripts\app.js" />
-    <Content Include="scripts\bootstrap.js" />
-    <Content Include="scripts\jquery.js" />
     <Content Include="components\version\interpolate-filter.js" />
     <Content Include="components\version\interpolate-filter_test.js" />
     <Content Include="components\version\version-directive.js" />
@@ -266,16 +264,13 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="scripts\jquery-2.2.4.js" />
     <Content Include="style\app.css" />
-    <Content Include="scripts\view1\utils.js" />
-    <Content Include="scripts\view1\view1.html" />
-    <Content Include="scripts\view1\view1.js" />
-    <Content Include="scripts\view1\view1_test.js" />
-    <Content Include="scripts\view2\view2.html" />
-    <Content Include="scripts\view2\view2.js" />
-    <Content Include="scripts\view2\view2_test.js" />
-    <Content Include="style\bootstrap-responsive.css" />
-    <Content Include="style\bootstrap.css" />
+    <Content Include="scripts\utils.js" />
+    <Content Include="scripts\records\records.html" />
+    <Content Include="scripts\records\records.js" />
+    <Content Include="scripts\login\login.html" />
+    <Content Include="scripts\login\login.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
@@ -306,9 +301,6 @@
     <EmbeddedResource Include="Migrations\201608191214010_addPaid.resx">
       <DependentUpon>201608191214010_addPaid.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="style\bootstrap.css.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

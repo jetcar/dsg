@@ -1,13 +1,13 @@
 'use strict';
-angular.module('myApp.view1', ['ngRoute']);
+angular.module('myApp.records', ['ngRoute']);
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/records', {
-        templateUrl: 'scripts/view1/view1.html',
-        controller: 'View1Ctrl'
+        templateUrl: 'scripts/records/records.html',
+        controller: 'RecordsCtrl'
     });
 }
 ]);
-app.controller('View1Ctrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
 
     var records = [];
     var groups = [];
