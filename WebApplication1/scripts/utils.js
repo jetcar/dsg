@@ -41,14 +41,14 @@ function processSequences(sequences, records, date) {
                     amount: sequences[i].amount,
                     name: sequences[i].name,
                     time: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), sequences[i].time.getDate()),
-                    sequence: sequences[i].id,
+                    sequence: sequences[i],
                 });
             } else if (sequences[i].endDate > date && sequences[i].time <= date) {
                 newRecords.push({
                     amount: sequences[i].amount,
                     name: sequences[i].name,
                     time: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), sequences[i].time.getDate()),
-                    sequence: sequences[i].id,
+                    sequence: sequences[i],
 
                 });
             }

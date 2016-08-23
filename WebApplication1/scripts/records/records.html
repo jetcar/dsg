@@ -122,6 +122,7 @@
             <input type="checkbox" ng-change="showEdit(record)" ng-model="record.paid">paid
         </div>
         <div class="col-md-2">
+            <button class="btn" ng-if="record.sequence" ng-hide="hideEdit" ng-click="deleteSequence(record.sequence)">Delete sequence</button>
             <button class="btn" ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
             <button class="btn" ng-show="record.edit" ng-click="saveRecord(record)">Save</button>
         </div>

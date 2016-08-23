@@ -65,7 +65,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
     $scope.currentYear = $scope.currentTime.getFullYear();
     $scope.currentMonth = $scope.currentTime.getMonth();
-    $scope.day = $scope.currentTime.getDate();
+    $scope.day = date.getDate();
     $scope.hideEdit = true;
     $scope.amount = 0;
     $scope.currentRecords = [];
@@ -209,10 +209,10 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 record.id = item.data.id;
             }, logError);
 
-            $scope.amount = 1;
-            $scope.name = 'a';
+            $scope.amount ='';
+            $scope.name = '';
             $scope.paid = false;
-            $scope.day = $scope.currentTime.getDate();
+            $scope.day = $scope.day;
         }
 
         updateView();
@@ -232,10 +232,10 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             record.id = item.id;
         }, logError);
 
-        group.recordAmount = 1;
-        group.recordName = 'a';
+        group.recordAmount = '';
+        group.recordName = '';
         group.recordPaid = false;
-        group.recordDay = new Date().getDate();
+        group.recordDay = $scope.day;
 
         updateView();
 
@@ -247,7 +247,9 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             return true;
         });
         var recordsWithSequences = processSequences(sequencesWithoutGroups, records, $scope.currentTime);
-        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function(a, b) {
+            return a.time > b.time;
+        });
 
 
     }
