@@ -21,7 +21,7 @@ function addRecordFromPrevMonths(records, date) {
             name: 'from prev month',
             paid: true,
             time: date,
-        })
+        });
     }
     return result;
 }

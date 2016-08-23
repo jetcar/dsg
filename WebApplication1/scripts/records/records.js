@@ -83,6 +83,9 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         });
         var groupsWithSequences = processSequences(groupSequences, groups, $scope.currentTime);
         var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
+        currentGroups.map(function(group) {
+            group.recordName = group.name;
+        });
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
         $scope.expectedExpences = calculateExpences(newValue);
         $scope.currentAmount = calculateCurrent(newValue);
@@ -236,7 +239,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         }, logError);
 
         group.recordAmount = '';
-        group.recordName = '';
+        group.recordName = group.name;
         group.recordPaid = false;
         group.recordDay = $scope.day;
 
