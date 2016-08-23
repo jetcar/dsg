@@ -223,8 +223,13 @@
     <Compile Include="Migrations\201608231051237_recordSequenceId.Designer.cs">
       <DependentUpon>201608231051237_recordSequenceId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201608231158567_groupSequenceId.cs" />
+    <Compile Include="Migrations\201608231158567_groupSequenceId.Designer.cs">
+      <DependentUpon>201608231158567_groupSequenceId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Group.cs" />
+    <Compile Include="Models\LoginViewModels.cs" />
     <Compile Include="Models\Record.cs" />
     <Compile Include="Models\Sequence.cs" />
     <Compile Include="Repositories\ApplicationDbContext.cs" />
@@ -311,6 +316,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201608231051237_recordSequenceId.resx">
       <DependentUpon>201608231051237_recordSequenceId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201608231158567_groupSequenceId.resx">
+      <DependentUpon>201608231158567_groupSequenceId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

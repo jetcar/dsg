@@ -176,6 +176,8 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     $scope.saveGroup = function (group) {
         group.edit = false;
         group.userid = "null";
+        if (group.sequence)
+            group.sequenceId = group.sequence.id;
 
         $http.post("api/groups", group, {
             withCredentials: true
