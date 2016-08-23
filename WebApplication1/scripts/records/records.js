@@ -168,8 +168,9 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $http.post("api/records", record, {
             withCredentials: true
         }).then(function (item) {
-            updateView();
         }, logError);
+        updateView();
+
 
     }
     $scope.saveGroup = function (group) {
@@ -181,8 +182,8 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $http.post("api/groups", group, {
             withCredentials: true
         }).then(function (item) {
-            updateView();
         }, logError);
+        updateView();
 
     }
 
@@ -201,7 +202,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             $http.post("api/sequences", sequence, {
                 withCredentials: true
             }).then(function (item) {
-                sequence.id = item.data.id;
+                sequence.id = item.data.id;//hack
             }, logError);
 
         } else if ($scope.group) {
@@ -216,7 +217,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             $http.post("api/groups", group, {
                 withCredentials: true
             }).then(function (item) {
-                group.id = item.data.id;
+                group.id = item.data.id;//hack
             }, logError);
 
         } else {
@@ -231,7 +232,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             $http.post("api/records", record, {
                 withCredentials: true
             }).then(function (item) {
-                record.id = item.data.id;
+                record.id = item.data.id;//hack
             }, logError);
 
             $scope.amount = '';
@@ -248,6 +249,9 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         if (!group.id) {
             
             group.userid = "null";
+            if (group.sequence)
+                group.sequenceId = group.sequence.id;
+
 
             $http.post("api/groups", group, {
                 withCredentials: true
