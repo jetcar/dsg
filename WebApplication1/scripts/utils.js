@@ -36,14 +36,14 @@ function processSequences(sequences, records, date) {
     do {
         for (var i = 0; i < sequences.length; i++) {
 
-            if (!sequences[i].hasOwnProperty('endDate') && sequences[i].time <= date) {
+            if (!sequences[i].hasOwnProperty('endDate') && (sequences[i].time.getFullYear() < date.getFullYear() || sequences[i].time.getMonth() <= date.getMonth())) {
                 newRecords.push({
                     amount: sequences[i].amount,
                     name: sequences[i].name,
                     time: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), sequences[i].time.getDate()),
                     sequence: sequences[i],
                 });
-            } else if (sequences[i].endDate > date && sequences[i].time <= date) {
+            } else if (sequences[i].endDate > date && (sequences[i].time.getFullYear() < date.getFullYear() && sequences[i].time.getMonth() <= date.getMonth())) {
                 newRecords.push({
                     amount: sequences[i].amount,
                     name: sequences[i].name,
