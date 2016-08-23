@@ -21,6 +21,7 @@ namespace WebApplication1.Models
         [Required]
         public string UserId { get; set; }
 
+        public bool group { get; set; }
 
     }
 }

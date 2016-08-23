@@ -100,6 +100,12 @@ function assignRecordsIntoGroups(records, groups) {
             if (item.paid)
                 groupsDict[item.groupId].leftAmount -= item.amount;
         }
+        else if (item.groupId > 0 && !groupsDict.hasOwnProperty(item.groupId)) {
+            groups.push({
+                name: "unassigned",
+                records: [item]
+            });
+        }
     });
 
 

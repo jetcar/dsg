@@ -100,7 +100,6 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
     });
 
-    updateView();
 
     $scope.prev = function () {
         $scope.currentTime = addMonths($scope.currentTime, -1);
