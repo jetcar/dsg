@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -54,72 +52,5 @@ namespace WebApplication1.Models
             // Add custom user claims here
             return userIdentity;
         }
-    }
-
-    [Table("Record")]
-    public class Record
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public decimal Amount { get; set; }
-
-        [Required]
-        [MaxLength(256)]
-        public string Name { get; set; }
-        [Required]
-        public DateTime Time { get; set; }
-
-        public int? GroupId { get; set; }
-
-        [Required]
-        [MaxLength(256)]
-        public string UserId { get; set; }
-
-        public bool Paid { get; set; }
-
-
-
-    }
-
-    [Table("Group")]
-    public class Group
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public decimal Amount { get; set; }
-
-        [Required]
-        [MaxLength(256)]
-        public string Name { get; set; }
-        [Required]
-        public DateTime Time { get; set; }
-
-        [Required]
-        [MaxLength(256)]
-        public string UserId { get; set; }
-
-
-    }
-
-    [Table("Sequence")]
-    public class Sequence
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public decimal Amount { get; set; }
-
-        [Required]
-        [MaxLength(256)]
-        public string Name { get; set; }
-        [Required]
-        public DateTime Time { get; set; }
-
-        [Required]
-        public string UserId { get; set; }
-
-
     }
 }

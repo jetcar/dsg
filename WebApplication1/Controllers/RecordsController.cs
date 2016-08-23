@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Net.Http;
@@ -90,7 +91,7 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 record.UserId = User.GetUserId();
-                ApplicationDbContext.Records.Add(record);
+                ApplicationDbContext.Records.AddOrUpdate(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
@@ -146,7 +147,7 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 record.UserId = User.GetUserId();
-                ApplicationDbContext.Groups.Add(record);
+                ApplicationDbContext.Groups.AddOrUpdate(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
             }
@@ -159,7 +160,7 @@ namespace WebApplication1.Controllers
             if (ModelState.IsValid)
             {
                 record.UserId = User.GetUserId();
-                ApplicationDbContext.Sequences.Add(record);
+                ApplicationDbContext.Sequences.AddOrUpdate(record);
                 ApplicationDbContext.SaveChanges();
                 return record;
             }

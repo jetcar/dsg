@@ -163,8 +163,26 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
     $scope.saveRecord = function (record) {
         record.edit = false;
+        record.userid = "null";
+        if (record.sequence)
+            record.sequenceId = record.sequence.id;
+        $http.post("api/records", record, {
+            withCredentials: true
+        }).then(function (item) {
+            updateView();
+        }, logError);
 
-        updateView();
+    }
+    $scope.saveGroup = function (group) {
+        group.edit = false;
+        group.userid = "null";
+
+        $http.post("api/groups", group, {
+            withCredentials: true
+        }).then(function (item) {
+            updateView();
+        }, logError);
+
     }
 
     $scope.save = function () {
