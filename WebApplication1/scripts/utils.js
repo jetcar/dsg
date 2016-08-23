@@ -73,20 +73,23 @@ function setCurrentRecords(records, currentDate) {
 
 function assignRecordsIntoGroups(records, groups) {
     var groupsDict = {};
-    for (var i = 0; i < groups.length; i++) {
-        groupsDict[groups[i].id] = groups[i];
-        groups[i].records = [];
-        groups[i].leftAmount = groups[i].amount;
-        groups[i].recordDay = new Date().getDate();
-    }
-    var result = [];
-    for (var i = 0; i < records.length; i++) {
-        if (records[i].groupId > 0) {
-            groupsDict[records[i].groupId].records.push(records[i]);
-            if (records[i].paid)
-                groupsDict[records[i].groupId].leftAmount -= records[i].amount;
+    groups.map(function(group) {
+        groupsDict[group.id] = group;
+        group.records = [];
+        group.leftAmount = group.amount;
+        group.recordDay = new Date().getDate();
+    });
+
+
+    records.map(function (item) {
+        if (item.groupId > 0 && groupsDict.hasOwnProperty(item.groupId)) {
+            groupsDict[item.groupId].records.push(item);
+            if (item.paid)
+                groupsDict[item.groupId].leftAmount -= item.amount;
         }
-    }
+    });
+
+
     return groups;
 }
 
@@ -106,12 +109,13 @@ function calculateCurrent(records) {
     }
     return result;
 }
-function removeItem(item, array) {
-    var result = [];
-    for (var i = 0; i < array.length; i++) {
-        if (array[i] != item)
-            result.push(array[i]);
-    }
+function removeItem(removable, array) {
+    var result = array.filter(function(item) {
+        if (item.id === removable.id)
+            return false;
+        return true;
+    });
+    
     return result;
 }
 function filterByDate(records, from, to) {

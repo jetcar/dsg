@@ -129,8 +129,9 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $http.delete("api/records?id=" + record.id,
         {
             withCredentials: true
+        }).then(function() {
+            updateView();
         });
-        updateView();
     }
 
     $scope.deleteGroup = function (group) {
@@ -138,17 +139,19 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $http.delete("api/groups?id=" + group.id,
         {
             withCredentials: true
+        }).then(function () {
+            updateView();
         });
-        updateView();
     }
 
     $scope.deleteSequence = function (sequence) {
-        groups = removeItem(sequence, sequences);
+        sequences = removeItem(sequence, sequences);
         $http.delete("api/sequences?id=" + sequence.id,
         {
             withCredentials: true
+        }).then(function () {
+            updateView();
         });
-        updateView();
     }
 
     $scope.showEdit = function (record) {
