@@ -83,7 +83,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         });
         var groupsWithSequences = processSequences(groupSequences, groups, $scope.currentTime);
         var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
-        currentGroups.map(function(group) {
+        currentGroups.map(function (group) {
             group.recordName = group.name;
         });
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
@@ -92,7 +92,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
 
     });
-  
+
 
     $scope.$watch('currentTime', function (newValue, oldValue) {
         $scope.currentYear = newValue.getFullYear();
@@ -132,7 +132,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $http.delete("api/records?id=" + record.id,
         {
             withCredentials: true
-        }).then(function() {
+        }).then(function () {
             updateView();
         });
     }
@@ -235,7 +235,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 record.id = item.data.id;
             }, logError);
 
-            $scope.amount ='';
+            $scope.amount = '';
             $scope.name = '';
             $scope.paid = false;
             $scope.day = $scope.day;
@@ -245,12 +245,32 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     }
 
     $scope.saveFromFroup = function (group) {
+
+        if (!group.id) {
+            
+            group.userid = "null";
+
+            $http.post("api/groups", group, {
+                withCredentials: true
+            }).then(function (item) {
+                group.id = item.data.id;
+                groups.push(group);
+                saveRecord(group, $scope.currentYear, $scope.currentMonth, $scope.day);
+            }, logError);
+        } else {
+            saveRecord(group, $scope.currentYear, $scope.currentMonth, $scope.day);
+        }
+
+
+    }
+
+    function saveRecord(group, currentYear, currentMonth, day) {
         var record = {
             amount: parseInt(group.recordAmount),
             name: group.recordName,
             paid: group.recordPaid,
             userid: "null",
-            time: new Date($scope.currentYear, $scope.currentMonth, group.recordDay),
+            time: new Date(currentYear, currentMonth, group.recordDay),
             groupId: group.id
         };
         records.push(record);
@@ -261,11 +281,11 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         group.recordAmount = '';
         group.recordName = group.name;
         group.recordPaid = false;
-        group.recordDay = $scope.day;
+        group.recordDay = day;
 
         updateView();
-
     }
+
     function updateView() {
         var sequencesWithoutGroups = sequences.filter(function (item) {
             if (item.group)
@@ -273,7 +293,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             return true;
         });
         var recordsWithSequences = processSequences(sequencesWithoutGroups, records, $scope.currentTime);
-        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function(a, b) {
+        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
             return a.time > b.time;
         });
 
