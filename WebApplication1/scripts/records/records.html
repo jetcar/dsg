@@ -79,7 +79,7 @@
                 {{record.time | date:"d MMM"}}
             </div>
             <div class="col-md-1">
-                <input class="toggle" type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
+                <input data-toggle="toggle" data-on="Paid" data-off="Paid"  type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
             </div>
             <div class="col-md-2">
                 <button class="btn" ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
@@ -99,7 +99,7 @@
                 <input class="form-control" type="number" ng-model="group.recordDay">
             </div>
             <div class="col-md-1">
-                <input class="toggle" type="checkbox" ng-model="group.recordPaid">
+                <input type="checkbox" data-toggle="toggle" data-on="Paid" data-off="Paid" ng-model="group.recordPaid">
             </div>
             <div class="col-md-2">
                 <button class="btn" ng-click="saveFromFroup(group)">Add</button>
@@ -119,7 +119,7 @@
             {{record.time | date:"d MMM"}}
         </div>
         <div class="col-md-1">
-            <input class="toggle" type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
+            <input data-toggle="toggle" data-on="Paid" data-off="Paid"  type="checkbox" ng-click="showEdit(record)" ng-model="record.paid">
         </div>
         <div class="col-md-2">
             <button class="btn" ng-hide="hideEdit" ng-click="delete(record)">Delete</button>
@@ -139,7 +139,7 @@
             <input class="form-control" type="number" ng-model="day">
         </div>
         <div class="col-md-1 btn-group">
-            <input class="toggle" type="checkbox" ng-model="paid">
+            <input data-toggle="toggle" data-on="Paid" data-off="Paid" type="checkbox" ng-model="paid">
         </div>
         <div class="col-md-2">
             <button class="btn" ng-click="save()">Add</button>
@@ -152,7 +152,7 @@
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" data-toggle="toggle" ng-model="repeat">Repeat
+                    <input type="checkbox" data-toggle="toggle" data-on="Repeat" data-off="Repeat" ng-model="repeat">
                 </label>
             </div>
         </div>
@@ -160,11 +160,10 @@
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" data-toggle="toggle"  ng-model="group">Group
+                    <input type="checkbox" data-toggle="toggle" data-on="Group" data-off="Group" ng-model="group">
                 </label>
             </div>
         </div>
     </div>
 </div>
 
-<input type="checkbox" data-toggle="toggle" data-on="Enabled" data-off="Disabled">

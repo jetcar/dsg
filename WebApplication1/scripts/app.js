@@ -5,7 +5,9 @@
   'ngRoute',
   'myApp.login',
   'myApp.records',
-]);
+ ]);
+
+
 app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 

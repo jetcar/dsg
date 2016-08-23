@@ -264,6 +264,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="scripts\bootstrap-toggle.js" />
     <Content Include="scripts\jquery-2.2.4.js" />
     <Content Include="style\app.css" />
     <Content Include="scripts\utils.js" />

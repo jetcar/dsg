@@ -88,7 +88,10 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         $scope.currentAmount = calculateCurrent(newValue);
         $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
 
+        $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle();
+
     });
+  
 
     $scope.$watch('currentTime', function (newValue, oldValue) {
         $scope.currentYear = newValue.getFullYear();
@@ -247,6 +250,8 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         });
         var recordsWithSequences = processSequences(sequencesWithoutGroups, records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime);
+
+        $('input[type=checkbox][data-toggle^=toggle]').bootstrapToggle();
 
     }
 }
