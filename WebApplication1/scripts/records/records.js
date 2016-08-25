@@ -38,11 +38,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             return item;
         });
 
-        $http.get("api/sequences", {
-            withCredentials: true
-        }).then(getSequences, error);
     }
-
 
 
     $http.get("api/records", {
@@ -53,11 +49,19 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             return item;
         });
 
+
+    }, error).then(function () {
+
         $http.get("api/groups", {
             withCredentials: true
         }).then(getGroups, error);
 
-    }, error);
+    },error).then(function() {
+        $http.get("api/sequences", {
+            withCredentials: true
+        }).then(getSequences, error);
+
+    });
 
 
 
