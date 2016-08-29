@@ -26,6 +26,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
     function getSequences(data) {
         sequences = data.data.map(function (item) {
+            item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
             return item;
         });
@@ -34,6 +35,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     }
     function getGroups(data) {
         groups = data.data.map(function (item) {
+            item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
             return item;
         });
@@ -45,6 +47,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         withCredentials: true
     }).then(function (data) {
         records = data.data.map(function (item) {
+            item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
             return item;
         });
@@ -132,7 +135,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
     $scope.delete = function (record) {
         records = removeItem(record, records);
-        $http.delete("api/records?id=" + record.id,
+        $http.delete("api/records/" + record.id,
         {
             withCredentials: true
         }).then(function () {
@@ -278,7 +281,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             paid: group.recordPaid,
             userid: "null",
             time: new Date(currentYear, currentMonth, group.recordDay),
-            groupId: group.id
+            groupid: group.id
         };
         records.push(record);
         $http.post("api/records", record, { withCredentials: true }).then(function (item) {

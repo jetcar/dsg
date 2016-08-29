@@ -33,9 +33,36 @@ module.exports = function (app) {
                 if (foundUser) {
                     var record = req.body;
                     record.userid = foundUser.id;
-                    Records.create(record).then(sequelize().sync())
-                        .then(function (record) {
-                            res.end(JSON.stringify(record));
+                    record.amount = parseFloat(record.amount);
+                    var createorUpdate = null;
+                    if (!record.id)
+                        createorUpdate = Records.create(record);
+                    else {
+                        createorUpdate = Records.update(record, { where: { id: record.id } });
+                    }
+                    createorUpdate.then(sequelize().sync())
+                        .then(function (data) {
+                            res.end(JSON.stringify(data));
+                        });
+                } else {
+                    res.status(401).end();
+                }
+
+            }).error(function (error) {
+                res.status(401).end();
+
+            });
+        });
+
+    app.delete('/api/records/:id',
+        function (req, res) {
+            authorize(req).then(function (foundUser) {
+                if (foundUser) {
+                    Records.findById(req.params.id)
+                        .then(function(record) {
+                            record.destroy().then(sequelize().sync()).then(function(data) {
+                                res.end();
+                            });
                         });
                 } else {
                     res.status(401).end();

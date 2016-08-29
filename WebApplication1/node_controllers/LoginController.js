@@ -41,9 +41,6 @@ module.exports = function (app) {
                         foundUser.emailtoken = guid();
                         foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req));
                     }
-
-
-
                 });
         });
     app.get('/account/login/userid/:userid/code/:code',
@@ -62,7 +59,7 @@ module.exports = function (app) {
                         .then(function () {
                             res.cookie('token',
                                 foundUser.token + '|' + foundUser.id,
-                                { maxAge: 900000, httpOnly: true });
+                                { httpOnly: true });
                             res.redirect('/index.html#!/records');
                         });
 

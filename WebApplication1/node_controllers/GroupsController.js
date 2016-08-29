@@ -33,7 +33,14 @@ module.exports = function (app) {
                 if (foundUser) {
                     var group = req.body;
                     group.userid = foundUser.id;
-                    Groups.create(group).then(sequelize().sync())
+                    group.amount = parseFloat(group.amount);
+                    var createorUpdate = null;
+                    if (!group.id)
+                        createorUpdate = Groups.create(group);
+                    else {
+                        createorUpdate = Groups.update(group, { where: { id: group.id } });
+                    }
+                    createorUpdate.then(sequelize().sync())
                         .then(function (group) {
                             res.end(JSON.stringify(group));
                         });

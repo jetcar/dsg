@@ -31,7 +31,14 @@ module.exports = function (app) {
                if (foundUser) {
                    var sequence = req.body;
                    sequence.userid = foundUser.id;
-                   Sequences.create(sequence).then(sequelize().sync())
+                   sequence.amount = parseFloat(sequence.amount);
+                   var createorUpdate = null;
+                   if (!sequence.id)
+                       createorUpdate = Sequences.create(sequence);
+                   else {
+                       createorUpdate = Sequences.update(sequence, { where: { id: sequence.id } });
+                   }
+                   createorUpdate.then(sequelize().sync())
                        .then(function (sequence) {
                            res.end(JSON.stringify(sequence));
                        });

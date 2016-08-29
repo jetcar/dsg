@@ -76,7 +76,7 @@ function setCurrentRecords(records, currentDate) {
     var recordsWithPrevValues = addRecordFromPrevMonths(records, currentDate);
     var currentMonthRecords = filterByDate(recordsWithPrevValues, currentDate, nextMonth);
     var recordsWithutGroups = currentMonthRecords.filter(function (item) {
-        if (item.groupId > 0)
+        if (item.groupid > 0)
             return false;
         return true;
     });
@@ -95,12 +95,12 @@ function assignRecordsIntoGroups(records, groups) {
 
 
     records.map(function (item) {
-        if (item.groupId > 0 && groupsDict.hasOwnProperty(item.groupId)) {
-            groupsDict[item.groupId].records.push(item);
+        if (item.groupid > 0 && groupsDict.hasOwnProperty(item.groupid)) {
+            groupsDict[item.groupid].records.push(item);
             if (item.paid)
-                groupsDict[item.groupId].leftAmount -= item.amount;
+                groupsDict[item.groupid].leftAmount -= item.amount;
         }
-        else if (item.groupId > 0 && !groupsDict.hasOwnProperty(item.groupId)) {
+        else if (item.groupid > 0 && !groupsDict.hasOwnProperty(item.groupid)) {
             groups.push({
                 name: "unassigned",
                 records: [item]
