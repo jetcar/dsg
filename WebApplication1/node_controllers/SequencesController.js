@@ -51,4 +51,24 @@ module.exports = function (app) {
 
            });
        });
+
+    app.delete('/api/sequences/:id',
+      function (req, res) {
+          authorize(req).then(function (foundUser) {
+              if (foundUser) {
+                  Sequences.findById(req.params.id)
+                      .then(function (sequence) {
+                          sequence.destroy().then(sequelize().sync()).then(function (data) {
+                              res.end();
+                          });
+                      });
+              } else {
+                  res.status(401).end();
+              }
+
+          }).error(function (error) {
+              res.status(401).end();
+
+          });
+      });
 }

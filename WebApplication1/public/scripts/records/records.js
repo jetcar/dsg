@@ -145,7 +145,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
     $scope.deleteGroup = function (group) {
         groups = removeItem(group, groups);
-        $http.delete("api/groups?id=" + group.id,
+        $http.delete("api/groups/" + group.id,
         {
             withCredentials: true
         }).then(function () {
@@ -155,7 +155,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
     $scope.deleteSequence = function (sequence) {
         sequences = removeItem(sequence, sequences);
-        $http.delete("api/sequences?id=" + sequence.id,
+        $http.delete("api/sequences/" + sequence.id,
         {
             withCredentials: true
         }).then(function () {

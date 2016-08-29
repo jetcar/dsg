@@ -53,5 +53,25 @@ module.exports = function (app) {
 
             });
         });
+
+    app.delete('/api/groups/:id',
+      function (req, res) {
+          authorize(req).then(function (foundUser) {
+              if (foundUser) {
+                  Groups.findById(req.params.id)
+                      .then(function (group) {
+                          group.destroy().then(sequelize().sync()).then(function (data) {
+                              res.end();
+                          });
+                      });
+              } else {
+                  res.status(401).end();
+              }
+
+          }).error(function (error) {
+              res.status(401).end();
+
+          });
+      });
 }
 
