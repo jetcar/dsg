@@ -1,10 +1,14 @@
 
 
 <div class="row-fluid">
-    <div class="input-group">
-        <div class="col-lg-6">
+    <div class="col-md-12">
+        <div class="col-md-4">
             <input type="email" class="form-control" ng-model="email">
-            <span class="input-group-btn"><button class="btn btn-default" type="button" ng-click="login()">Login</button></span>
+        </div>
+        <div class="col-md-6">
+            <span class="input-group-btn"><button class="btn btn-default" type="button" ng-disabled="disableButton" ng-click="login()">Login</button></span>
         </div>
     </div>
+
+    <div>{{message}}</div>
 </div>

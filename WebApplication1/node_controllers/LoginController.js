@@ -39,7 +39,9 @@ module.exports = function (app) {
 
                     } else {
                         foundUser.emailtoken = guid();
-                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req));
+                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req)).then(function() {
+                            res.end();
+                        });
                     }
                 });
         });

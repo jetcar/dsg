@@ -16,7 +16,11 @@ angular.module('myApp.login', ['ngRoute'])
 
         $scope.email = "test@sdg.ee";
         $scope.login = function () {
-            $http.post('/api/login', { email: $scope.email });
+            $scope.disableButton = true;
+            $http.post('/api/login', { email: $scope.email }).then(function(data) {
+                $scope.message = "email sent check mail box";
+                
+            });
 
         }
     }]);
