@@ -246,9 +246,15 @@
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
+    <Content Include="node_controllers\authorize.js" />
+    <Content Include="node_controllers\SequencesController.js" />
     <Content Include="node_controllers\LoginController.js" />
+    <Content Include="node_controllers\GroupsController.js" />
     <Content Include="node_controllers\RecordsController.js" />
-    <Content Include="node_DAL\ds.js" />
+    <Content Include="node_DAL\db.js" />
+    <Content Include="node_DAL\Groups.js" />
+    <Content Include="node_DAL\Sequences.js" />
+    <Content Include="node_DAL\Records.js" />
     <Content Include="node_DAL\Users.js" />
     <Content Include="public\scripts\angular-route.js" />
     <Content Include="public\scripts\angular.min.js" />
@@ -283,9 +289,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="public\scripts\bootstrap-toggle.js" />
-    <Content Include="public\scripts\cordova.js" />
     <Content Include="public\scripts\jquery-2.2.4.js" />
-    <Content Include="public\scripts\ng-cordova.js" />
     <Content Include="public\style\app.css" />
     <Content Include="public\scripts\utils.js" />
     <Content Include="public\scripts\records\records.html" />

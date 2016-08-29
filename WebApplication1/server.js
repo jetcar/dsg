@@ -14,6 +14,7 @@ var app = express();
 
 
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
 
 app.get('/', function (req, res) {
     //res.send(path.join(__dirname ,"/public/index.html"));
@@ -22,6 +23,9 @@ app.get('/', function (req, res) {
 
 
 var loginController = require(__dirname + '/node_controllers/LoginController.js')(app);
+var recordsController = require(__dirname + '/node_controllers/RecordsController.js')(app);
+var groupsController = require(__dirname + '/node_controllers/GroupsController.js')(app);
+var sequencesController = require(__dirname + '/node_controllers/SequencesController.js')(app);
 
 
 
