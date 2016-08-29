@@ -4,7 +4,6 @@ var urlencodedParser = bodyParser.json();
 var sequelize = require(__dirname + '/../node_DAL/db.js');
 var authorize = require(__dirname + '/authorize.js');
 var Groups = require(__dirname + '/../node_DAL/Groups.js');
-var cookieParser = require('cookie-parser');
 
 
 
@@ -23,6 +22,26 @@ module.exports = function (app) {
                 }
 
             }).error(function(error) {
+                res.status(401).end();
+
+            });
+        });
+
+    app.post('/api/groups', urlencodedParser,
+        function (req, res) {
+            authorize(req).then(function (foundUser) {
+                if (foundUser) {
+                    var group = req.body;
+                    group.userid = foundUser.id;
+                    Groups.create(group).then(sequelize().sync())
+                        .then(function (group) {
+                            res.end(JSON.stringify(group));
+                        });
+                } else {
+                    res.status(401).end();
+                }
+
+            }).error(function (error) {
                 res.status(401).end();
 
             });

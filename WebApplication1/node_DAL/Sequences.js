@@ -2,11 +2,11 @@
 var sequelize = require(__dirname + '/db.js');
 
 module.exports = sequelize().define('sequences', {
-    id: { type: Sequelize.INTEGER, primaryKey: true },
+    id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true, },
     amount: Sequelize.DECIMAL,
     name: Sequelize.STRING,
     time: Sequelize.DATE,
-    userid: Sequelize.STRING,
-    isgroup: Sequelize.BOOLEAN
+    userid: { type: Sequelize.STRING, allowNull: false },
+    group: Sequelize.BOOLEAN
 
 });
