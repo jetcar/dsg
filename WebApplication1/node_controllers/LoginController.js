@@ -28,7 +28,7 @@ module.exports = function (app) {
                 where: { email: mail }
             })
                 .then(function (foundUser) {
-
+                    var url = req.protocol + '://' + req.get('host')
                     if (!foundUser) {
                         foundUser = {
                             id: guid(),
@@ -36,29 +36,47 @@ module.exports = function (app) {
                             token: guid(),
                             emailtoken: guid()
                         };
-                        Users.create(foundUser).then(sequelize().sync()).then(sendMail(foundUser));
+                        Users.create(foundUser).then(sequelize().sync()).then(sendMail(foundUser, url));
 
                     } else {
                         foundUser.emailtoken = guid();
-                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser));
+                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, url));
                     }
 
 
 
                 });
         });
-    app.get('/api/login:userid:code',
-        function(req, res) {
+    app.get('/account/login/userid/:userid/code/:code',
+        function (req, res) {
+            Users.findOne({
+                where: {
+                    id: req.params.userid,
+                    emailtoken: req.params.code
+                }
+            })
+                .then(function (foundUser) {
+                    foundUser.token = guid();
+                    foundUser.emailtoken = null;
+                    foundUser.save()
+                        .then(sequelize().sync())
+                        .then(function () {
+                            res.cookie('token',
+                                foundUser.token + '|' + foundUser.id,
+                                { maxAge: 900000, httpOnly: true });
+                            res.redirect('/index.html#!/records');
+                        });
 
+                });
         });
 }
 
-function sendMail(foundUser) {
+function sendMail(foundUser, url) {
     transporter.sendMail({
         from: 'jetcarq@gmail.com',
         to: 'jetcarq@gmail.com',
         subject: 'hello world!',
-        html: '<a href="http://localhost:3000/account/login?userid=' + foundUser.id + '&code=' +
+        html: '<a href="' + url + '/account/login/userid/' + foundUser.id + '/code/' +
             foundUser.emailtoken +
             '">Login</a>'
     },
