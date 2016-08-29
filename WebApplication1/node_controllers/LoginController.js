@@ -28,7 +28,6 @@ module.exports = function (app) {
                 where: { email: mail }
             })
                 .then(function (foundUser) {
-                    var url = req.protocol + '://' + req.get('host')
                     if (!foundUser) {
                         foundUser = {
                             id: guid(),
@@ -36,11 +35,11 @@ module.exports = function (app) {
                             token: guid(),
                             emailtoken: guid()
                         };
-                        Users.create(foundUser).then(sequelize().sync()).then(sendMail(foundUser, url));
+                        Users.create(foundUser).then(sequelize().sync()).then(sendMail(foundUser, req));
 
                     } else {
                         foundUser.emailtoken = guid();
-                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, url));
+                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req));
                     }
 
 
@@ -71,11 +70,13 @@ module.exports = function (app) {
         });
 }
 
-function sendMail(foundUser, url) {
+function sendMail(foundUser, req) {
+    var url = req.protocol + '://' + req.get('host');
+
     transporter.sendMail({
-        from: 'jetcarq@gmail.com',
-        to: 'jetcarq@gmail.com',
-        subject: 'hello world!',
+        from: 'no-reply@' + req.get('host'),
+        to: foundUser.email,
+        subject: 'Login link',
         html: '<a href="' + url + '/account/login/userid/' + foundUser.id + '/code/' +
             foundUser.emailtoken +
             '">Login</a>'
