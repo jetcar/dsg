@@ -35,8 +35,8 @@ function processSequences(sequences, records, date) {
         sequenceDict[item.id] = item;
     });
     var newRecords = records.map(function (item) {
-        if (item.hasOwnProperty('sequenceId'))
-            item.sequence = sequenceDict[item.sequenceId];
+        if (item.hasOwnProperty('sequenceid'))
+            item.sequence = sequenceDict[item.sequenceid];
         return item;
     });
 

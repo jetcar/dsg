@@ -171,7 +171,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         record.edit = false;
         record.userid = "null";
         if (record.sequence)
-            record.sequenceId = record.sequence.id;
+            record.sequenceid = record.sequence.id;
         $http.post("api/records", record, {
             withCredentials: true
         }).then(function (item) {
@@ -184,7 +184,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         group.edit = false;
         group.userid = "null";
         if (group.sequence)
-            group.sequenceId = group.sequence.id;
+            group.sequenceid = group.sequence.id;
 
         $http.post("api/groups", group, {
             withCredentials: true
@@ -256,7 +256,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
 
             group.userid = "null";
             if (group.sequence)
-                group.sequenceId = group.sequence.id;
+                group.sequenceid = group.sequence.id;
 
 
             $http.post("api/groups", group, {
