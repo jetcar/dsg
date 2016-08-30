@@ -21,14 +21,14 @@ module.exports = function (app) {
                     res.status(401).end();
                 }
 
-            }).error(function(error) {
+            }).error(function (error) {
                 res.status(401).end();
 
             });
         });
 
     app.post('/api/groups', urlencodedParser,
-        function (req, res) {
+        function (req, res, next) {
             authorize(req).then(function (foundUser) {
                 if (foundUser) {
                     var group = req.body;
@@ -43,25 +43,29 @@ module.exports = function (app) {
                     createorUpdate.then(sequelize().sync())
                         .then(function (group) {
                             res.end(JSON.stringify(group));
+                        }).catch(function data(err) {
+                            return next(err);
                         });
                 } else {
                     res.status(401).end();
                 }
 
-            }).error(function (error) {
-                res.status(401).end();
+            }).catch(function (error) {
+                return next(error);
 
             });
         });
 
     app.delete('/api/groups/:id',
-      function (req, res) {
+      function (req, res, next) {
           authorize(req).then(function (foundUser) {
               if (foundUser) {
                   Groups.findById(req.params.id)
                       .then(function (group) {
                           group.destroy().then(sequelize().sync()).then(function (data) {
                               res.end();
+                          }).catch(function data(err) {
+                              return next(err);
                           });
                       });
               } else {

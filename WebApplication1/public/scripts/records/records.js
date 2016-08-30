@@ -59,7 +59,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             withCredentials: true
         }).then(getGroups, error);
 
-    },error).then(function() {
+    }, error).then(function () {
         $http.get("api/sequences", {
             withCredentials: true
         }).then(getSequences, error);
@@ -167,7 +167,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         record.edit = true;
     }
 
-    $scope.saveRecord = function (record) {
+    $scope.saveRecord = function (record, form) {
         record.edit = false;
         record.userid = "null";
         if (record.sequence)
@@ -242,8 +242,8 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 record.id = item.data.id;//hack
             }, logError);
 
-            $scope.amount = '';
-            $scope.name = '';
+            $scope.amount = null;
+            $scope.name = null;
             $scope.paid = false;
             $scope.day = $scope.day;
         }
@@ -252,9 +252,8 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     }
 
     $scope.saveFromFroup = function (group) {
-
         if (!group.id) {
-            
+
             group.userid = "null";
             if (group.sequence)
                 group.sequenceId = group.sequence.id;

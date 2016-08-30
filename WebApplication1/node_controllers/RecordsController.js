@@ -28,40 +28,46 @@ module.exports = function (app) {
         });
 
     app.post('/api/records', urlencodedParser,
-        function (req, res) {
-            authorize(req).then(function (foundUser) {
-                if (foundUser) {
-                    var record = req.body;
-                    record.userid = foundUser.id;
-                    record.amount = parseFloat(record.amount);
-                    var createorUpdate = null;
-                    if (!record.id)
-                        createorUpdate = Records.create(record);
-                    else {
-                        createorUpdate = Records.update(record, { where: { id: record.id } });
-                    }
-                    createorUpdate.then(sequelize().sync())
-                        .then(function (data) {
-                            res.end(JSON.stringify(data));
-                        });
-                } else {
+        function (req, res, next) {
+            authorize(req, next).then(function (foundUser) {
+                if (!foundUser) {
                     res.status(401).end();
+                    return next("unauthorized");
                 }
 
-            }).error(function (error) {
+                var record = req.body;
+                record.userid = foundUser.id;
+                record.amount = parseFloat(record.amount);
+                var createorUpdate = null;
+                if (!record.id)
+                    createorUpdate = Records.create(record);
+                else {
+                    createorUpdate = Records.update(record, { where: { id: record.id } });
+                }
+                createorUpdate.then(sequelize().sync())
+                    .then(function (data) {
+                        res.end(JSON.stringify(data));
+                    }).catch(function data(err) {
+                        return next(err);
+                    });
+
+
+            }).catch(function (error) {
                 res.status(401).end();
 
             });
         });
 
     app.delete('/api/records/:id',
-        function (req, res) {
+        function (req, res,next) {
             authorize(req).then(function (foundUser) {
                 if (foundUser) {
                     Records.findById(req.params.id)
-                        .then(function(record) {
-                            record.destroy().then(sequelize().sync()).then(function(data) {
+                        .then(function (record) {
+                            record.destroy().then(sequelize().sync()).then(function (data) {
                                 res.end();
+                            }).catch(function data(err) {
+                                return next(err);
                             });
                         });
                 } else {

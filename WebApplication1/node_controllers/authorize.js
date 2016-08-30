@@ -1,9 +1,9 @@
 ﻿var Users = require(__dirname + '/../node_DAL/Users.js');
 
 
-module.exports = function (req) {
+module.exports = function (req, next) {
     if (!req.cookies.token)
-        throw "unauthorized";
+        return next("unauthorized");
     return Users.findOne({
         where: {
             id: req.cookies.token.split('|')[1],
