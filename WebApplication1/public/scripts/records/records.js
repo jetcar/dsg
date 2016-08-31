@@ -1,17 +1,17 @@
 'use strict';
-angular.module('myApp.records', ['ngRoute']);
-app.config(['$routeProvider', function ($routeProvider) {
+angular.module('myApp.records', ['ngRoute']).
+config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/records', {
         templateUrl: 'scripts/records/records.html',
         controller: 'RecordsCtrl'
     });
 }
-]);
-app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+])
+.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
 
-    var records = [];
-    var groups = [];
-    var sequences = [];
+    $scope.records = [];
+    $scope.groups = [];
+    $scope.sequences = [];
 
 
     function error(message) {
@@ -25,7 +25,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     }
 
     function getSequences(data) {
-        sequences = data.data.map(function (item) {
+        $scope.sequences = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
             return item;
@@ -34,7 +34,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         updateView();
     }
     function getGroups(data) {
-        groups = data.data.map(function (item) {
+        $scope.groups = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
             return item;
@@ -46,7 +46,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     $http.get("api/records", {
         withCredentials: true
     }).then(function (data) {
-        records = data.data.map(function (item) {
+        $scope.records = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
             return item;
@@ -80,48 +80,30 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
 
-    $scope.$watch('currentRecords', function (newValue, oldValue) {
-        var recordsWithGroups = filterByDate(records, $scope.currentTime, addMonths($scope.currentTime, 1));
-
-        var groupSequences = sequences.filter(function (item) {
-            if (item.group)
-                return true;
-            return false;
-        });
-        var groupsWithSequences = processSequences(groupSequences, groups, $scope.currentTime);
-        var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
-        currentGroups.map(function (group) {
-            group.recordName = group.name;
-        });
-        $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
-        $scope.expectedExpences = calculateExpences(newValue);
-        $scope.currentAmount = calculateCurrent(newValue);
-        $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
-
-    });
 
 
-    $scope.$watch('currentTime', function (newValue, oldValue) {
-        $scope.currentYear = newValue.getFullYear();
-        $scope.currentMonth = newValue.getMonth();
-
-    });
 
 
     $scope.prev = function () {
         $scope.currentTime = addMonths($scope.currentTime, -1);
+        $scope.currentYear = newValue.getFullYear();
+        $scope.currentMonth = newValue.getMonth();
 
         updateView();
     }
 
     $scope.current = function () {
         $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
+        $scope.currentYear = newValue.getFullYear();
+        $scope.currentMonth = newValue.getMonth();
 
         updateView();
     }
 
     $scope.next = function () {
         $scope.currentTime = addMonths($scope.currentTime, 1);
+        $scope.currentYear = newValue.getFullYear();
+        $scope.currentMonth = newValue.getMonth();
 
         updateView();
     }
@@ -131,6 +113,15 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             $scope.hideEdit = true;
         else
             $scope.hideEdit = false;
+    }
+    $scope.editRecord = function(record,isgroup) {
+        $scope.id = record.id;
+        $scope.amount = record.amount;
+        $scope.name = record.name;
+        $scope.time = record.time.getDate();
+        $scope.group = isgroup;
+        $scope.sequence = record.hasOwnProperty('sequenceid');
+        $scope.canDelete = true;
     }
 
     $scope.delete = function (record) {
@@ -143,15 +134,6 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         });
     }
 
-    $scope.deleteGroup = function (group) {
-        groups = removeItem(group, groups);
-        $http.delete("api/groups/" + group.id,
-        {
-            withCredentials: true
-        }).then(function () {
-            updateView();
-        });
-    }
 
     $scope.deleteSequence = function (sequence) {
         sequences = removeItem(sequence, sequences);
@@ -163,36 +145,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         });
     }
 
-    $scope.showEdit = function (record) {
-        record.edit = true;
-    }
 
-    $scope.saveRecord = function (record, form) {
-        record.edit = false;
-        record.userid = "null";
-        if (record.sequence)
-            record.sequenceid = record.sequence.id;
-        $http.post("api/records", record, {
-            withCredentials: true
-        }).then(function (item) {
-        }, logError);
-        updateView();
-
-
-    }
-    $scope.saveGroup = function (group) {
-        group.edit = false;
-        group.userid = "null";
-        if (group.sequence)
-            group.sequenceid = group.sequence.id;
-
-        $http.post("api/groups", group, {
-            withCredentials: true
-        }).then(function (item) {
-        }, logError);
-        updateView();
-
-    }
 
     $scope.save = function () {
         if ($scope.repeat) {
@@ -203,7 +156,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
                 group: $scope.group,
             };
-            sequences.push(
+            $scope.sequences.push(
                 sequence
             );
             $http.post("api/sequences", sequence, {
@@ -219,7 +172,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 userid: "null",
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             };
-            groups.push(group);
+            $scope.groups.push(group);
 
             $http.post("api/groups", group, {
                 withCredentials: true
@@ -235,7 +188,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 userid: "null",
                 time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
             };
-            records.push(record);
+            $scope.records.push(record);
             $http.post("api/records", record, {
                 withCredentials: true
             }).then(function (item) {
@@ -263,7 +216,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
                 withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;
-                groups.push(group);
+                $scope.groups.push(group);
                 saveRecord(group, $scope.currentYear, $scope.currentMonth, $scope.day);
             }, logError);
         } else {
@@ -282,7 +235,7 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
             time: new Date(currentYear, currentMonth, group.recordDay),
             groupid: group.id
         };
-        records.push(record);
+        $scope.records.push(record);
         $http.post("api/records", record, { withCredentials: true }).then(function (item) {
             record.id = item.id;
         }, logError);
@@ -295,16 +248,33 @@ app.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope,
         updateView();
     }
 
-    function updateView() {
-        var sequencesWithoutGroups = sequences.filter(function (item) {
+    $scope.updateView = function () {
+        var sequencesWithoutGroups = $scope.sequences.filter(function (item) {
             if (item.group)
                 return false;
             return true;
         });
-        var recordsWithSequences = processSequences(sequencesWithoutGroups, records, $scope.currentTime);
+        var recordsWithSequences = processSequences(sequencesWithoutGroups, $scope.records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
             return a.time > b.time;
         });
+
+        var recordsWithGroups = filterByDate($scope.records, $scope.currentTime, addMonths($scope.currentTime, 1));
+
+        var groupSequences = $scope.sequences.filter(function (item) {
+            if (item.group)
+                return true;
+            return false;
+        });
+        var groupsWithSequences = processSequences(groupSequences, $scope.groups, $scope.currentTime);
+        var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
+        currentGroups.map(function (group) {
+            group.recordName = group.name;
+        });
+        $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
+        $scope.expectedExpences = calculateExpences($scope.records);
+        $scope.currentAmount = calculateCurrent($scope.records);
+        $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
 
 
     }
