@@ -20,6 +20,7 @@ module.exports = function(config) {
             'public/scripts/angular-route.js',
             'public/scripts/app.js',
             'public/scripts/utils.js',
+            'public/scripts/testUtils.js',
             'public/scripts/records/*.js',
             'public/scripts/login/*.js',
         ],

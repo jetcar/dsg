@@ -26,6 +26,10 @@ function addRecordFromPrevMonths(records, date) {
     return result;
 }
 
+function logError(data) {
+    console.log(data);
+}
+
 
 function processSequences(sequences, records, date) {
     var currentTime = new Date();
@@ -112,20 +116,47 @@ function assignRecordsIntoGroups(records, groups) {
     return groups;
 }
 
-function calculateExpences(records) {
+function calculateExpences(records,groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
         if (!records[i].paid)
             result += records[i].amount;
     }
+    if (groups) {
+
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i];
+            result += group.amount;
+            for (var j = 0; j < group.records.length; j++) {
+                var record = group.records[j];
+                if (record.paid)
+                    result -= record.amount;
+            }
+        }
+        
+    }
+
     return result;
 }
-function calculateCurrent(records) {
+function calculateCurrent(records,groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
         if (records[i].paid)
-            result += (-records[i].amount);
+            result += -records[i].amount;
     }
+    if (groups) {
+
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i];
+            for (var j = 0; j < group.records.length; j++) {
+                var record = group.records[j];
+                if (record.paid)
+                    result -= record.amount;
+            }
+        }
+
+    }
+
     return result;
 }
 function removeItem(removable, array) {

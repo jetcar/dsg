@@ -294,6 +294,7 @@
     <Content Include="public\scripts\bootstrap-toggle.js" />
     <Content Include="public\scripts\jquery-2.2.4.js" />
     <Content Include="public\scripts\records\records_test.js" />
+    <Content Include="public\scripts\testUtils.js" />
     <Content Include="public\style\app.css" />
     <Content Include="public\scripts\utils.js" />
     <Content Include="public\scripts\records\records.html" />
