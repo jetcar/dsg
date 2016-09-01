@@ -9,43 +9,40 @@ describe('myApp.records', function () {
         it('simple record', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
-            var controller = $controller('RecordsCtrl', { $scope: scope });
-            scope.records = [
-                {
-                    id: 1,
-                    amount: -100,
-                    name: 'test',
-                    paid: true,
-                    time: new Date(),
+            var http = new myHttp([], [], []);
 
-                },
-                {
-                    id: 2,
-                    amount: 1,
-                    name: 'test',
-                    paid: false,
-                    time: new Date(),
+            http.createRecord({
+                amount: -100,
+                name: 'test',
+                paid: true,
+                time: new Date(),
 
-                },
-                {
-                    id: 4,
-                    amount: 1,
-                    name: 'test',
-                    paid: true,
-                    time: new Date(),
+            });
+            http.createRecord({
+                amount: 1,
+                name: 'test',
+                paid: false,
+                time: new Date(),
 
-                },
-                {
-                    id: 3,
-                    amount: 1,
-                    name: 'test',
-                    paid: true,
-                    time: new Date(2011),
+            });
+            http.createRecord({
+                amount: 1,
+                name: 'test',
+                paid: true,
+                time: new Date(),
 
-                },
+            });
+            http.createRecord({
+                amount: 1,
+                name: 'test',
+                paid: true,
+                time: new Date(2011),
 
-            ];
-            scope.updateView();
+            });
+
+            //act
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
 
             expect(scope.currentRecords.length).toBe(3);
             expect(scope.currentRecords[0].id).toBe(1);
@@ -65,25 +62,24 @@ describe('myApp.records', function () {
         it('simple group', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
-            var controller = $controller('RecordsCtrl', { $scope: scope });
-            scope.groups = [
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(),
 
-                }
-                ,
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(2011),
+            var http = new myHttp([], [], []);
+            http.createGroup({
+                amount: 1,
+                name: 'test',
+                time: new Date(),
 
-                }
-            ];
-            scope.updateView();
+            });
+            http.createGroup({
+                amount: 1,
+                name: 'test',
+                time: new Date(2011),
+
+            });
+
+
+            //act
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
             expect(scope.currentGroups.length).toBe(1);
             expect(scope.currentGroups[0].id).toBe(1);
@@ -102,48 +98,44 @@ describe('myApp.records', function () {
         it('group with records', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
-            var controller = $controller('RecordsCtrl', { $scope: scope });
-            scope.groups = [
-                {
-                    id: 1,
-                    amount: 111,
-                    name: 'test',
-                    time: new Date(),
 
-                }
-                ,
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(2011),
+            var http = new myHttp([], [], []);
 
-                }
-            ];
+            var group = http.createGroup({
+                amount: 111,
+                name: 'test',
+                time: new Date(),
 
-            scope.records = [
-                {
-                    id: 1,
-                    amount: 100,
-                    name: 'testRecord',
-                    paid: true,
-                    time: new Date(),
-                    groupid: scope.groups[0].id,
+            });
+            http.createGroup({
+                amount: 1,
+                name: 'test',
+                time: new Date(2011),
 
-                },
-                {
-                    id: 2,
-                    amount: 2,
-                    name: 'test2',
-                    paid: true,
-                    time: new Date(2011),
-                    groupid: scope.groups[0].id,
+            });
 
+            http.createRecord({
+                amount: 100,
+                name: 'testRecord',
+                paid: true,
+                time: new Date(),
+                groupid: group.id,
 
-                },
+            });
+            http.createRecord({
+                amount: 2,
+                name: 'test2',
+                paid: true,
+                time: new Date(2011),
+                groupid: group.id,
+            });
 
-            ];
-            scope.updateView();
+            
+
+            //act
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+           
 
             expect(scope.currentRecords.length).toBe(0);
 
@@ -170,8 +162,8 @@ describe('myApp.records', function () {
         it('simple record sequence', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
-            var controller = $controller('RecordsCtrl', { $scope: scope });
-            scope.sequences = [
+
+            var sequences = [
                 {
                     id: 1,
                     amount: 1,
@@ -181,7 +173,11 @@ describe('myApp.records', function () {
                 }
 
             ];
-            scope.updateView();
+            var http = new myHttp([], [], sequences);
+
+            //act
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
 
             expect(scope.currentRecords.length).toBe(1);
             expect(scope.currentRecords[0].id).toBe(undefined);
@@ -199,45 +195,50 @@ describe('myApp.records', function () {
         it('simple group sequence', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
-            var controller = $controller('RecordsCtrl', { $scope: scope });
-            scope.sequences = [
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(),
-                    group: true
-                },
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(2011),
-                    group: true
-                },
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(2100),
-                    group: true
-                },
+            var http = new myHttp([], [], []);
+            http.createSequence({
+                amount: 1,
+                name: 'test1',
+                time: new Date(),
+                group: true
+            });
+            http.createSequence({
+                amount: 2,
+                name: 'test2',
+                time: new Date(2011,1,1),
+                group: true
+            });
+            http.createSequence({
+                amount: 1,
+                name: 'test3',
+                time: new Date(2100,1,1),
+                group: true
+            });
 
-            ];
-            scope.updateView();
+            //act
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+           
 
-            expect(scope.currentGroups.length).toBe(1);
+            expect(scope.currentGroups.length).toBe(2);
             expect(scope.currentGroups[0].id).toBe(undefined);
             expect(scope.currentGroups[0].amount).toBe(1);
             expect(scope.currentGroups[0].leftAmount).toBe(1);
-            expect(scope.currentGroups[0].name).toBe('test');
+            expect(scope.currentGroups[0].name).toBe('test1');
             expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
 
+            expect(scope.currentGroups[1].id).toBe(undefined);
+            expect(scope.currentGroups[1].amount).toBe(2);
+            expect(scope.currentGroups[1].leftAmount).toBe(2);
+            expect(scope.currentGroups[1].name).toBe('test2');
+            expect(scope.currentGroups[1].time.getDate()).toBe(new Date().getDate());
+            expect(scope.currentGroups[1].time.getMonth()).toBe(new Date().getMonth());
 
-            expect(scope.expectedExpences).toBe(1);
+
+
+            expect(scope.expectedExpences).toBe(3);
             expect(scope.currentAmount).toBe(0);
-            expect(scope.leftAmount).toBe(-1);
+            expect(scope.leftAmount).toBe(-3);
 
         }));
 
@@ -246,26 +247,21 @@ describe('myApp.records', function () {
             //spec body
             var scope = $rootScope.$new();
 
-            var groups = [
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(),
+            var http = new myHttp([], [], []);
 
-                }
-                ,
-                {
-                    id: 1,
-                    amount: 1,
-                    name: 'test',
-                    time: new Date(2011),
+            http.createGroup({
 
-                }
-            ];
+                amount: 1,
+                name: 'test',
+                time: new Date(),
 
-            var http = new myHttp([], groups, []);
+            });
+            http.createGroup({
+                amount: 1,
+                name: 'test',
+                time: new Date(2011),
 
+            });
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
@@ -296,6 +292,113 @@ describe('myApp.records', function () {
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(-1);
             expect(scope.leftAmount).toBe(-1);
+
+
+        }));
+
+        it('add record', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+            http.createGroup({
+                amount: 1,
+                name: 'test',
+                time: new Date(),
+
+            });
+            http.createGroup({
+                amount: 1,
+                name: 'test',
+                time: new Date(2011),
+
+            });
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            scope.amount = 1;
+            scope.name = "name";
+            scope.day = 1;
+            scope.paid = true;
+
+
+            //act
+            scope.save();
+
+            expect(scope.currentGroups.length).toBe(1);
+            expect(scope.currentGroups[0].id).toBe(1);
+            expect(scope.currentGroups[0].amount).toBe(1);
+            expect(scope.currentGroups[0].leftAmount).toBe(1);
+            expect(scope.currentGroups[0].name).toBe('test');
+            expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
+            expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
+
+            expect(scope.currentRecords.length).toBe(1);
+            expect(scope.currentRecords[0].id).toBe(1);
+            expect(scope.currentRecords[0].name).toBe('name');
+            expect(scope.currentRecords[0].amount).toBe(1);
+
+
+            expect(scope.expectedExpences).toBe(1);
+            expect(scope.currentAmount).toBe(-1);
+            expect(scope.leftAmount).toBe(-2);
+
+
+        }));
+
+
+        it('add group', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+
+            var groups = [
+                {
+                    id: 1,
+                    amount: 1,
+                    name: 'test',
+                    time: new Date(),
+
+                }
+                ,
+                {
+                    id: 2,
+                    amount: 1,
+                    name: 'test',
+                    time: new Date(2011),
+
+                }
+            ];
+
+            var http = new myHttp([], groups, []);
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            scope.amount = 1;
+            scope.name = "name";
+            scope.day = 1;
+            scope.paid = true;
+
+
+            //act
+            scope.save();
+
+            expect(scope.currentGroups.length).toBe(1);
+            expect(scope.currentGroups[0].id).toBe(1);
+            expect(scope.currentGroups[0].amount).toBe(1);
+            expect(scope.currentGroups[0].leftAmount).toBe(1);
+            expect(scope.currentGroups[0].name).toBe('test');
+            expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
+            expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
+
+            expect(scope.currentRecords.length).toBe(1);
+            expect(scope.currentRecords[0].id).toBe(1);
+            expect(scope.currentRecords[0].name).toBe('name');
+            expect(scope.currentRecords[0].amount).toBe(1);
+
+
+            expect(scope.expectedExpences).toBe(1);
+            expect(scope.currentAmount).toBe(-1);
+            expect(scope.leftAmount).toBe(-2);
 
 
         }));

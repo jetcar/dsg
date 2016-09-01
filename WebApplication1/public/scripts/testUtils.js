@@ -44,17 +44,40 @@
             }
             else if (method === 'POST') {
                 if (url === 'api/records') {
-                    args.id = ++recordLastId;
-                    return (new responce(args));
+                    if (args.id) {
+                        var recordIndex = records.findIndex(function(item) {
+                            return item.id === args.id;
+                        });
+                        records.splice(recordIndex, 1);
+                    } else {
+                        args.id = ++recordLastId;
+                    }
+                    records.push(args);
+
+                    return (new responce({ data: args }));
                 }
                 else if (url === 'api/groups') {
-                    args.id = ++groupId;
-
-                    return (new responce(args));
+                    if (args.id) {
+                        var recordIndex = groups.findIndex(function (item) {
+                            return item.id === args.id;
+                        });
+                        groups.splice(recordIndex, 1);
+                    } else {
+                        args.id = ++groupId;
+                    }
+                    groups.push(args);
+                    return (new responce({ data: args }));
                 } else {
-                    args.id = ++sequenceid;
-
-                    return (new responce(args));
+                    if (args.id) {
+                        var recordIndex = sequences.findIndex(function (item) {
+                            return item.id === args.id;
+                        });
+                        sequences.splice(recordIndex, 1);
+                    } else {
+                        args.id = ++sequenceid;
+                    }
+                    sequences.push(args);
+                    return (new responce({ data: args }));
                 }
             }
 
@@ -71,6 +94,27 @@
         },
         'post': function (url, args) {
             return core.ajax('POST', url, args);
+        },
+        'createGroup': function (args) {
+            var item = {};
+            core.ajax('POST', 'api/groups', args).then(function (data) {
+                item = data.data;
+            });
+            return item;
+        },
+        'createRecord': function (args) {
+            var item = {};
+            core.ajax('POST', 'api/records', args).then(function (data) {
+                item = data.data;
+            });
+            return item;
+        },
+        'createSequence': function (args) {
+            var item = {};
+            core.ajax('POST', 'api/sequences', args).then(function (data) {
+                item = data.data;
+            });
+            return item;
         },
         'put': function (url, args) {
             return core.ajax('PUT', url, args);

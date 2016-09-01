@@ -44,7 +44,10 @@ config(['$routeProvider', function ($routeProvider) {
                 return true;
             return false;
         });
-        var groupsWithSequences = processSequences(groupSequences, $scope.groups, $scope.currentTime);
+
+        var filteredGroupSequences = filterByDate(groupSequences, new Date(1970), addMonths($scope.currentTime, 1));
+
+        var groupsWithSequences = processSequences(filteredGroupSequences, $scope.groups, $scope.currentTime);
         var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
         currentGroups.map(function (group) {
             group.recordName = group.name;
@@ -257,7 +260,7 @@ config(['$routeProvider', function ($routeProvider) {
         };
         $scope.records.push(record);
         $http.post("api/records", record, { withCredentials: true }).then(function (item) {
-            record.id = item.id;
+            record.id = item.data.id;
         }, logError);
 
         group.recordAmount = '';
