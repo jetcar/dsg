@@ -95,16 +95,16 @@
         'post': function (url, args) {
             return core.ajax('POST', url, args);
         },
-        'createGroup': function (args) {
+        'createGroup': function (name, amount, time) {
             var item = {};
-            core.ajax('POST', 'api/groups', args).then(function (data) {
+            core.ajax('POST', 'api/groups', { name: name, amount: amount, time: time }).then(function (data) {
                 item = data.data;
             });
             return item;
         },
-        'createRecord': function (args) {
+        'createRecord': function (name,amount,paid,time,groupid) {
             var item = {};
-            core.ajax('POST', 'api/records', args).then(function (data) {
+            core.ajax('POST', 'api/records', {name : name,amount:amount,paid:paid,time:time,groupid:groupid}).then(function (data) {
                 item = data.data;
             });
             return item;

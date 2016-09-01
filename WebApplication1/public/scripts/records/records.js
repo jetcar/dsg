@@ -32,7 +32,11 @@ config(['$routeProvider', function ($routeProvider) {
                 return false;
             return true;
         });
-        var recordsWithSequences = processSequences(sequencesWithoutGroups, $scope.records, $scope.currentTime);
+
+        var filteredSequences = filterByDate(sequencesWithoutGroups, new Date(1970), addMonths($scope.currentTime, 1));
+
+
+        var recordsWithSequences = processSequences(filteredSequences, $scope.records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
             return a.time > b.time;
         });
@@ -53,6 +57,15 @@ config(['$routeProvider', function ($routeProvider) {
             group.recordName = group.name;
         });
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
+        if ($scope.currentTime > new Date()) {
+            var record = recordWithPrevMonthsMoney(recordsWithSequences,
+                $scope.currentGroups,
+                $scope.currentTime);
+            if (record) {
+                $scope.currentRecords.push(record);
+            }
+        }
+
         var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
         $scope.leftAmount = $scope.currentAmount - expectedExpences;
@@ -114,24 +127,24 @@ config(['$routeProvider', function ($routeProvider) {
 
     $scope.prev = function () {
         $scope.currentTime = addMonths($scope.currentTime, -1);
-        $scope.currentYear = newValue.getFullYear();
-        $scope.currentMonth = newValue.getMonth();
+        $scope.currentYear = $scope.currentTime.getFullYear();
+        $scope.currentMonth = $scope.currentTime.getMonth();
 
         $scope.updateView();
     }
 
     $scope.current = function () {
         $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
-        $scope.currentYear = newValue.getFullYear();
-        $scope.currentMonth = newValue.getMonth();
+        $scope.currentYear = $scope.currentTime.getFullYear();
+        $scope.currentMonth = $scope.currentTime.getMonth();
 
         $scope.updateView();
     }
 
     $scope.next = function () {
         $scope.currentTime = addMonths($scope.currentTime, 1);
-        $scope.currentYear = newValue.getFullYear();
-        $scope.currentMonth = newValue.getMonth();
+        $scope.currentYear = $scope.currentTime.getFullYear();
+        $scope.currentMonth = $scope.currentTime.getMonth();
 
         $scope.updateView();
     }
@@ -149,6 +162,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.time = record.time.getDate();
         $scope.paid = record.paid;
         $scope.group = isgroup;
+        $scope.hideEdit = true;
     }
     $scope.editSequence = function (record, isgroup) {
         $scope.id = record.sequence.id;
@@ -158,6 +172,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.paid = record.paid;
         $scope.group = isgroup;
         $scope.repeat = true;
+        $scope.hideEdit = true;
     }
 
     $scope.delete = function (record) {

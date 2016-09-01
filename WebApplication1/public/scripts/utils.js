@@ -6,24 +6,27 @@ function addMonths(date, amount) {
     var year = date.getFullYear();
     return new Date(year, month, 1);
 }
-function addRecordFromPrevMonths(records, date) {
+function recordWithPrevMonthsMoney(records, groups, date) {
     var currentTime = new Date();
-    var prevMonthsRecords = filterByDate(records, new Date(currentTime.getFullYear(), currentTime.getMonth()), date);
-    var prevExpences = calculateExpences(prevMonthsRecords);
-    var prevCurrent = calculateCurrent(prevMonthsRecords);
-    var prevLeftAmount = prevCurrent - prevExpences;
-
-    var result = records.map(function (item) { return item; });
-
-    if (prevLeftAmount > 0) {
-        result.push({
-            amount: prevLeftAmount * -1,
-            name: 'from prev month',
-            paid: true,
-            time: date,
-        });
+    var currentRecords = filterByDate(records, new Date(currentTime.getFullYear(), currentTime.getMonth()), date);
+    var currentGroups = filterByDate(groups, new Date(currentTime.getFullYear(), currentTime.getMonth()), date);
+    var money = 0;
+    for (var i = 0; i < currentRecords.length; i++) {
+        var record = currentRecords[i];
+        money += record.amount;
     }
-    return result;
+    for (var i = 0; i < currentGroups.length; i++) {
+        var record = currentGroups[i];
+        money += record.amount;
+    }
+
+
+    return {
+        amount: money,
+        name: 'from prev month',
+        paid: true,
+        time: date,
+    };
 }
 
 function logError(data) {
@@ -44,8 +47,7 @@ function processSequences(sequences, records, date) {
         return item;
     });
 
-    while (currentMonth <= date)
-    {
+    while (currentMonth <= date) {
         for (var i = 0; i < sequences.length; i++) {
             var seq = sequences[i];
             if (!containsSequenceRecord(newRecords, seq, currentMonth)) {
@@ -59,7 +61,7 @@ function processSequences(sequences, records, date) {
             }
         }
         currentMonth = addMonths(currentMonth, 1);
-    } 
+    }
     return newRecords;
 }
 
@@ -77,8 +79,7 @@ function containsSequenceRecord(records, sequence, date) {
 
 function setCurrentRecords(records, currentDate) {
     var nextMonth = addMonths(currentDate, 1);
-    var recordsWithPrevValues = addRecordFromPrevMonths(records, currentDate);
-    var currentMonthRecords = filterByDate(recordsWithPrevValues, currentDate, nextMonth);
+    var currentMonthRecords = filterByDate(records, currentDate, nextMonth);
     var recordsWithutGroups = currentMonthRecords.filter(function (item) {
         if (item.groupid > 0)
             return false;
@@ -116,7 +117,7 @@ function assignRecordsIntoGroups(records, groups) {
     return groups;
 }
 
-function calculateExpences(records,groups) {
+function calculateExpences(records, groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
         if (!records[i].paid)
@@ -133,12 +134,12 @@ function calculateExpences(records,groups) {
                     result -= record.amount;
             }
         }
-        
+
     }
 
     return result;
 }
-function calculateCurrent(records,groups) {
+function calculateCurrent(records, groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
         if (records[i].paid)

@@ -11,34 +11,11 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-           var record = http.createRecord({
-                amount: -100,
-                name: 'test',
-                paid: true,
-                time: new Date(),
-
-            });
-            http.createRecord({
-                amount: 1,
-                name: 'test2',
-                paid: false,
-                time: new Date(),
-
-            });
-            http.createRecord({
-                amount: 1,
-                name: 'test3',
-                paid: true,
-                time: new Date(),
-
-            });
-            http.createRecord({
-                amount: 1,
-                name: 'test4',
-                paid: true,
-                time: new Date(2011),
-
-            });
+            var record = http.createRecord('test', -100, true, new Date());
+            http.createRecord('test2', 1, false, new Date());
+            http.createRecord('test3', 1, true, new Date());
+            http.createRecord('test4', 1, true, addMonths(new Date(),1));
+         
 
             //act
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
@@ -65,34 +42,11 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-           var record = http.createRecord({
-                amount: -100,
-                name: 'test',
-                paid: true,
-                time: new Date(),
+            var record = http.createRecord('test', -100, true, new Date());
+            http.createRecord('test2', 1, false, new Date());
+            http.createRecord('test3', 1, true, new Date());
+            http.createRecord('test4', 1, false, addMonths(new Date(),1));
 
-            });
-            http.createRecord({
-                amount: 1,
-                name: 'test2',
-                paid: false,
-                time: new Date(),
-
-            });
-            http.createRecord({
-                amount: 1,
-                name: 'test3',
-                paid: true,
-                time: new Date(),
-
-            });
-            http.createRecord({
-                amount: 1,
-                name: 'test4',
-                paid: true,
-                time: new Date(2011,1,1),
-
-            });
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
             scope.editRecord(scope.records[0]);
@@ -128,12 +82,8 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-           var group = http.createGroup({
-                amount: -100,
-                name: 'test',
-                time: new Date(),
+            var group = http.createGroup('test', -100, new Date());
 
-            });
             
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
@@ -226,6 +176,44 @@ describe('myApp.records', function () {
             expect(scope.amount).toBe(-100);
             expect(scope.group).toBe(undefined);
             expect(scope.repeat).toBe(true);
+            expect(scope.name).toBe('test');
+            expect(scope.paid).toBe(undefined);
+            expect(scope.day).toBe(1);
+            expect(scope.hideEdit).toBe(true);
+
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(100);
+
+
+        }));
+
+        it('start edit sequence Record notSaved', inject(function ($rootScope, $controller) {
+            //spec body 
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+            var sequence = http.createSequence({
+                amount: -100,
+                name: 'test',
+                time: new Date(),
+
+            });
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            //act
+            scope.edit();
+            scope.editRecord(scope.currentRecords[0]);
+
+
+
+            expect(scope.currentRecords.length).toBe(1);
+            expect(scope.id).toBe(undefined);
+            expect(scope.amount).toBe(-100);
+            expect(scope.group).toBe(undefined);
+            expect(scope.repeat).toBe(undefined);
             expect(scope.name).toBe('test');
             expect(scope.paid).toBe(undefined);
             expect(scope.day).toBe(1);
