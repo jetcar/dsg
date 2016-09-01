@@ -3,6 +3,12 @@
         background-color: #f5e79e;
         border: solid;
         border-width: 1px;
+    }    
+    
+    .sequence {
+        background-color: cornflowerblue;
+        border: solid;
+        border-width: 1px;
     }
 
     .record {

@@ -167,6 +167,7 @@ describe('myApp.records', function () {
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
             //act
+            scope.edit();
             scope.editSequence(scope.currentRecords[0]);
 
 

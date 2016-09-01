@@ -26,12 +26,7 @@
     var core = {
 
         // Method that performs the ajax request
-        ajax: function (method, url, args) {
-
-
-
-            // Instantiates the XMLHttpRequest
-            var uri = url;
+        ajax: function (method, url, json) {
 
 
             if (method === 'GET') {
@@ -43,6 +38,8 @@
                     return (new responce({ data: sequences }));
             }
             else if (method === 'POST') {
+                var args = JSON.parse(json);
+
                 if (url === 'api/records') {
                     if (args.id) {
                         var recordIndex = records.findIndex(function(item) {
@@ -97,21 +94,21 @@
         },
         'createGroup': function (name, amount, time) {
             var item = {};
-            core.ajax('POST', 'api/groups', { name: name, amount: amount, time: time }).then(function (data) {
+            core.ajax('POST', 'api/groups', JSON.stringify({ name: name, amount: amount, time: time })).then(function (data) {
                 item = data.data;
             });
             return item;
         },
         'createRecord': function (name,amount,paid,time,groupid) {
             var item = {};
-            core.ajax('POST', 'api/records', {name : name,amount:amount,paid:paid,time:time,groupid:groupid}).then(function (data) {
+            core.ajax('POST', 'api/records', JSON.stringify({name : name,amount:amount,paid:paid,time:time,groupid:groupid})).then(function (data) {
                 item = data.data;
             });
             return item;
         },
         'createSequence': function (args) {
             var item = {};
-            core.ajax('POST', 'api/sequences', args).then(function (data) {
+            core.ajax('POST', 'api/sequences', JSON.stringify(args)).then(function (data) {
                 item = data.data;
             });
             return item;

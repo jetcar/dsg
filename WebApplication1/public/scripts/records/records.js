@@ -87,7 +87,7 @@ config(['$routeProvider', function ($routeProvider) {
     function getSequences(data) {
         $scope.sequences = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
-            item.time = new Date(item.time);
+            item.time = new Date(item.time);//problem here need to convert to local time
             return item;
         });
 
@@ -225,7 +225,7 @@ config(['$routeProvider', function ($routeProvider) {
                 );
             }
 
-            $http.post("api/sequences", sequence, {
+            $http.post("api/sequences", JSON.stringify(sequence), {
                 withCredentials: true
             }).then(function (item) {
                 sequence.id = item.data.id;//hack
@@ -251,7 +251,7 @@ config(['$routeProvider', function ($routeProvider) {
                 $scope.groups.push(group);
             }
 
-            $http.post("api/groups", group, {
+            $http.post("api/groups", JSON.stringify(group), {
                 withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;//hack
@@ -277,7 +277,7 @@ config(['$routeProvider', function ($routeProvider) {
                 };
                 $scope.records.push(record);
             }
-            $http.post("api/records", record, {
+            $http.post("api/records", JSON.stringify(record), {
                 withCredentials: true
             }).then(function (item) {
                 record.id = item.data.id;//hack
@@ -300,7 +300,7 @@ config(['$routeProvider', function ($routeProvider) {
                 group.sequenceid = group.sequence.id;
 
 
-            $http.post("api/groups", group, {
+            $http.post("api/groups", JSON.stringify(group), {
                 withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;
@@ -324,7 +324,7 @@ config(['$routeProvider', function ($routeProvider) {
             groupid: group.id
         };
         $scope.records.push(record);
-        $http.post("api/records", record, { withCredentials: true }).then(function (item) {
+        $http.post("api/records", JSON.stringify(record), { withCredentials: true }).then(function (item) {
             record.id = item.data.id;
         }, logError);
 
