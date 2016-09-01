@@ -49,7 +49,8 @@
             <div class="col-md-1">
             </div>
             <div class="col-md-2">
-                <button class="btn" ng-hide="hideEdit" ng-click="editRecord(group)">Edit</button>
+                <button class="btn" ng-hide="hideEdit" ng-click="editRecord(group,true)">Edit</button>
+                <button class="btn" ng-if="!hideEdit && group.sequenceid" ng-click="editSequence(group,true)">Edit Sequence</button>
             </div>
         </div>
             </form>
@@ -71,6 +72,7 @@
                 </div>
                 <div class="col-md-2">
                     <button class="btn" ng-hide="hideEdit" ng-click="editRecord(record)">Edit</button>
+                    <button class="btn" ng-if="!hideEdit && record.sequenceid" ng-click="editSequence(record)">Edit Sequence</button>
                 </div>
             </div>
         </form>
@@ -114,12 +116,13 @@
             </div>
             <div class="col-md-2">
                 <button class="btn" ng-hide="hideEdit" ng-click="editRecord(record)">Edit</button>
+                <button class="btn" ng-if="!hideEdit && record.sequence" ng-click="editSequence(record)">Edit Sequence</button>
             </div>
         </div>
 </div>
 <form name="myForm">
     <div class="row-fluid" style="margin-top: 20px;">
-        <div class="col-md-12 input-group">
+        <div  class="col-md-12 input-group">
             <div class="col-md-2">
                 <input class="form-control" type="number" required="" ng-model="amount">
             </div>
@@ -130,17 +133,15 @@
                 <input class="form-control" type="number" required="" min="1" max="31" integer ng-model="day">
             </div>
             <div class="col-md-1 btn-group">
-                <input type="checkbox" ng-model="paid">paid
+                <div ng-hide="group || repeat" >
+                    <input type="checkbox" ng-model="paid">paid
+                </div>
+
             </div>
             <div class="col-md-2">
                 <button class="btn" ng-click="myForm.$valid && save()">Save</button>
-                <button class="btn" ng-if="sequence || id > 0" ng-hide="hideEdit" ng-click="deleteSequence(record.sequence)">Delete sequence</button>
-                <button class="btn" ng-if="canDelete" ng-click="delete(id)">Delete</button>
+                <button class="btn" ng-if="canDelete" ng-click="delete()">Delete</button>
             </div>
-            <div class="col-md-2">
-               {{id}}
-            </div>
-
         </div>
     </div>
 </form>

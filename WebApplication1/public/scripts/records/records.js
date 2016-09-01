@@ -53,9 +53,14 @@ config(['$routeProvider', function ($routeProvider) {
             group.recordName = group.name;
         });
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
-        $scope.expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
+        var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
-        $scope.leftAmount = $scope.currentAmount - $scope.expectedExpences;
+        $scope.leftAmount = $scope.currentAmount - expectedExpences;
+        if (expectedExpences > 0)
+            $scope.expectedExpences = expectedExpences;
+        else {
+            $scope.expectedExpences = 0;
+        }
 
     }
 
@@ -142,9 +147,17 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.amount = record.amount;
         $scope.name = record.name;
         $scope.time = record.time.getDate();
+        $scope.paid = record.paid;
         $scope.group = isgroup;
-        $scope.sequence = record.hasOwnProperty('sequenceid');
-        $scope.canDelete = true;
+    }
+    $scope.editSequence = function (record, isgroup) {
+        $scope.id = record.sequence.id;
+        $scope.amount = record.amount;
+        $scope.name = record.name;
+        $scope.time = record.time.getDate();
+        $scope.paid = record.paid;
+        $scope.group = isgroup;
+        $scope.repeat = true;
     }
 
     $scope.delete = function (record) {
@@ -171,17 +184,32 @@ config(['$routeProvider', function ($routeProvider) {
 
 
     $scope.save = function () {
+        if (!$scope.amount)
+            return;
+        if (!$scope.name)
+            return;
         if ($scope.repeat) {
-            var sequence = {
-                amount: parseInt($scope.amount),
-                name: $scope.name,
-                userid: "null",
-                time: new Date($scope.currentYear, $scope.currentMonth, $scope.day),
-                group: $scope.group,
-            };
-            $scope.sequences.push(
-                sequence
-            );
+ 
+            var sequence = {};
+
+            if ($scope.id) {
+                sequence = $scope.sequences.find(function (item) { return item.id === $scope.id });
+                sequence.amount = $scope.amount;
+                sequence.name = $scope.name;
+                sequence.time = new Date($scope.currentYear, $scope.currentMonth, $scope.day);
+            }
+            else {
+                sequence = {
+                    amount: parseInt($scope.amount),
+                    name: $scope.name,
+                    userid: "null",
+                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
+                };
+                $scope.sequences.push(
+                    sequence
+                );
+            }
+
             $http.post("api/sequences", sequence, {
                 withCredentials: true
             }).then(function (item) {
@@ -189,13 +217,24 @@ config(['$routeProvider', function ($routeProvider) {
             }, logError);
 
         } else if ($scope.group) {
-            var group = {
-                amount: parseInt($scope.amount),
-                name: $scope.name,
-                userid: "null",
-                time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
-            };
-            $scope.groups.push(group);
+
+            var group = {};
+
+            if ($scope.id) {
+                group = $scope.groups.find(function (item) { return item.id === $scope.id });
+                group.amount = $scope.amount;
+                group.name = $scope.name;
+                group.time = new Date($scope.currentYear, $scope.currentMonth, $scope.day);
+            }
+            else {
+                group = {
+                    amount: parseInt($scope.amount),
+                    name: $scope.name,
+                    userid: "null",
+                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
+                };
+                $scope.groups.push(group);
+            }
 
             $http.post("api/groups", group, {
                 withCredentials: true
@@ -204,26 +243,37 @@ config(['$routeProvider', function ($routeProvider) {
             }, logError);
 
         } else {
-            var record = {
-                amount: parseInt($scope.amount),
-                name: $scope.name,
-                paid: $scope.paid,
-                userid: "null",
-                time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
-            };
-            $scope.records.push(record);
+            var record = {};
+
+            if ($scope.id) {
+                record = $scope.records.find(function (item) { return item.id === $scope.id });
+                record.amount = $scope.amount;
+                record.name = $scope.name;
+                record.paid = $scope.paid;
+                record.time = new Date($scope.currentYear, $scope.currentMonth, $scope.day);
+            }
+            else {
+                record = {
+                    amount: parseInt($scope.amount),
+                    name: $scope.name,
+                    paid: $scope.paid,
+                    userid: "null",
+                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.day)
+                };
+                $scope.records.push(record);
+            }
             $http.post("api/records", record, {
                 withCredentials: true
             }).then(function (item) {
                 record.id = item.data.id;//hack
             }, logError);
-
-            $scope.amount = null;
-            $scope.name = null;
-            $scope.paid = false;
-            $scope.day = $scope.day;
+           
         }
-
+        $scope.id = undefined;
+        $scope.amount = undefined;
+        $scope.name = undefined;
+        $scope.paid = false;
+        $scope.day = $scope.day;
         $scope.updateView();
     }
 
@@ -271,7 +321,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.updateView();
     }
 
-   
+
 }
 ]);
 
