@@ -101,7 +101,7 @@ describe('myApp.records', function () {
             expect(scope.hideEdit).toBe(true);
             expect(scope.name).toBe('test');
             expect(scope.paid).toBe(undefined);
-            expect(scope.day).toBe(1);
+            expect(scope.day).toBe(new Date().getDate());
 
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(0);
@@ -139,7 +139,7 @@ describe('myApp.records', function () {
             expect(scope.currentGroups[0].amount).toBe(-10);
             expect(scope.currentGroups[0].name).toBe('new Name');
             expect(scope.currentGroups[0].paid).toBe(undefined);
-            expect(scope.currentGroups[0].time.getDate()).toBe(1);
+            expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
@@ -179,8 +179,8 @@ describe('myApp.records', function () {
             expect(scope.repeat).toBe(true);
             expect(scope.name).toBe('test');
             expect(scope.paid).toBe(undefined);
-            expect(scope.day).toBe(1);
-            expect(scope.hideEdit).toBe(true);
+            expect(scope.day).toBe(new Date().getDate());
+            expect(scope.hideEdit).toBe(false);
 
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(0);
@@ -217,8 +217,8 @@ describe('myApp.records', function () {
             expect(scope.repeat).toBe(undefined);
             expect(scope.name).toBe('test');
             expect(scope.paid).toBe(undefined);
-            expect(scope.day).toBe(1);
-            expect(scope.hideEdit).toBe(true);
+            expect(scope.day).toBe(new Date().getDate());
+            expect(scope.hideEdit).toBe(false);
 
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(0);
@@ -256,13 +256,85 @@ describe('myApp.records', function () {
             expect(scope.currentRecords[0].amount).toBe(-10);
             expect(scope.currentRecords[0].name).toBe('new Name');
             expect(scope.currentRecords[0].paid).toBe(undefined);
-            expect(scope.currentRecords[0].time.getDate()).toBe(1);
+            expect(scope.currentRecords[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(0);
             expect(scope.leftAmount).toBe(10);
+
+
+
+        }));
+
+        it('delete record', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+            http.createRecord('test',1,true,new Date());
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+            scope.edit();
+            scope.editRecord(scope.currentRecords[0]);
+            //act
+            scope.delete();
+
+
+
+            expect(scope.currentRecords.length).toBe(0);
+            expect(scope.currentGroups.length).toBe(0);
+            expect(scope.id).toBe(undefined);
+
+            expect(scope.id).toBe(undefined);
+            expect(scope.amount).toBe(undefined);
+            expect(scope.group).toBe(false);
+            expect(scope.repeat).toBe(undefined);
+            expect(scope.name).toBe(undefined);
+            expect(scope.paid).toBe(false);
+            expect(scope.day).toBe(new Date().getDate());
+            expect(scope.hideEdit).toBe(false);
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(0);
+
+
+
+        }));
+
+        it('delete group', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+            http.createGroup('test',1,new Date());
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+            scope.edit();
+            scope.editRecord(scope.currentGroups[0], true);
+            //act
+            scope.delete();
+
+
+
+            expect(scope.currentRecords.length).toBe(0);
+            expect(scope.currentGroups.length).toBe(0);
+            expect(scope.id).toBe(undefined);
+
+            expect(scope.id).toBe(undefined);
+            expect(scope.amount).toBe(undefined);
+            expect(scope.group).toBe(false);
+            expect(scope.repeat).toBe(undefined);
+            expect(scope.name).toBe(undefined);
+            expect(scope.paid).toBe(false);
+            expect(scope.day).toBe(new Date().getDate());
+            expect(scope.hideEdit).toBe(false);
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(0);
 
 
 

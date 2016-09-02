@@ -87,7 +87,7 @@ config(['$routeProvider', function ($routeProvider) {
     function getSequences(data) {
         $scope.sequences = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
-            item.time = new Date(item.time);//problem here need to convert to local time
+            item.time = new Date(item.time);//problem here need to convert to local timep
             return item;
         });
 
@@ -102,8 +102,7 @@ config(['$routeProvider', function ($routeProvider) {
 
     }
 
-    $http.get("api/records", { withCredentials: true })
-        .then(function (data) {
+    $http.get("api/records", { withCredentials: true }).then(function (data) {
             $scope.records = data.data.map(function (item) {
                 item.amount = parseFloat(item.amount);
                 item.time = new Date(item.time);
@@ -112,7 +111,6 @@ config(['$routeProvider', function ($routeProvider) {
 
 
         }, error).then(function () {
-
             $http.get("api/groups", {
                 withCredentials: true
             }).then(getGroups, error);
@@ -162,7 +160,6 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.time = record.time.getDate();
         $scope.paid = record.paid;
         $scope.group = isgroup;
-        $scope.hideEdit = true;
     }
     $scope.editSequence = function (record, isgroup) {
         $scope.id = record.sequence.id;
@@ -172,17 +169,41 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.paid = record.paid;
         $scope.group = isgroup;
         $scope.repeat = true;
-        $scope.hideEdit = true;
     }
 
-    $scope.delete = function (record) {
-        records = removeItem(record, records);
-        $http.delete("api/records/" + record.id,
-        {
-            withCredentials: true
-        }).then(function () {
-            updateView();
-        });
+    $scope.delete = function () {
+        if ($scope.group) {
+            $scope.groups = removeItem($scope.id, $scope.groups);
+            $http.delete("api/groups/" + $scope.id,
+                {
+                    withCredentials: true
+                })
+                .then(function () {
+                    $scope.id = undefined;
+                    $scope.amount = undefined;
+                    $scope.name = undefined;
+                    $scope.paid = false;
+                    $scope.day = $scope.day;
+                    $scope.group = false;
+                    $scope.updateView();
+                });
+
+        } else {
+            $scope.records = removeItem($scope.id, $scope.records);
+            $http.delete("api/records/" + $scope.id,
+                {
+                    withCredentials: true
+                })
+                .then(function() {
+                    $scope.id = undefined;
+                    $scope.amount = undefined;
+                    $scope.name = undefined;
+                    $scope.paid = false;
+                    $scope.day = $scope.day;
+                    $scope.group = false;
+                    $scope.updateView();
+                });
+        }
     }
 
 
@@ -225,7 +246,7 @@ config(['$routeProvider', function ($routeProvider) {
                 );
             }
 
-            $http.post("api/sequences", JSON.stringify(sequence), {
+            $http.post("api/sequences", (sequence), {
                 withCredentials: true
             }).then(function (item) {
                 sequence.id = item.data.id;//hack
@@ -251,7 +272,7 @@ config(['$routeProvider', function ($routeProvider) {
                 $scope.groups.push(group);
             }
 
-            $http.post("api/groups", JSON.stringify(group), {
+            $http.post("api/groups", (group), {
                 withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;//hack
@@ -277,7 +298,7 @@ config(['$routeProvider', function ($routeProvider) {
                 };
                 $scope.records.push(record);
             }
-            $http.post("api/records", JSON.stringify(record), {
+            $http.post("api/records", (record), {
                 withCredentials: true
             }).then(function (item) {
                 record.id = item.data.id;//hack
@@ -288,7 +309,9 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.amount = undefined;
         $scope.name = undefined;
         $scope.paid = false;
-        $scope.day = $scope.day;
+        $scope.day = new Date().getDate();
+        $scope.group = false;
+        $scope.repeat = false;
         $scope.updateView();
     }
 
@@ -300,7 +323,7 @@ config(['$routeProvider', function ($routeProvider) {
                 group.sequenceid = group.sequence.id;
 
 
-            $http.post("api/groups", JSON.stringify(group), {
+            $http.post("api/groups", (group), {
                 withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;
@@ -324,7 +347,7 @@ config(['$routeProvider', function ($routeProvider) {
             groupid: group.id
         };
         $scope.records.push(record);
-        $http.post("api/records", JSON.stringify(record), { withCredentials: true }).then(function (item) {
+        $http.post("api/records", (record), { withCredentials: true }).then(function (item) {
             record.id = item.data.id;
         }, logError);
 

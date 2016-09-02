@@ -37,9 +37,16 @@
                 else
                     return (new responce({ data: sequences }));
             }
+            if (method === 'DELETE') {
+                if (url === 'api/records')
+                    return (new responce({ data: records }));
+                else if (url === 'api/groups')
+                    return (new responce({ data: groups }));
+                else
+                    return (new responce({ data: sequences }));
+            }
             else if (method === 'POST') {
-                var args = JSON.parse(json);
-
+                var args = json;
                 if (url === 'api/records') {
                     if (args.id) {
                         var recordIndex = records.findIndex(function(item) {
@@ -94,21 +101,21 @@
         },
         'createGroup': function (name, amount, time) {
             var item = {};
-            core.ajax('POST', 'api/groups', JSON.stringify({ name: name, amount: amount, time: time })).then(function (data) {
+            core.ajax('POST', 'api/groups', ({ name: name, amount: amount, time: time })).then(function (data) {
                 item = data.data;
             });
             return item;
         },
         'createRecord': function (name,amount,paid,time,groupid) {
             var item = {};
-            core.ajax('POST', 'api/records', JSON.stringify({name : name,amount:amount,paid:paid,time:time,groupid:groupid})).then(function (data) {
+            core.ajax('POST', 'api/records', ({name : name,amount:amount,paid:paid,time:time,groupid:groupid})).then(function (data) {
                 item = data.data;
             });
             return item;
         },
         'createSequence': function (args) {
             var item = {};
-            core.ajax('POST', 'api/sequences', JSON.stringify(args)).then(function (data) {
+            core.ajax('POST', 'api/sequences', (args)).then(function (data) {
                 item = data.data;
             });
             return item;

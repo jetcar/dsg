@@ -6,6 +6,16 @@ describe('myApp.records', function () {
 
 
     describe('records controller', function () {
+        it('parse json', inject(function ($rootScope, $controller) {
+            //spec body
+
+            var time = new Date('2016-09-01T21:00:00.000Z');
+
+            expect(time.getDate()).toBe(2);
+
+
+        }));
+
         it('simple record', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
@@ -322,7 +332,7 @@ describe('myApp.records', function () {
             http.createSequence({
                 amount: 2,
                 name: 'test2',
-                time: new Date(2011, 1, 1),
+                time: addMonths(new Date(),-1),
                 group: true
             });
             http.createSequence({
@@ -436,6 +446,13 @@ describe('myApp.records', function () {
             expect(scope.currentRecords[0].id).toBe(1);
             expect(scope.currentRecords[0].name).toBe('name');
             expect(scope.currentRecords[0].amount).toBe(1);
+
+            expect(scope.amount).toBe(undefined);
+            expect(scope.group).toBe(false);
+            expect(scope.repeat).toBe(false);
+            expect(scope.name).toBe(undefined);
+            expect(scope.paid).toBe(false);
+            expect(scope.day).toBe(new Date().getDate());
 
 
             expect(scope.expectedExpences).toBe(1);

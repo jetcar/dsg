@@ -4,7 +4,7 @@
 function addMonths(date, amount) {
     var month = date.getMonth() + amount;
     var year = date.getFullYear();
-    return new Date(year, month, 1);
+    return new Date(year, month, date.getDate());
 }
 function recordWithPrevMonthsMoney(records, groups, date) {
     var currentTime = new Date();
@@ -160,9 +160,9 @@ function calculateCurrent(records, groups) {
 
     return result;
 }
-function removeItem(removable, array) {
+function removeItem(id, array) {
     var result = array.filter(function (item) {
-        if (item.id === removable.id)
+        if (item.id === id)
             return false;
         return true;
     });
