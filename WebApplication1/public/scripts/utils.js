@@ -52,10 +52,14 @@ function processSequences(sequences, records, date) {
             var seq = sequences[i];
             if (!containsSequenceRecord(newRecords, seq, currentMonth)) {
                 newRecords.push({
+                    id:-1,
                     amount: seq.amount,
                     name: seq.name,
                     time: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), seq.time.getDate()),
                     sequence: seq,
+                    group: seq.group,
+                    repeat:true,
+                    sequenceid:seq.id
 
                 });
             }

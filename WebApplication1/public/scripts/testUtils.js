@@ -38,12 +38,47 @@
                     return (new responce({ data: sequences }));
             }
             if (method === 'DELETE') {
-                if (url === 'api/records')
-                    return (new responce({ data: records }));
-                else if (url === 'api/groups')
-                    return (new responce({ data: groups }));
+                if (url.indexOf('api/records') === 0) {
+                    var id = parseInt(url.split('/')[2]);
+                    var recordIndex = records.findIndex(function(item) {
+                        return item.id === id;
+                    });
+                    if (recordIndex > -1) {
+                        records.splice(recordIndex, 1);
+                        return new responce();
+                    }
+                    else {
+                        throw 'invalid id: ' + id;
+                    }
+                }
+                else if (url.indexOf('api/groups') === 0) {
+                    var id = parseInt(url.split('/')[2]);
+                    var recordIndex = groups.findIndex(function (item) {
+                        return item.id === id;
+                    });
+                    if (recordIndex > -1) {
+                        groups.splice(recordIndex, 1);
+                        return new responce();
+                    }
+                    else {
+                        throw 'invalid id: ' + id;
+                    }
+                }
                 else
-                    return (new responce({ data: sequences }));
+                    if (url.indexOf('api/sequences') === 0) {
+                        var id = parseInt(url.split('/')[2]);
+                        var recordIndex = sequences.findIndex(function (item) {
+                            return item.id === id;
+                        });
+                        if (recordIndex > -1) {
+                            sequences.splice(recordIndex, 1);
+                            return new responce();
+                        }
+
+                        else {
+                            throw 'invalid id: ' + id;
+                        }
+                    }
             }
             else if (method === 'POST') {
                 var args = json;

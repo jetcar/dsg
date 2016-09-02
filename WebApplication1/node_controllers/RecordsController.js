@@ -59,7 +59,7 @@ module.exports = function (app) {
         });
 
     app.delete('/api/records/:id',
-        function (req, res,next) {
+        function (req, res, next) {
             authorize(req).then(function (foundUser) {
                 if (foundUser) {
                     Records.findById(req.params.id)

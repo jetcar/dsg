@@ -28,23 +28,25 @@
     <div class="col-md-1">Paid</div>
     <div class="col-md-2">
         <label>
-            <button class="btn" ng-click="edit()">Edit</button>
+            <button class="btn" ng-show="hideEdit" ng-click="edit()">Edit</button>
+            <button class="btn" ng-hide="hideEdit"  ng-click="edit()">Done</button>
         </label>
     </div>
 </div>
+<hr/>
 
 <div class="row-fluid group" ng-repeat="group in currentGroups">
     <div class="row">
         <form name="editForm">
             <div class="col-md-12">
-                <div ng-show="hideEdit" class="col-md-2">
-                    Limit:{{group.amount}}
+                <div  class="col-md-2">
+                    Limit:<div class="pull-right">{{group.amount}}</div>
                 </div>
                 <div class="col-md-2">
-                    Group Name:{{group.name}}
+                    {{group.name}}
                 </div>
                 <div class="col-md-2">
-                    Left:{{group.leftAmount}}
+                    Left: <div class="pull-right">{{group.leftAmount}}</div>
                 </div>
                 <div class="col-md-1">
                 </div>
@@ -106,7 +108,7 @@
             Amount:{{record.amount}}
         </div>
         <div class="col-md-2">
-            Name:{{record.name}}
+            {{record.name}}
         </div>
         <div class="col-md-2">
             {{record.time | date:"d MMM"}}
@@ -123,24 +125,25 @@
 <form name="myForm">
     <div class="row-fluid" style="margin-top: 20px;">
         <div class="col-md-12 input-group">
+            {{editableRecord.id}}
             <div class="col-md-2">
-                <input class="form-control" type="number" required="" ng-model="amount">
+                <input class="form-control" type="number" required="" ng-model="editableRecord.amount">
             </div>
             <div class="col-md-2">
-                <input class="form-control" type="text" required="" ng-model="name">
+                <input class="form-control" type="text" required="" ng-model="editableRecord.name">
             </div>
             <div class="col-md-2 ">
-                <input class="form-control" type="number" required="" min="1" max="31" integer ng-model="day">
+                <input class="form-control" type="number" required="" min="1" max="31" integer ng-model="editableRecord.day">
             </div>
             <div class="col-md-1 btn-group">
-                <div ng-hide="group || repeat">
-                    <input type="checkbox" ng-model="paid">paid
+                <div ng-hide="editableRecord.group || repeat">
+                    <input type="checkbox" ng-model="editableRecord.paid">paid
                 </div>
 
             </div>
             <div class="col-md-2">
                 <button class="btn" ng-click="myForm.$valid && save()">Save</button>
-                <button class="btn" ng-if="id" ng-click="delete()">Delete</button>
+                <button class="btn" ng-if="editableRecord.id" ng-click="delete()">Delete</button>
             </div>
         </div>
     </div>
@@ -151,7 +154,7 @@
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" ng-disabled="id" ng-model="repeat">repeat
+                    <input type="checkbox" ng-disabled="editableRecord.id" ng-model="editableRecord.repeat">repeat
                 </label>
             </div>
         </div>
@@ -159,7 +162,7 @@
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" ng-disabled="id" ng-model="group">group
+                    <input type="checkbox" ng-disabled="editableRecord.id" ng-model="editableRecord.group">group
                 </label>
             </div>
         </div>

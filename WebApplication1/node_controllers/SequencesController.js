@@ -58,13 +58,13 @@ module.exports = function (app) {
           authorize(req).then(function (foundUser) {
               if (foundUser) {
                   Sequences.findById(req.params.id)
-                      .then(function (sequence) {
+                          .then(function(sequence) {
                           sequence.destroy().then(sequelize().sync()).then(function (data) {
-                              res.end();
+                                      res.end();
                           }).catch(function data(err) {
-                              return next(err);
+                                      return next(err);
+                                  });
                           });
-                      });
               } else {
                   res.status(401).end();
               }
