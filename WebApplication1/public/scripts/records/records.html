@@ -36,25 +36,25 @@
 <div class="row-fluid group" ng-repeat="group in currentGroups">
     <div class="row">
         <form name="editForm">
-        <div class="col-md-12">
-            <div ng-show="hideEdit" class="col-md-2">
-                Limit:{{group.amount}}
+            <div class="col-md-12">
+                <div ng-show="hideEdit" class="col-md-2">
+                    Limit:{{group.amount}}
+                </div>
+                <div class="col-md-2">
+                    Group Name:{{group.name}}
+                </div>
+                <div class="col-md-2">
+                    Left:{{group.leftAmount}}
+                </div>
+                <div class="col-md-1">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn" ng-hide="hideEdit" ng-click="editRecord(group,true)">Edit</button>
+                    <button class="btn" ng-if="!hideEdit && group.sequenceid" ng-click="editSequence(group,true)">Edit Sequence</button>
+                </div>
             </div>
-            <div class="col-md-2">
-                Group Name:{{group.name}}
-            </div>
-            <div class="col-md-2">
-                Left:{{group.leftAmount}}
-            </div>
-            <div class="col-md-1">
-            </div>
-            <div class="col-md-2">
-                <button class="btn" ng-hide="hideEdit" ng-click="editRecord(group,true)">Edit</button>
-                <button class="btn" ng-if="!hideEdit && group.sequenceid" ng-click="editSequence(group,true)">Edit Sequence</button>
-            </div>
-        </div>
-            </form>
-</div>
+        </form>
+    </div>
     <div class="row-fluid record" ng-repeat="record in group.records">
         <form name="editForm">
             <div class="col-md-12 input-group">
@@ -101,28 +101,28 @@
 </div>
 
 <div class="row-fluid " style="border: solid; border-width: 1px;" ng-repeat="record in currentRecords">
-        <div ng-class="{sequence : record.sequence}" class="col-md-12 input-group">
-            <div  class="col-md-2">
-                Amount:{{record.amount}}
-            </div>
-            <div class="col-md-2">
-                Name:{{record.name}}
-            </div>
-            <div class="col-md-2">
-                {{record.time | date:"d MMM"}}
-            </div>
-            <div class="col-md-1">
-                <input type="checkbox" disabled ng-model="record.paid">paid
-            </div>
-            <div class="col-md-2">
-                <button class="btn" ng-hide="hideEdit" ng-click="editRecord(record)">Edit</button>
-                <button class="btn" ng-if="!hideEdit && record.sequence" ng-click="editSequence(record)">Edit Sequence</button>
-            </div>
+    <div ng-class="{sequence : record.sequence}" class="col-md-12 input-group">
+        <div class="col-md-2">
+            Amount:{{record.amount}}
         </div>
+        <div class="col-md-2">
+            Name:{{record.name}}
+        </div>
+        <div class="col-md-2">
+            {{record.time | date:"d MMM"}}
+        </div>
+        <div class="col-md-1">
+            <input type="checkbox" disabled ng-model="record.paid">paid
+        </div>
+        <div class="col-md-2">
+            <button class="btn" ng-hide="hideEdit" ng-click="editRecord(record)">Edit</button>
+            <button class="btn" ng-if="!hideEdit && record.sequence" ng-click="editSequence(record)">Edit Sequence</button>
+        </div>
+    </div>
 </div>
 <form name="myForm">
     <div class="row-fluid" style="margin-top: 20px;">
-        <div  class="col-md-12 input-group">
+        <div class="col-md-12 input-group">
             <div class="col-md-2">
                 <input class="form-control" type="number" required="" ng-model="amount">
             </div>
@@ -133,7 +133,7 @@
                 <input class="form-control" type="number" required="" min="1" max="31" integer ng-model="day">
             </div>
             <div class="col-md-1 btn-group">
-                <div ng-hide="group || repeat" >
+                <div ng-hide="group || repeat">
                     <input type="checkbox" ng-model="paid">paid
                 </div>
 
@@ -145,13 +145,13 @@
         </div>
     </div>
 </form>
-<div class="row-fluid ">
+<div class="row-fluid">
     <div class="col-md-12">
         <div class="col-md-2">
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" ng-model="repeat">repeat
+                    <input type="checkbox" ng-disabled="id" ng-model="repeat">repeat
                 </label>
             </div>
         </div>
@@ -159,7 +159,7 @@
 
             <div class="checkbox">
                 <label>
-                    <input type="checkbox" ng-model="group">group
+                    <input type="checkbox" ng-disabled="id" ng-model="group">group
                 </label>
             </div>
         </div>

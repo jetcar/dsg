@@ -156,12 +156,10 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-            var sequence = http.createSequence({
-                amount: -100,
-                name: 'test',
-                time: new Date(),
 
-            });
+            var sequence = http.createSequence('test', -100, new Date());
+
+
 
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
@@ -194,12 +192,9 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-            var sequence = http.createSequence({
-                amount: -100,
-                name: 'test',
-                time: new Date(),
+            var sequence = http.createSequence('test', -100, new Date());
 
-            });
+
 
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
@@ -232,13 +227,8 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-            var group = http.createSequence({
-                amount: -100,
-                name: 'test',
-                time: new Date(),
 
-            });
-
+            var sequence = http.createSequence('test', -100, new Date());
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
             scope.editSequence(scope.currentRecords[0]);
@@ -247,9 +237,7 @@ describe('myApp.records', function () {
             //act
             scope.save();
             scope.save();
-
-
-
+            
             expect(scope.currentRecords.length).toBe(1);
             expect(scope.currentGroups.length).toBe(0);
             expect(scope.currentRecords[0].id).toBe(undefined);
@@ -281,9 +269,7 @@ describe('myApp.records', function () {
             scope.editRecord(scope.currentRecords[0]);
             //act
             scope.delete();
-
-
-
+            
             expect(scope.currentRecords.length).toBe(0);
             expect(scope.currentGroups.length).toBe(0);
             expect(scope.id).toBe(undefined);
@@ -291,7 +277,7 @@ describe('myApp.records', function () {
             expect(scope.id).toBe(undefined);
             expect(scope.amount).toBe(undefined);
             expect(scope.group).toBe(false);
-            expect(scope.repeat).toBe(undefined);
+            expect(scope.repeat).toBe(false);
             expect(scope.name).toBe(undefined);
             expect(scope.paid).toBe(false);
             expect(scope.day).toBe(new Date().getDate());
@@ -317,6 +303,39 @@ describe('myApp.records', function () {
             scope.editRecord(scope.currentGroups[0], true);
             //act
             scope.delete();
+            
+            expect(scope.currentRecords.length).toBe(0);
+            expect(scope.currentGroups.length).toBe(0);
+            expect(scope.id).toBe(undefined);
+
+            expect(scope.id).toBe(undefined);
+            expect(scope.amount).toBe(undefined);
+            expect(scope.group).toBe(false);
+            expect(scope.repeat).toBe(false);
+            expect(scope.name).toBe(undefined);
+            expect(scope.paid).toBe(false);
+            expect(scope.day).toBe(new Date().getDate());
+            expect(scope.hideEdit).toBe(false);
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(0);
+
+
+
+        }));
+
+        it('delete sequence', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+            var sequence = http.createSequence('test', 1, new Date());
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+            scope.edit();
+            scope.editSequence(scope.currentRecords[0]);
+            //act
+            scope.delete();
 
 
 
@@ -327,7 +346,7 @@ describe('myApp.records', function () {
             expect(scope.id).toBe(undefined);
             expect(scope.amount).toBe(undefined);
             expect(scope.group).toBe(false);
-            expect(scope.repeat).toBe(undefined);
+            expect(scope.repeat).toBe(false);
             expect(scope.name).toBe(undefined);
             expect(scope.paid).toBe(false);
             expect(scope.day).toBe(new Date().getDate());

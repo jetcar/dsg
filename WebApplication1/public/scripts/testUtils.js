@@ -113,9 +113,9 @@
             });
             return item;
         },
-        'createSequence': function (args) {
+        'createSequence': function (name, amount, time,group) {
             var item = {};
-            core.ajax('POST', 'api/sequences', (args)).then(function (data) {
+            core.ajax('POST', 'api/sequences', ({ name: name, amount: amount, time: time,group:group })).then(function (data) {
                 item = data.data;
             });
             return item;

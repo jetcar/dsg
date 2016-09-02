@@ -161,6 +161,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.paid = record.paid;
         $scope.group = isgroup;
     }
+
     $scope.editSequence = function (record, isgroup) {
         $scope.id = record.sequence.id;
         $scope.amount = record.amount;
@@ -185,6 +186,25 @@ config(['$routeProvider', function ($routeProvider) {
                     $scope.paid = false;
                     $scope.day = $scope.day;
                     $scope.group = false;
+                    $scope.repeat = false;
+                    $scope.updateView();
+                });
+
+        }
+        else if ($scope.repeat) {
+            $scope.sequences = removeItem($scope.id, $scope.sequences);
+            $http.delete("api/sequences/" + $scope.id,
+                {
+                    withCredentials: true
+                })
+                .then(function () {
+                    $scope.id = undefined;
+                    $scope.amount = undefined;
+                    $scope.name = undefined;
+                    $scope.paid = false;
+                    $scope.day = $scope.day;
+                    $scope.group = false;
+                    $scope.repeat = false;
                     $scope.updateView();
                 });
 
@@ -201,6 +221,7 @@ config(['$routeProvider', function ($routeProvider) {
                     $scope.paid = false;
                     $scope.day = $scope.day;
                     $scope.group = false;
+                    $scope.repeat = false;
                     $scope.updateView();
                 });
         }

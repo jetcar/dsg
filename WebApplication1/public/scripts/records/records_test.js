@@ -122,21 +122,9 @@ describe('myApp.records', function () {
 
 
             var http = new myHttp([], [], []);
-            var sequence = http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: new Date(),
+            var sequence = http.createSequence('test', 1, new Date());
+            http.createSequence('test', 1, addMonths(new Date(), 1));
 
-           });
-
-            http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: addMonths(new Date(), 1)
-
-           });
 
             //act
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
@@ -163,21 +151,10 @@ describe('myApp.records', function () {
 
 
             var http = new myHttp([], [], []);
-            var sequence = http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: new Date(),
+            var sequence = http.createSequence('test', 1, new Date());
+            http.createSequence('test', 1, addMonths(new Date(), 1));
 
-           });
 
-            http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: addMonths(new Date(), 1)
-
-           });
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
@@ -206,21 +183,10 @@ describe('myApp.records', function () {
 
 
             var http = new myHttp([], [], []);
-            var sequence = http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: new Date(),
+            var sequence = http.createSequence('test', 1, new Date());
+            http.createSequence('test', 1, addMonths(new Date(), 1));
 
-           });
 
-            http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: addMonths(new Date(), 1)
-
-           });
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
@@ -252,13 +218,9 @@ describe('myApp.records', function () {
             var http = new myHttp([], [], []);
 
             http.createRecord('test', -100, true, new Date());
-            http.createSequence(
-           {
-               amount: 50,
-               name: 'test',
-               time: new Date(),
+            var sequence = http.createSequence('test', 50, new Date());
 
-           });
+
             http.createGroup('test', 50, new Date());
 
 
@@ -289,21 +251,10 @@ describe('myApp.records', function () {
 
 
             var http = new myHttp([], [], []);
-            var sequence = http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: new Date(),
+            var sequence = http.createSequence('test', 1, new Date());
+            http.createSequence('test', 1, addMonths(new Date(), 1));
 
-           });
 
-            http.createSequence(
-           {
-               amount: 1,
-               name: 'test',
-               time: addMonths(new Date(), 1)
-
-           });
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
@@ -323,24 +274,12 @@ describe('myApp.records', function () {
             //spec body
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
-            http.createSequence({
-                amount: 1,
-                name: 'test1',
-                time: new Date(),
-                group: true
-            });
-            http.createSequence({
-                amount: 2,
-                name: 'test2',
-                time: addMonths(new Date(),-1),
-                group: true
-            });
-            http.createSequence({
-                amount: 1,
-                name: 'test3',
-                time: new Date(2100, 1, 1),
-                group: true
-            });
+
+            var sequence = http.createSequence('test', 1, new Date(),true);
+            http.createSequence('test2', 2, addMonths(new Date(), -1),true);
+            http.createSequence('test3', 1, addMonths(new Date(), 1),true);
+
+
 
             //act
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
@@ -350,7 +289,7 @@ describe('myApp.records', function () {
             expect(scope.currentGroups[0].id).toBe(undefined);
             expect(scope.currentGroups[0].amount).toBe(1);
             expect(scope.currentGroups[0].leftAmount).toBe(1);
-            expect(scope.currentGroups[0].name).toBe('test1');
+            expect(scope.currentGroups[0].name).toBe('test');
             expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
 
