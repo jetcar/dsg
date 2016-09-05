@@ -273,6 +273,33 @@ describe('myApp.records', function () {
 
         }));
 
+
+        it('simple record sequence sorting', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+
+
+
+            var http = new myHttp([], [], []);
+            http.createSequence('test', 1, new Date(2001,3,2));
+            http.createSequence('1', 1, new Date(2001,2,1));
+            http.createSequence('test3', 1, new Date(2001,4,3));
+
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            //act
+            scope.next();
+
+            expect(scope.currentRecords.length).toBe(4);
+            expect(scope.currentRecords[0].name).toBe('1');
+            expect(scope.currentRecords[1].name).toBe('test');
+            expect(scope.currentRecords[2].name).toBe('test3');
+
+
+        }));
+
         it('simple group sequence', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();
@@ -280,7 +307,7 @@ describe('myApp.records', function () {
 
             var sequence = http.createSequence('test', 1, new Date(),true);
             http.createSequence('test2', 2, addMonths(new Date(), -1),true);
-            http.createSequence('test3', 1, addMonths(new Date(), 1),true);
+            http.createSequence('test3', 3, addMonths(new Date(), 1),true);
 
 
 
@@ -290,16 +317,16 @@ describe('myApp.records', function () {
 
             expect(scope.currentGroups.length).toBe(2);
             expect(scope.currentGroups[0].id).toBe(-1);
-            expect(scope.currentGroups[0].amount).toBe(2);
-            expect(scope.currentGroups[0].leftAmount).toBe(2);
-            expect(scope.currentGroups[0].name).toBe('test2');
+            expect(scope.currentGroups[0].amount).toBe(1);
+            expect(scope.currentGroups[0].leftAmount).toBe(1);
+            expect(scope.currentGroups[0].name).toBe('test');
             expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
 
             expect(scope.currentGroups[1].id).toBe(-1);
-            expect(scope.currentGroups[1].amount).toBe(1);
-            expect(scope.currentGroups[1].leftAmount).toBe(1);
-            expect(scope.currentGroups[1].name).toBe('test');
+            expect(scope.currentGroups[1].amount).toBe(2);
+            expect(scope.currentGroups[1].leftAmount).toBe(2);
+            expect(scope.currentGroups[1].name).toBe('test2');
             expect(scope.currentGroups[1].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentGroups[1].time.getMonth()).toBe(new Date().getMonth());
 

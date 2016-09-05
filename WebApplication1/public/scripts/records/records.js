@@ -32,29 +32,19 @@ config(['$routeProvider', function ($routeProvider) {
             return true;
         });
 
-        $scope.records = $scope.records.sort(function (a, b) {
-            if (a.time.toISOString() == b.time.toISOString())
-                return a.id > b.id;
-            return a.time > b.time;
-        });
-
-        $scope.groups = $scope.groups.sort(function (a, b) {
-            if (a.time.toISOString() == b.time.toISOString())
-                return a.id > b.id;
-            return a.time > b.time;
-        });
-
-        $scope.sequences = $scope.sequences.sort(function (a, b) {
-            if (a.time.toISOString() == b.time.toISOString())
-                return a.id > b.id;
-            return a.time > b.time;
-        });
 
         var filteredSequences = filterByDate(sequencesWithoutGroups, new Date(1970), addMonths($scope.currentTime, 1));
 
 
         var recordsWithSequences = processSequences(filteredSequences, $scope.records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
+
+            if (a.time.toISOString() === b.time.toISOString()) {
+                if (a.id === b.id) {
+                    return a.name.localeCompare(b.name);
+                }
+                return a.id > b.id;
+            }
             return a.time > b.time;
         });
 
@@ -73,7 +63,18 @@ config(['$routeProvider', function ($routeProvider) {
         currentGroups.map(function (group) {
             group.recordName = group.name;
         });
-        $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups);
+
+        $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function (a, b) {
+
+            if (a.time.toISOString() === b.time.toISOString()) {
+                if (a.id === b.id) {
+                    return a.name.localeCompare(b.name);
+                }
+                return a.id > b.id;
+            }
+            return a.time > b.time;
+        });
+
         if ($scope.currentTime > new Date()) {
             var record = recordWithPrevMonthsMoney(recordsWithSequences,
                 $scope.currentGroups,
