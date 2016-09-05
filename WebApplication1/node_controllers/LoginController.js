@@ -64,7 +64,7 @@ function sendMail(foundUser, req) {
     var url = req.protocol + '://' + req.get('host');
 
     transporter().sendMail({
-        from: 'no-reply@' + req.get('host'),
+        from: 'dsgDsg <no-reply@dsgdsg.eu',
         to: foundUser.email,
         subject: 'Login link',
         html: '<a href="' + url + '/account/login/userid/' + foundUser.id + '/code/' +
