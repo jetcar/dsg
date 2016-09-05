@@ -1,20 +1,11 @@
 ﻿var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.json();
 var Users = require(__dirname + '/../node_DAL/Users.js');
-var nodemailer = require('nodemailer');
-var smtpTransport = require('nodemailer-smtp-transport');
-
-var sequelize = require(__dirname + '/../node_DAL/db.js');
+var sequelize = require(__dirname + '/../db.js');
+var transporter = require(__dirname + '/../mail.js');
 
 
-var transporter = nodemailer.createTransport(smtpTransport({
-    port: 255,
-    host: 'localhost',
-    tls: {
-        ciphers: 'SSLv3'
-    },
-    secure: false,
-}));
+
 
 
 module.exports = function (app) {
@@ -72,7 +63,7 @@ module.exports = function (app) {
 function sendMail(foundUser, req) {
     var url = req.protocol + '://' + req.get('host');
 
-    transporter.sendMail({
+    transporter().sendMail({
         from: 'no-reply@' + req.get('host'),
         to: foundUser.email,
         subject: 'Login link',

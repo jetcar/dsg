@@ -247,12 +247,13 @@
     <Content Include="Areas\HelpPage\HelpPage.css" />
     <Content Include="Areas\HelpPage\Views\_ViewStart.cshtml" />
     <Content Include="karma.conf.js" />
+    <Content Include="mail.js" />
     <Content Include="node_controllers\authorize.js" />
     <Content Include="node_controllers\SequencesController.js" />
     <Content Include="node_controllers\LoginController.js" />
     <Content Include="node_controllers\GroupsController.js" />
     <Content Include="node_controllers\RecordsController.js" />
-    <Content Include="node_DAL\db.js" />
+    <Content Include="db.js" />
     <Content Include="node_DAL\Groups.js" />
     <Content Include="node_DAL\Sequences.js" />
     <Content Include="node_DAL\Records.js" />

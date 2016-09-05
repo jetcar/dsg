@@ -1,5 +1,5 @@
 ﻿var Sequelize = require('sequelize');
-var sequelize = require(__dirname + '/db.js');
+var sequelize = require(__dirname + '/../db.js');
 
 module.exports = sequelize().define('users', {
     id: { type: Sequelize.STRING, primaryKey: true },

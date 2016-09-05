@@ -1,7 +1,7 @@
 ﻿
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.json();
-var sequelize = require(__dirname + '/../node_DAL/db.js');
+var sequelize = require(__dirname + '/../db.js');
 var Records = require(__dirname + '/../node_DAL/Records.js');
 var authorize = require(__dirname + '/authorize.js');
 
