@@ -249,6 +249,12 @@ config(['$routeProvider', function ($routeProvider) {
 
             if ($scope.editableRecord.id) {
                 sequence = $scope.sequences.find(function (item) { return item.id === $scope.editableRecord.id });
+                sequence = {
+                    id: sequence.id,
+                    userid: "null",
+                    group: $scope.editableRecord.group,
+                    repeat: true,
+                };
                 sequence.amount = $scope.editableRecord.amount;
                 sequence.name = $scope.editableRecord.name;
                 sequence.time = new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day);
@@ -260,6 +266,7 @@ config(['$routeProvider', function ($routeProvider) {
                     userid: "null",
                     time: new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day),
                     group: $scope.editableRecord.group,
+                    repeat:true,
                 };
                 $scope.sequences.push(
                     sequence
@@ -278,6 +285,13 @@ config(['$routeProvider', function ($routeProvider) {
 
             if ($scope.editableRecord.id > 0) {
                 group = $scope.groups.find(function (item) { return item.id === $scope.editableRecord.id });
+                group = {
+                    id: group.id,
+                    userid: "null",
+                    group: true,
+                    sequenceid: $scope.editableRecord.sequenceid,
+                    repeat: $scope.editableRecord.repeat,
+                };
                 group.amount = $scope.editableRecord.amount;
                 group.name = $scope.editableRecord.name;
                 group.time = new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day);
@@ -305,6 +319,13 @@ config(['$routeProvider', function ($routeProvider) {
 
             if ($scope.editableRecord.id > 0) {
                 record = $scope.records.find(function (item) { return item.id === $scope.editableRecord.id });
+                record = {
+                    id : record.id,
+                    userid: "null",
+                    sequenceid: $scope.editableRecord.sequenceid,
+                    repeat: $scope.editableRecord.repeat,
+                };
+                   
                 record.amount = $scope.editableRecord.amount;
                 record.name = $scope.editableRecord.name;
                 record.paid = $scope.editableRecord.paid;
@@ -334,22 +355,26 @@ config(['$routeProvider', function ($routeProvider) {
     }
 
     $scope.saveFromFroup = function (group) {
-        if (!group.id) {
+        if (group.id < 0) {
 
-            group.userid = "null";
-            if (group.sequence)
-                group.sequenceid = group.sequence.id;
+            var newgroup = {
+                amount: group.amount,
+                name:group.name,
+                userid: "null",
+                sequenceid: group.sequenceid,
+                time: new Date(group.time.getFullYear(), group.time.getMonth(), group.recordDay)
 
+            }
 
-            $http.post("api/groups", (group), {
+            $http.post("api/groups", (newgroup), {
                 withCredentials: true
             }).then(function (item) {
                 group.id = item.data.id;
                 $scope.groups.push(group);
-                saveRecord(group, $scope.currentYear, $scope.currentMonth, $scope.day);
+                saveRecord(group, $scope.currentYear, $scope.currentMonth, group.recordDay);
             }, logError);
         } else {
-            saveRecord(group, $scope.currentYear, $scope.currentMonth, $scope.day);
+            saveRecord(group, $scope.currentYear, $scope.currentMonth, group.recordDay);
         }
 
 
@@ -361,7 +386,7 @@ config(['$routeProvider', function ($routeProvider) {
             name: group.recordName,
             paid: group.recordPaid,
             userid: "null",
-            time: new Date(currentYear, currentMonth, group.recordDay),
+            time: new Date(currentYear, currentMonth, day),
             groupid: group.id
         };
         $scope.records.push(record);

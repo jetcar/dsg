@@ -67,7 +67,7 @@ describe('myApp.records', function () {
             expect(scope.currentRecords[0].amount).toBe(-10);
             expect(scope.currentRecords[0].name).toBe('new name');
             expect(scope.currentRecords[0].paid).toBe(false);
-            expect(scope.currentRecords[0].time.getDate()).toBe(1);
+            expect(scope.currentRecords[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
@@ -350,13 +350,13 @@ describe('myApp.records', function () {
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
             scope.edit();
-            scope.editRecord(scope.currentGroups[0],true);
+            scope.editRecord(scope.currentGroups[0]);
             scope.editableRecord.name = "new Name";
             scope.editableRecord.amount = -10;
             scope.save();
             
             //act
-            scope.editRecord(scope.currentGroups[0], true);
+            scope.editRecord(scope.currentGroups[0]);
             scope.editableRecord.name = "new Name2";
             scope.editableRecord.amount = -11;
             scope.save();

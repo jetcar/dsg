@@ -10,6 +10,11 @@
         border: solid;
         border-width: 1px;
     }
+    .income {
+        background-color: greenyellow;
+        border: solid;
+        border-width: 1px;
+    }
 
     .record {
         background-color: white;

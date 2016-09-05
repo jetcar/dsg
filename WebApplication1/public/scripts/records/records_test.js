@@ -506,6 +506,52 @@ describe('myApp.records', function () {
 
         }));
 
+        it('add record to group sequence', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+
+            var http = new myHttp([], [], []);
+
+            http.createSequence('test', 1, new Date(),true);
+
+            http.createGroup('test', 1, addMonths(new Date(), 1));
+
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            var group = scope.currentGroups[0];
+            group.recordAmount = 1;
+            group.recordName = "name";
+            group.recordDay = 1;
+            group.recordPaid = true;
+
+
+            //act
+            scope.saveFromFroup(group);
+
+            expect(scope.currentRecords.length).toBe(0);
+            expect(scope.currentGroups.length).toBe(1);
+            expect(scope.currentGroups[0].id).toBe(2);
+            expect(scope.currentGroups[0].amount).toBe(1);
+            expect(scope.currentGroups[0].leftAmount).toBe(0);
+            expect(scope.currentGroups[0].name).toBe('test');
+            //expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
+            expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
+
+            expect(scope.currentGroups[0].records.length).toBe(1);
+            expect(scope.currentGroups[0].records[0].id).toBe(1);
+            expect(scope.currentGroups[0].records[0].name).toBe('name');
+            expect(scope.currentGroups[0].records[0].amount).toBe(1);
+
+
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(-1);
+            expect(scope.leftAmount).toBe(-1);
+
+
+        }));
+
         it('add record', inject(function ($rootScope, $controller) {
             //spec body
             var scope = $rootScope.$new();

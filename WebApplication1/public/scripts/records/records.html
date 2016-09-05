@@ -103,7 +103,7 @@
 </div>
 
 <div class="row-fluid " style="border: solid; border-width: 1px;" ng-repeat="record in currentRecords">
-    <div ng-class="{sequence : record.sequence}" class="col-md-12 input-group">
+    <div ng-class="{income :record.amount <0,  sequence : record.sequence}" class="col-md-12 input-group">
         <div class="col-md-2">
             Amount:{{record.amount}}
         </div>
