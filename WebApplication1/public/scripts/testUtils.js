@@ -131,6 +131,9 @@
     };
     // Adapter pattern
     return {
+        'records': this.records,
+        'groups': this.groups,
+        'sequences': this.sequences,
         'get': function (url, args) {
             return core.ajax('GET', url, args);
         },
