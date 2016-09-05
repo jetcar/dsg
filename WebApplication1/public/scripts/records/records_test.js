@@ -22,9 +22,9 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-            http.createRecord('test', -100, true, new Date());
-            http.createRecord('test', 1, false, new Date());
-            http.createRecord('test', 1, true, new Date());
+            var record = http.createRecord('test', -100, true, new Date());
+            var record2 = http.createRecord('test2', 1, false, new Date());
+            var record3 = http.createRecord('test3', 1, true, new Date());
             http.createRecord('test', 1, true, addMonths(new Date(), 1));
 
 
@@ -33,7 +33,9 @@ describe('myApp.records', function () {
 
 
             expect(scope.currentRecords.length).toBe(3);
-            expect(scope.currentRecords[0].id).toBe(1);
+            expect(scope.currentRecords[0].id).toBe(record.id);
+            expect(scope.currentRecords[1].id).toBe(record2.id);
+            expect(scope.currentRecords[2].id).toBe(record3.id);
             expect(scope.currentRecords[0].amount).toBe(-100);
             expect(scope.currentRecords[0].name).toBe('test');
             expect(scope.currentRecords[0].paid).toBe(true);
@@ -52,7 +54,7 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
 
             var http = new myHttp([], [], []);
-            http.createGroup('test', 1, new Date());
+            var group = http.createGroup('test', 1, new Date());
             http.createGroup('test', 1, addMonths(new Date(), 1));
 
 
@@ -61,7 +63,7 @@ describe('myApp.records', function () {
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
             expect(scope.currentGroups.length).toBe(1);
-            expect(scope.currentGroups[0].id).toBe(1);
+            expect(scope.currentGroups[0].id).toBe(group.id);
             expect(scope.currentGroups[0].amount).toBe(1);
             expect(scope.currentGroups[0].leftAmount).toBe(1);
             expect(scope.currentGroups[0].name).toBe('test');
@@ -83,7 +85,7 @@ describe('myApp.records', function () {
             var group = http.createGroup('test', 111, new Date());
             http.createGroup('test', 1, addMonths(new Date(), 1));
 
-            http.createRecord('testRecord', 100, true, new Date(), group.id);
+            var record = http.createRecord('testRecord', 100, true, new Date(), group.id);
             http.createRecord('test2', 2, true, addMonths(new Date(), 1), group.id);
 
 
@@ -98,14 +100,14 @@ describe('myApp.records', function () {
 
 
             expect(scope.currentGroups.length).toBe(1);
-            expect(scope.currentGroups[0].id).toBe(1);
+            expect(scope.currentGroups[0].id).toBe(group.id);
             expect(scope.currentGroups[0].amount).toBe(111);
             expect(scope.currentGroups[0].name).toBe('test');
             expect(scope.currentGroups[0].leftAmount).toBe(11);
             expect(scope.currentGroups[0].time.getDate()).toBe(new Date().getDate());
             expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.currentGroups[0].records.length).toBe(1);
-            expect(scope.currentGroups[0].records[0].id).toBe(1);
+            expect(scope.currentGroups[0].records[0].id).toBe(record.id);
             expect(scope.currentGroups[0].records[0].name).toBe('testRecord');
             expect(scope.currentGroups[0].records[0].amount).toBe(100);
 
@@ -466,9 +468,9 @@ describe('myApp.records', function () {
 
             var http = new myHttp([], [], []);
 
-            http.createGroup('test', 1, new Date());
+            var mygroup = http.createGroup('test', 1, new Date());
 
-            http.createGroup('test', 1, addMonths(new Date(), 1));
+            http.createGroup('test2', 1, addMonths(new Date(), 1));
 
 
 
@@ -486,7 +488,7 @@ describe('myApp.records', function () {
 
             expect(scope.currentRecords.length).toBe(0);
             expect(scope.currentGroups.length).toBe(1);
-            expect(scope.currentGroups[0].id).toBe(1);
+            expect(scope.currentGroups[0].id).toBe(mygroup.id);
             expect(scope.currentGroups[0].amount).toBe(1);
             expect(scope.currentGroups[0].leftAmount).toBe(0);
             expect(scope.currentGroups[0].name).toBe('test');
@@ -494,7 +496,7 @@ describe('myApp.records', function () {
             expect(scope.currentGroups[0].time.getMonth()).toBe(new Date().getMonth());
 
             expect(scope.currentGroups[0].records.length).toBe(1);
-            expect(scope.currentGroups[0].records[0].id).toBe(1);
+            expect(scope.currentGroups[0].records[0].id).toBe(mygroup.id);
             expect(scope.currentGroups[0].records[0].name).toBe('name');
             expect(scope.currentGroups[0].records[0].amount).toBe(1);
 

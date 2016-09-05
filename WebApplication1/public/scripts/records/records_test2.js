@@ -19,6 +19,8 @@ describe('myApp.records', function () {
 
             //act
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+            expect(scope.currentRecords[0].id).toBe(record.id);
+
             scope.editRecord(scope.currentRecords[0]);
 
             expect(scope.currentRecords.length).toBe(3);
@@ -49,6 +51,9 @@ describe('myApp.records', function () {
 
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            expect(scope.currentRecords[0].id).toBe(record.id);
+
             scope.editRecord(scope.currentRecords[0]);
             scope.editableRecord.amount = -10;
             scope.editableRecord.name = 'new name';
@@ -180,6 +185,42 @@ describe('myApp.records', function () {
 
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(100);
+
+
+        }));
+
+        it('edit saved sequence record', inject(function ($rootScope, $controller) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+
+            var sequence = http.createSequence('test', -100, new Date());
+
+
+
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+
+            //act
+            scope.edit();
+            scope.editRecord(scope.currentRecords[0]);
+            scope.save();
+            scope.editRecord(scope.currentRecords[0]);
+            scope.editableRecord.paid = true;
+            scope.save();
+
+
+            expect(scope.currentRecords.length).toBe(1);
+            //expect(scope.editableRecord.id).toBe(sequence.id);
+            expect(scope.currentRecords[0].amount).toBe(-100);
+            expect(scope.currentRecords[0].repeat).toBe(true);
+            expect(scope.currentRecords[0].name).toBe('test');
+            expect(scope.currentRecords[0].paid).toBe(true);
+
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(100);
             expect(scope.leftAmount).toBe(100);
 
 

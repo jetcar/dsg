@@ -89,7 +89,8 @@
                         });
                         records.splice(recordIndex, 1);
                     } else {
-                        args.id = ++recordLastId;
+                        recordLastId += Math.round(Math.random(100));
+                        args.id = recordLastId;
                     }
                     records.push(args);
 
@@ -102,7 +103,8 @@
                         });
                         groups.splice(recordIndex, 1);
                     } else {
-                        args.id = ++groupId;
+                        groupId += Math.round(Math.random(100));
+                        args.id = groupId;
                     }
                     groups.push(args);
                     return (new responce({ data: args }));
@@ -113,7 +115,8 @@
                         });
                         sequences.splice(recordIndex, 1);
                     } else {
-                        args.id = ++sequenceid;
+                        sequenceid += Math.round(Math.random(100));
+                        args.id = sequenceid;
                     }
                     sequences.push(args);
                     return (new responce({ data: args }));
