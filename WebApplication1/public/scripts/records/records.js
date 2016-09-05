@@ -77,7 +77,7 @@ config(['$routeProvider', function ($routeProvider) {
 
         if ($scope.currentTime > new Date()) {
             var record = recordWithPrevMonthsMoney(recordsWithSequences,
-                $scope.currentGroups,
+                groupsWithSequences,
                 $scope.currentTime);
             if (record) {
                 $scope.currentRecords.push(record);
@@ -86,7 +86,7 @@ config(['$routeProvider', function ($routeProvider) {
 
         var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
-        $scope.leftAmount = $scope.currentAmount - expectedExpences;
+        $scope.leftAmount = calculateLeft($scope.currentRecords, $scope.currentGroups);
         if (expectedExpences > 0)
             $scope.expectedExpences = expectedExpences;
         else {

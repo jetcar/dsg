@@ -124,7 +124,7 @@ function assignRecordsIntoGroups(records, groups) {
 function calculateExpences(records, groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
-        if (!records[i].paid)
+        if (!records[i].paid && records[i].amount > 0)
             result += records[i].amount;
     }
     if (groups) {
@@ -142,6 +142,23 @@ function calculateExpences(records, groups) {
     }
 
     return result;
+}
+
+function calculateLeft(records, groups) {
+    var result = 0;
+    for (var i = 0; i < records.length; i++) {
+            result += records[i].amount;
+    }
+    if (groups) {
+
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i];
+            result += group.amount;
+        }
+
+    }
+
+    return -1 * result;
 }
 function calculateCurrent(records, groups) {
     var result = 0;

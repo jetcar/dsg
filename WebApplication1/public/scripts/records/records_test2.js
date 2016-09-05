@@ -71,7 +71,7 @@ describe('myApp.records', function () {
             expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
-            expect(scope.expectedExpences).toBe(0);
+            expect(scope.expectedExpences).toBe(1);
             expect(scope.currentAmount).toBe(-1);
             expect(scope.leftAmount).toBe(8);
 
