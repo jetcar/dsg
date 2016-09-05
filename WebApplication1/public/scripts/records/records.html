@@ -96,7 +96,7 @@
         </div>
     </div>
 
-    <div class="row" ng-repeat="record in currentRecords">
+    <div class="row" ng-class-odd="'record2'" ng-class="{income:record.amount < 0}" ng-class-even="'record'" ng-repeat="record in currentRecords">
         <div class="type">
             <span ng-show="record.sequence" class="glyphicon glyphicon-retweet" aria-hidden="true">
             </span>

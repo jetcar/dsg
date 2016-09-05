@@ -14,12 +14,13 @@
 
 .income {
     background-color: greenyellow;
-    border-top: 1px solid #ddd;
 }
 
 .record {
     background-color: white;
-    margin: 10px 10px;
+}
+.record2 {
+    background-color: #f9f9f9;
 }
 
 .selected {
