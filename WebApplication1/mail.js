@@ -4,7 +4,7 @@ var smtpTransport = require('nodemailer-smtp-transport');
 
 
 var transporter = nodemailer.createTransport(smtpTransport({
-    port: 255,
+    port: 25,
     host: 'localhost',
     tls: {
         ciphers: 'SSLv3'
