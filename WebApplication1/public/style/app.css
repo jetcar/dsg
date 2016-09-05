@@ -2,6 +2,9 @@
 .group {
     background-color: #f5e79e;
     border-top: 1px solid #ddd;
+}.group2 {
+    background-color: #e8cc37;
+    border-top: 1px solid #ddd;
 }
 
 .sequence {

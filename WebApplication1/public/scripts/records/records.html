@@ -15,21 +15,20 @@
     <br>
     <br>
     <div class="row">
+        <div class="type"> type:</div>
         <div class="col-md-2">Expences:{{expectedExpences}}</div>
         <div class="col-md-2">Current:{{currentAmount}}</div>
         <div class="col-md-2">Left:{{leftAmount}}</div>
-        <div class="col-md-1">Paid</div>
+        <div class="col-md-2">Paid</div>
         <div class="col-md-2">
-            <label>
-                <button class="btn btn-primary" ng-show="hideEdit" ng-click="edit()">Edit</button>
-                <button class="btn btn-primary" ng-hide="hideEdit" ng-click="edit()">Done</button>
-            </label>
+            <button class="btn btn-primary" ng-show="hideEdit" ng-click="edit()">Edit</button>
+            <button class="btn btn-primary" ng-hide="hideEdit" ng-click="edit()">Done</button>
         </div>
     </div>
 
 
     <div class="row" ng-repeat="group in currentGroups">
-        <div class="row">
+        <div class="row" ng-class-odd="'group'" ng-class-even="'group2'">
             <div class="type">
                 <span ng-show="group.sequence" class="glyphicon glyphicon-retweet" aria-hidden="true">
                 </span>
