@@ -9,20 +9,8 @@
     var groups = this.groups;
     var sequences = this.sequences;
     var recordLastId = 0;
-    this.records.map(function (a) {
-        if (a.id > recordLastId)
-            recordLastId = a.id;
-    });
     var groupId = 0;
-    this.groups.map(function (a) {
-        if (a.id > groupId)
-            groupId = a.id;
-    });
     var sequenceid = 0;
-    this.sequences.map(function (a) {
-        if (a.id > sequenceid)
-            sequenceid = a.id;
-    });
     var core = {
 
         // Method that performs the ajax request
@@ -89,7 +77,7 @@
                         });
                         records.splice(recordIndex, 1);
                     } else {
-                        recordLastId += Math.round(Math.random(100));
+                        recordLastId += Math.round(Math.random()*100)+1;
                         args.id = recordLastId;
                     }
                     records.push(args);
@@ -103,7 +91,7 @@
                         });
                         groups.splice(recordIndex, 1);
                     } else {
-                        groupId += Math.round(Math.random(100));
+                        groupId += Math.round(Math.random()*100)+1;
                         args.id = groupId;
                     }
                     groups.push(args);
@@ -115,7 +103,7 @@
                         });
                         sequences.splice(recordIndex, 1);
                     } else {
-                        sequenceid += Math.round(Math.random(100));
+                        sequenceid += Math.round(Math.random()*100)+1;
                         args.id = sequenceid;
                     }
                     sequences.push(args);

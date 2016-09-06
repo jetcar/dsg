@@ -243,7 +243,7 @@ config(['$routeProvider', function ($routeProvider) {
             return;
         if (!$scope.editableRecord.name)
             return;
-        if ($scope.editableRecord.repeat && $scope.editableRecord.id !== -1) {
+        if ($scope.editableRecord.repeat && $scope.editableRecord.id !== -1 && $scope.editableRecord.sequenceid == undefined) {
 
             var sequence = {};
 
