@@ -1,14 +1,15 @@
 
 
 <div class="row-fluid">
+<form ng-submit="login()">
     <div class="col-md-12">
         <div class="col-md-4">
             <input type="email" class="form-control" ng-model="email">
         </div>
         <div class="col-md-6">
-            <span class="input-group-btn"><button class="btn btn-default" type="button" ng-disabled="disableButton" ng-click="login()">Login</button></span>
+            <span class="input-group-btn"><input class="btn btn-default" type="submit" ng-disabled="disableButton" >Login</button></span>
         </div>
     </div>
-
+</form>
     <div>{{message}}</div>
 </div>
