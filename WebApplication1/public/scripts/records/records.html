@@ -1,4 +1,7 @@
-<div class="container">
+<div ng-show="loading" class="container">
+<div class="col-md-1"><img src="/img/loading.gif"></div>
+</div>
+<div ng-hide="loading" class="container">
     <div class="row">
         <div class="col-md-2">
             <button class="btn btn-warning" ng-click="prev()">Prev</button>

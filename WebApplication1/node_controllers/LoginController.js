@@ -45,6 +45,8 @@ module.exports = function (app) {
                 }
             })
                 .then(function (foundUser) {
+					if(foundUser)
+					{
                     foundUser.token = guid();
                     foundUser.emailtoken = null;
                     foundUser.save()
@@ -55,6 +57,10 @@ module.exports = function (app) {
                                 { httpOnly: true });
                             res.redirect('/index.html#!/records');
                         });
+					}
+					else{
+						res.redirect('/index.html#!/login');
+					}
 
                 });
         });

@@ -22,7 +22,7 @@ config(['$routeProvider', function ($routeProvider) {
     $scope.expectedExpences = 0;
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
-
+	$scope.loading = true;
 
 
     $scope.updateView = function () {
@@ -92,6 +92,8 @@ config(['$routeProvider', function ($routeProvider) {
         else {
             $scope.expectedExpences = 0;
         }
+		
+		$scope.loading = false;
 
     }
 
