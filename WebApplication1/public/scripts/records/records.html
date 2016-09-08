@@ -1,5 +1,5 @@
 <div ng-show="loading" class="container">
-<div style="text-align:center"><img src="/img/loading.gif"></div>
+    <div style="text-align:center"><img src="/img/loading.gif"></div>
 </div>
 <div ng-hide="loading" class="container-fluid">
     <div class="row-fluid">
@@ -36,20 +36,20 @@
                 <span ng-show="group.sequence" class="glyphicon glyphicon-retweet" aria-hidden="true">
                 </span>
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-2">
                 Limit:
                 <div class="pull-right">{{group.amount}}</div>
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-2">
                 {{group.name}}
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-3">
                 Left:
                 <div class="pull-right">{{group.leftAmount}}</div>
             </div>
-            <div class="col-md-1">
+            <div class="col-xs-1">
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-2">
                 <button class="btn btn-sm" ng-hide="hideEdit" ng-click="editRecord(group,true)">Edit</button>
                 <button class="btn btn-info btn-sm" ng-if="!hideEdit && group.sequenceid" ng-click="editSequence(group,true)">Edit Sequence</button>
             </div>
@@ -58,19 +58,19 @@
             <div class="type">
                 <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
             </div>
-            <div class="col-md-1">
+            <div class="col-xs-1">
                 {{record.amount}}
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-2">
                 {{record.name}}
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-3">
                 {{record.time | date:"d MMM"}}
             </div>
-            <div class="col-md-1">
+            <div class="col-xs-1">
                 <button class="btn btn-primary btn-sm" ng-hide="record.paid" value="Pay" ng-click="pay(record);">Pay</button>
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-2">
                 <button class="btn btn-sm" ng-hide="hideEdit" ng-click="editRecord(record)">Edit</button>
             </div>
         </div>
@@ -81,7 +81,7 @@
                 </div>
 
                 <div class="col-md-1">
-                    <input class="form-control" type="number"  placeholder="Amount" required ng-model="group.recordAmount">
+                    <input class="form-control" type="number" placeholder="Amount" required ng-model="group.recordAmount">
                 </div>
                 <div class="col-md-2">
                     <input class="form-control" type="text" placeholder="Name" required ng-model="group.recordName">
@@ -89,10 +89,10 @@
                 <div class="col-md-2">
                     <input class="form-control" type="number" placeholder="Day" required min="1" max="31" integer ng-model="group.recordDay">
                 </div>
-                <div class="col-md-1">
+                <div class="col-xs-3">
                     <input type="checkbox" ng-model="group.recordPaid">paid
                 </div>
-                <div class="col-md-2">
+                <div class="col-xs-2">
                     <button ng-show="hideEdit" class="btn btn-primary btn-sm" ng-click="groupForm.$valid && saveFromFroup(group)">Add</button>
                 </div>
             </form>
@@ -109,20 +109,22 @@
                 <span ng-show="!record.sequence && record.amount > 0" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
             </div>
 
-            <div class="col-md-1">
+            <div class="col-xs-2">
                 {{record.amount}}
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-3">
                 {{record.name}}
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-3">
                 {{record.time | date:"d MMM"}}
             </div>
-            <div class="col-md-1">
+            <div class="colxs-1">
                 <button class="btn btn-primary btn-sm" ng-hide="record.paid" value="Pay" ng-click="pay(record);">Pay</button>
             </div>
-            <div class="col-md-2">
+            <div class="col-xs-1">
                 <button class="btn btn-sm" ng-click="editRecord(record)">Edit</button>
+            </div>
+            <div class="col-xs-2">
                 <button class="btn btn-info btn-sm" ng-if="!hideEdit && record.sequence" ng-click="editSequence(record)">Edit Sequence</button>
             </div>
         </div>
@@ -148,14 +150,15 @@
                 <div class="col-md-2">
                     <input class="form-control" type="number" required="" min="1" max="31" placeholder="Day" integer ng-model="editableRecord.day">
                 </div>
-                <div class="col-md-1 btn-group">
+                <div class="col-xs-3 btn-group">
                     <div ng-hide="editableRecord.group || repeat">
-
-                        <input id="paid" type="checkbox" ng-model="editableRecord.paid">paid
+                        <label>
+                            <input id="paid" type="checkbox" ng-model="editableRecord.paid">paid
+                        </label>
                     </div>
 
                 </div>
-                <div class="col-md-2">
+                <div class="col-xs-2">
                     <button class="btn btn-primary btn-sm" ng-click="myForm.$valid && save()">Save</button>
                     <button class="btn btn-danger btn-sm" ng-if="editableRecord.id" ng-click="delete()">Delete</button>
                 </div>
@@ -163,7 +166,7 @@
         </form>
         <div class="row-fluid">
             <div class="col-md-12">
-                <div class="col-md-2">
+                <div class="col-xs-3">
 
                     <div class="checkbox">
                         <label>
@@ -171,7 +174,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-xs-3">
 
                     <div class="checkbox">
                         <label>
