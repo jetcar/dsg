@@ -32,12 +32,27 @@
     margin: 0px;
 }
 
+.row-fluid {
+    min-height: 31px;
+    margin: 0px;
+    clear: left;
+}
+
 .type {
-    width: 35px;
+    width: 30px;
     position: relative;
     float: left;
 }
 .container {
     width: 90%
 }
+/*.col-md-1, .col-md-2  {
+    float: left;
+}
+.col-md-2  {
+    min-width: 100px;
+}*/
 
+body {
+    padding-bottom: 400px; /* This should be equal to the height of your header */
+}

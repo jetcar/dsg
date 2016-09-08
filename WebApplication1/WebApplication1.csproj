@@ -306,6 +306,7 @@
     <Content Include="public\scripts\records\records.js" />
     <Content Include="public\scripts\login\login.html" />
     <Content Include="public\scripts\login\login.js" />
+    <Content Include="public\style\bootstrap-responsive.css" />
     <Content Include="public\style\bootstrap-theme.css" />
     <Content Include="public\style\bootstrap.css" />
     <Content Include="server.js" />

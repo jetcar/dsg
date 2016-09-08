@@ -22,7 +22,7 @@ config(['$routeProvider', function ($routeProvider) {
     $scope.expectedExpences = 0;
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
-	$scope.loading = true;
+    $scope.loading = true;
 
 
     $scope.updateView = function () {
@@ -92,8 +92,8 @@ config(['$routeProvider', function ($routeProvider) {
         else {
             $scope.expectedExpences = 0;
         }
-		
-		$scope.loading = false;
+
+        $scope.loading = false;
 
     }
 
@@ -145,6 +145,11 @@ config(['$routeProvider', function ($routeProvider) {
 
     });
 
+    $scope.pay = function (record) {
+        $scope.editRecord(record);
+        $scope.editableRecord.paid = true;
+        $scope.save();
+    }
 
     $scope.prev = function () {
         $scope.currentTime = addMonths($scope.currentTime, -1);
@@ -203,16 +208,38 @@ config(['$routeProvider', function ($routeProvider) {
 
         }
         else if ($scope.editableRecord.repeat) {
-            $scope.sequences = removeItem($scope.editableRecord.id, $scope.sequences);
-            $http.delete("api/sequences/" + $scope.editableRecord.id,
-                {
-                    withCredentials: true
-                })
-                .then(function () {
-                    $scope.editableRecord = {};
+            if ($scope.editableRecord.sequenceid != undefined) {
+                $scope.records = removeItem($scope.editableRecord.id, $scope.records);
+                $http.delete("api/records/" + $scope.editableRecord.id,
+                    {
+                        withCredentials: true
+                    })
+                    .then(function () {
+                        $scope.sequences = removeItem($scope.editableRecord.sequenceid, $scope.sequences);
+                        $http.delete("api/sequences/" + $scope.editableRecord.sequenceid,
+                            {
+                                withCredentials: true
+                            })
+                            .then(function () {
+                                $scope.editableRecord = {};
 
-                    $scope.updateView();
-                });
+                                $scope.updateView();
+                            });
+                    });
+            } else {
+
+
+                $scope.sequences = removeItem($scope.editableRecord.id, $scope.sequences);
+                $http.delete("api/sequences/" + $scope.editableRecord.id,
+                    {
+                        withCredentials: true
+                    })
+                    .then(function () {
+                        $scope.editableRecord = {};
+
+                        $scope.updateView();
+                    });
+            }
 
         } else {
             $scope.records = removeItem($scope.editableRecord.id, $scope.records);
@@ -268,7 +295,7 @@ config(['$routeProvider', function ($routeProvider) {
                     userid: "null",
                     time: new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day),
                     group: $scope.editableRecord.group,
-                    repeat:true,
+                    repeat: true,
                 };
                 $scope.sequences.push(
                     sequence
@@ -322,12 +349,12 @@ config(['$routeProvider', function ($routeProvider) {
             if ($scope.editableRecord.id > 0) {
                 record = $scope.records.find(function (item) { return item.id === $scope.editableRecord.id });
                 record = {
-                    id : record.id,
+                    id: record.id,
                     userid: "null",
                     sequenceid: $scope.editableRecord.sequenceid,
                     repeat: $scope.editableRecord.repeat,
                 };
-                   
+
                 record.amount = $scope.editableRecord.amount;
                 record.name = $scope.editableRecord.name;
                 record.paid = $scope.editableRecord.paid;
@@ -361,7 +388,7 @@ config(['$routeProvider', function ($routeProvider) {
 
             var newgroup = {
                 amount: group.amount,
-                name:group.name,
+                name: group.name,
                 userid: "null",
                 sequenceid: group.sequenceid,
                 time: new Date(group.time.getFullYear(), group.time.getMonth(), group.recordDay)
