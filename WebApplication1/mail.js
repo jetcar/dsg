@@ -3,7 +3,14 @@ var smtpTransport = require('nodemailer-smtp-transport');
 
 
 
-var transporter = nodemailer.createTransport(smtpTransport('smtps://jetcarq%40gmail.com:Curev3st1@smtp.gmail.com'));
+var transporter = nodemailer.createTransport(smtpTransport({
+    port: 25,
+    host: 'localhost',
+    tls: {
+        ciphers: 'SSLv3'
+    },
+    secure: false,
+}));
 
 module.exports = function () {
     return transporter;
