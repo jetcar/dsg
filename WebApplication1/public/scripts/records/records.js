@@ -38,14 +38,23 @@ config(['$routeProvider', function ($routeProvider) {
 
         var recordsWithSequences = processSequences(filteredSequences, $scope.records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
+            if (a.id == undefined)
+                return 1;
 
-            if (a.time.toISOString() === b.time.toISOString()) {
+            if (b.id == undefined)
+                return -1;
+
+            if (a.sequenceid === b.sequenceid) {
                 if (a.id === b.id) {
                     return a.name.localeCompare(b.name);
                 }
                 return a.id > b.id;
             }
-            return a.time > b.time;
+            if (a.sequenceid == undefined && b.sequenceid != undefined)
+                return 1;
+            if (a.sequenceid != undefined && b.sequenceid == undefined)
+                return -1;
+            return a.sequenceid - b.sequenceid;
         });
 
         var recordsWithGroups = filterByDate($scope.records, $scope.currentTime, addMonths($scope.currentTime, 1));
@@ -65,14 +74,23 @@ config(['$routeProvider', function ($routeProvider) {
         });
 
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function (a, b) {
+            if (a.id == undefined)
+                return 1;
 
-            if (a.time.toISOString() === b.time.toISOString()) {
+            if (b.id == undefined)
+                return -1;
+
+            if (a.sequenceid === b.sequenceid) {
                 if (a.id === b.id) {
                     return a.name.localeCompare(b.name);
                 }
                 return a.id > b.id;
             }
-            return a.time > b.time;
+            if (a.sequenceid == undefined && b.sequenceid != undefined)
+                return 1;
+            if (a.sequenceid != undefined && b.sequenceid == undefined)
+                return -1;
+            return a.sequenceid - b.sequenceid;
         });
 
         if ($scope.currentTime > new Date()) {

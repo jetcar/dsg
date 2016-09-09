@@ -55,6 +55,9 @@ module.exports = function (app) {
                             res.cookie('token',
                                 foundUser.token + '|' + foundUser.id,
                                 { httpOnly: true });
+                            res.cookie('mail',
+                                foundUser.email,
+                                { httpOnly: true });
                             res.redirect('/index.html#!/records');
                         });
 					}

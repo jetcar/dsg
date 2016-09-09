@@ -9,12 +9,12 @@ angular.module('myApp.login', ['ngRoute'])
         });
     }])
 
-    .controller('LoginCtrl', ['$location', '$http', '$scope', function ($location, $http, $scope) {
+    .controller('LoginCtrl', ['$location', '$http', '$scope', '$cookies', function ($location, $http, $scope, $cookies) {
 
 
 
 
-        $scope.email = "test@sdg.ee";
+        $scope.email = $cookies.get('mail');
         $scope.login = function () {
             //$scope.disableButton = true;
             $http.post('/api/login', { email: $scope.email }).then(function(data) {
