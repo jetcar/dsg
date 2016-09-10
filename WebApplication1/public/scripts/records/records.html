@@ -136,7 +136,6 @@
                     <span ng-show="record.sequence" class="glyphicon glyphicon-retweet" aria-hidden="true">
                     </span>
                     <span ng-show="!record.sequence && record.amount > 0" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
-
                 </td>
                 <td class="col-md-2">
                     {{record.amount}}
@@ -152,7 +151,6 @@
                 </td>
                 <td class="col-md-2">
                     <button class="btn btn-info btn-sm pull-right" ng-if="!hideEdit && record.sequence" ng-click="editSequence(record)">Edit Sequence</button>
-
                     <button class="btn btn-info btn-sm pull-right" ng-click="editRecord(record)">Edit</button>
                 </td>
             </tr>
@@ -165,21 +163,19 @@
         <div class="table-responsive">
             <table class="table">
                 <tr>
-                    <td>
+                    <td class="col-md-2">
                         <input class="form-control" type="number" placeholder="Amount" required="" ng-model="editableRecord.amount">
                     </td>
-                    <td>
+                    <td class="col-md-2">
                         <input class="form-control" type="text" required="" placeholder="Name" ng-model="editableRecord.name">
                     </td>
-                    <td>
-
+                    <td class="col-md-2">
                         <input class="form-control" type="number" required="" min="1" max="31" placeholder="Day" integer ng-model="editableRecord.day">
                     </td>
 
                 </tr>
                 <tr>
-                    <td>
-
+                    <td class="col-md-2">
                         <div ng-hide="editableRecord.group || repeat">
                             <label>
                                 <input id="paid" type="checkbox" ng-model="editableRecord.paid">paid
@@ -189,14 +185,13 @@
                             <input type="checkbox" ng-disabled="editableRecord.id" ng-model="editableRecord.repeat">repeat
                         </label>
                     </td>
-                    <td>
+                    <td class="col-md-2">
 
                         <label>
                             <input type="checkbox" ng-disabled="editableRecord.id" ng-model="editableRecord.group">group
                         </label>
                     </td>
-                    <td>
-
+                    <td class="col-md-2">
                         <button class="btn btn-primary btn-sm" ng-click="myForm.$valid && save()">Save</button>
                         <button class="btn btn-danger btn-sm" ng-if="editableRecord.id" ng-click="delete()">Delete</button>
                     </td>
