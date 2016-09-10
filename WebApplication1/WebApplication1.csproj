@@ -259,6 +259,7 @@
     <Content Include="node_DAL\Records.js" />
     <Content Include="node_DAL\Users.js" />
     <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="public\scripts\angular-cookies.js" />
     <Content Include="public\scripts\angular-mocks.js" />
     <Content Include="public\scripts\angular-route.js" />
     <Content Include="public\scripts\angular.js" />

@@ -18,6 +18,8 @@ config(['$routeProvider', function ($routeProvider) {
     $scope.currentMonth = $scope.currentTime.getMonth();
     $scope.hideEdit = true;
     $scope.editableRecord = {}
+    $scope.editableRecord.day = new Date().getDate();
+
     $scope.currentRecords = [];
     $scope.expectedExpences = 0;
     $scope.currentAmount = 0;
@@ -197,6 +199,8 @@ config(['$routeProvider', function ($routeProvider) {
         if ($scope.hideEdit === false) {
             $scope.hideEdit = true;
             $scope.editableRecord = {};
+            $scope.editableRecord.day = new Date().getDate();
+
         }
         else
             $scope.hideEdit = false;
@@ -221,6 +225,7 @@ config(['$routeProvider', function ($routeProvider) {
                 })
                 .then(function () {
                     $scope.editableRecord = {};
+                    $scope.editableRecord.day = new Date().getDate();
                     $scope.updateView();
                 });
 
@@ -240,6 +245,7 @@ config(['$routeProvider', function ($routeProvider) {
                             })
                             .then(function () {
                                 $scope.editableRecord = {};
+                                $scope.editableRecord.day = new Date().getDate();
 
                                 $scope.updateView();
                             });
@@ -254,6 +260,7 @@ config(['$routeProvider', function ($routeProvider) {
                     })
                     .then(function () {
                         $scope.editableRecord = {};
+                        $scope.editableRecord.day = new Date().getDate();
 
                         $scope.updateView();
                     });
@@ -267,6 +274,8 @@ config(['$routeProvider', function ($routeProvider) {
                 })
                 .then(function () {
                     $scope.editableRecord = {};
+                    $scope.editableRecord.day = new Date().getDate();
+
                     $scope.updateView();
                 });
         }
@@ -398,6 +407,8 @@ config(['$routeProvider', function ($routeProvider) {
 
         }
         $scope.editableRecord = {};
+        $scope.editableRecord.day = new Date().getDate();
+
         $scope.updateView();
     }
 
