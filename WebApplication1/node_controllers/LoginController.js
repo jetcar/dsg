@@ -3,7 +3,7 @@ var urlencodedParser = bodyParser.json();
 var Users = require(__dirname + '/../node_DAL/Users.js');
 var sequelize = require(__dirname + '/../db.js');
 var transporter = require(__dirname + '/../mail.js');
-
+var Tokens = require(__dirname + '/../node_DAL/Tokens.js');
 
 
 
@@ -23,7 +23,6 @@ module.exports = function (app) {
                         foundUser = {
                             id: guid(),
                             email: mail,
-                            token: guid(),
                             emailtoken: guid()
                         };
                         Users.create(foundUser).then(sequelize().sync()).then(sendMail(foundUser, req));
@@ -45,21 +44,28 @@ module.exports = function (app) {
                 }
             })
                 .then(function (foundUser) {
-					if(foundUser)
-					{
-                    foundUser.token = guid();
-                    foundUser.emailtoken = null;
-                    foundUser.save()
-                        .then(sequelize().sync())
-                        .then(function () {
-                            res.cookie('token',
-                                foundUser.token + '|' + foundUser.id,
-                                { httpOnly: true });
-                            res.cookie('mail',
-                                foundUser.email,
-                                { httpOnly: true });
-                            res.redirect('/index.html#!/records');
-                        });
+                    if (foundUser) {
+                        var token = guid();
+					    Tokens.create({
+					        userid: foundUser.id,
+					        token: token,
+					    }).then(sequelize().sync()).then(function() {
+					        foundUser.emailtoken = null;
+					        foundUser.save()
+					            .then(sequelize().sync())
+					            .then(function() {
+					                res.cookie('token',
+					                    token,
+					                    { httpOnly: true });
+					                res.cookie('id',
+					                    foundUser.id,
+					                    { httpOnly: true });
+					                res.cookie('mail',
+					                    foundUser.email,
+					                    { httpOnly: true });
+					                res.redirect('/index.html#!/records');
+					            });
+					    });
 					}
 					else{
 						res.redirect('/index.html#!/login');

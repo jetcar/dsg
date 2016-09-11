@@ -257,6 +257,7 @@
     <Content Include="node_DAL\Groups.js" />
     <Content Include="node_DAL\Sequences.js" />
     <Content Include="node_DAL\Records.js" />
+    <Content Include="node_DAL\Tokens.js" />
     <Content Include="node_DAL\Users.js" />
     <Content Include="public\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="public\scripts\angular-cookies.js" />

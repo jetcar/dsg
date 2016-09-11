@@ -7,8 +7,11 @@ config(['$routeProvider', function ($routeProvider) {
     });
 }
 ])
-.controller('RecordsCtrl', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+.controller('RecordsCtrl', ['$scope', '$http', '$location', '$cookies', function ($scope, $http, $location, $cookies) {
 
+    var browserId = $cookies.get('deviceid');
+    if (!browserId)
+        $cookies.put('deviceid', Math.random());
     $scope.records = [];
     $scope.groups = [];
     $scope.sequences = [];
