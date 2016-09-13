@@ -212,6 +212,7 @@ config(['$routeProvider', function ($routeProvider) {
             $scope.hideEdit = false;
     }
     $scope.editRecord = function (record) {
+        $scope.hideEdit = false;
         $scope.editableRecord = record;
         $scope.editableRecord.day = record.time.getDate();
     }
