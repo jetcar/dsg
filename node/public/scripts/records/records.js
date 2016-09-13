@@ -130,28 +130,13 @@ config(['$routeProvider', function ($routeProvider) {
         $location.path("/login");
     }
 
-    function getSequences(data) {
-        $scope.sequences = data.data.map(function (item) {
-            item.amount = parseFloat(item.amount);
-            item.time = new Date(item.time);//problem here need to convert to local timep
-            item.repeat = true;
-
-            return item;
-        });
-
-        $scope.updateView();
-    }
     function getGroups(data) {
-        $scope.groups = data.data.map(function (item) {
-            item.amount = parseFloat(item.amount);
-            item.time = new Date(item.time);
-            item.group = true;
-            return item;
-        });
+
 
     }
 
-    $http.get("api/records", { withCredentials: true }).then(function (data) {
+    $http.get("api/records", { withCredentials: true })
+    .then(function (data) {
         $scope.records = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
@@ -159,17 +144,40 @@ config(['$routeProvider', function ($routeProvider) {
         });
 
 
-    }, error).then(function () {
-        $http.get("api/groups", {
+    })
+    .then(function () {
+        return $http.get("api/groups", {
             withCredentials: true
-        }).then(getGroups, error);
+        });
 
-    }, error).then(function () {
-        $http.get("api/sequences", {
+    })
+    .then(function(data)
+            {
+            $scope.groups = data.data.map(function (item) {
+                        item.amount = parseFloat(item.amount);
+                        item.time = new Date(item.time);
+                        item.group = true;
+                        return item;
+                    });
+            })
+    .then(function () {
+       return $http.get("api/sequences", {
             withCredentials: true
-        }).then(getSequences, error);
+        })
 
-    });
+    })
+    .then(function (data) {
+                      $scope.sequences = data.data.map(function (item) {
+                          item.amount = parseFloat(item.amount);
+                          item.time = new Date(item.time);//problem here need to convert to local timep
+                          item.repeat = true;
+
+                          return item;
+                      });
+
+                      $scope.updateView();
+                  })
+                  .catch(error);
 
     $scope.pay = function (record) {
         $scope.editRecord(record);
