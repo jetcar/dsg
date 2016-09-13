@@ -346,6 +346,7 @@ describe('myApp.records', function () {
             expect(scope.currentRecords[2].name).toBe('test3');
             expect(scope.currentRecords[3].name).toBe('zp');
             expect(scope.currentRecords[4].name).toBe('from prev month');
+            expect(scope.currentRecords[4].amount).toBe(-80);
 
             expect(scope.currentGroups[0].name).toBe('gtest');
             expect(scope.currentGroups[1].name).toBe('g1');
@@ -359,6 +360,7 @@ describe('myApp.records', function () {
             expect(scope.expectedExpences).toBe(12);
             expect(scope.currentAmount).toBe(265);
             expect(scope.leftAmount).toBe(256);
+            expect(scope.currentRecords[4].amount).toBe(-168);
 
 
 
