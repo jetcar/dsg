@@ -109,6 +109,9 @@ config(['$routeProvider', function ($routeProvider) {
 
         var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
+                if ($scope.currentTime > new Date()) {
+        $scope.currentAmount = calculateCurrentForFuture($scope.currentRecords, $scope.currentGroups);
+}
         $scope.leftAmount = calculateLeft($scope.currentRecords, $scope.currentGroups);
         if (expectedExpences > 0)
             $scope.expectedExpences = expectedExpences;
@@ -445,7 +448,7 @@ config(['$routeProvider', function ($routeProvider) {
         var record = {
             amount: parseInt(group.recordAmount),
             name: group.recordName,
-            paid: group.recordPaid,
+            paid: true,
             userid: "null",
             time: new Date(currentYear, currentMonth, day),
             groupid: group.id

@@ -181,6 +181,27 @@ function calculateCurrent(records, groups) {
 
     return result;
 }
+
+function calculateCurrentForFuture(records, groups) {
+    var result = 0;
+    for (var i = 0; i < records.length; i++) {
+            result += -records[i].amount;
+    }
+    if (groups) {
+
+        for (var i = 0; i < groups.length; i++) {
+            var group = groups[i];
+            for (var j = 0; j < group.records.length; j++) {
+                var record = group.records[j];
+                if (record.paid)
+                    result -= record.amount;
+            }
+        }
+
+    }
+
+    return result;
+}
 function removeItem(id, array) {
     var result = array.filter(function (item) {
         if (item.id === id)
