@@ -2,7 +2,7 @@
 
 describe('myApp.records', function () {
 
-    beforeEach(module('myApp.records'));
+    beforeEach(module('myApp.records','ngCookies'));
 
 
     describe('records controller', function () {
@@ -29,7 +29,7 @@ describe('myApp.records', function () {
 
 
             //act
-            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http});
 
 
             expect(scope.currentRecords.length).toBe(3);
@@ -310,14 +310,14 @@ describe('myApp.records', function () {
             scope.next();
 
             expect(scope.currentRecords.length).toBe(5);
-            expect(scope.currentRecords[0].name).toBe('1');
-            expect(scope.currentRecords[1].name).toBe('test');
+            expect(scope.currentRecords[0].name).toBe('test');
+            expect(scope.currentRecords[1].name).toBe('1');
             expect(scope.currentRecords[2].name).toBe('test3');
             expect(scope.currentRecords[3].name).toBe('zp');
             //expect(scope.currentRecords[4].name).toBe('test3');
 
-            expect(scope.currentGroups[0].name).toBe('g1');
-            expect(scope.currentGroups[1].name).toBe('gtest');
+            expect(scope.currentGroups[0].name).toBe('gtest');
+            expect(scope.currentGroups[1].name).toBe('g1');
             expect(scope.currentGroups[2].name).toBe('gtest3');
 
             expect(scope.expectedExpences).toBe(6);
@@ -363,14 +363,14 @@ describe('myApp.records', function () {
             scope.next();
 
             expect(scope.currentRecords.length).toBe(5);
-            expect(scope.currentRecords[0].name).toBe('1');
-            expect(scope.currentRecords[1].name).toBe('test');
+            expect(scope.currentRecords[0].name).toBe('test');
+            expect(scope.currentRecords[1].name).toBe('1');
             expect(scope.currentRecords[2].name).toBe('test3');
             expect(scope.currentRecords[3].name).toBe('zp');
             //expect(scope.currentRecords[4].name).toBe('test3');
 
-            expect(scope.currentGroups[0].name).toBe('g1');
-            expect(scope.currentGroups[1].name).toBe('gtest');
+            expect(scope.currentGroups[0].name).toBe('gtest');
+            expect(scope.currentGroups[1].name).toBe('g1');
             expect(scope.currentGroups[2].name).toBe('gtest3');
 
             expect(scope.expectedExpences).toBe(6);
@@ -591,7 +591,6 @@ describe('myApp.records', function () {
             expect(scope.editableRecord.repeat).toBe(undefined);
             expect(scope.editableRecord.name).toBe(undefined);
             expect(scope.editableRecord.paid).toBe(undefined);
-            expect(scope.editableRecord.day).toBe(undefined);
 
 
             expect(scope.expectedExpences).toBe(1);
