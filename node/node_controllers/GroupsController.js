@@ -10,8 +10,8 @@ var Groups = require(__dirname + '/../node_DAL/Groups.js');
 
 module.exports = function (app) {
     app.get('/api/groups',
-        function (req, res) {
-            authorize(req).then(function (foundUser) {
+        function (req, res, next) {
+            authorize(req,next).then(function (foundUser) {
                 if (foundUser) {
                     Groups.findAll({ where: { userid: foundUser.id } })
                         .then(function (groups) {
@@ -29,7 +29,7 @@ module.exports = function (app) {
 
     app.post('/api/groups', urlencodedParser,
         function (req, res, next) {
-            authorize(req).then(function (foundUser) {
+            authorize(req, next).then(function (foundUser) {
                 if (foundUser) {
                     var group = req.body;
                     group.userid = foundUser.id;
@@ -58,7 +58,7 @@ module.exports = function (app) {
 
     app.delete('/api/groups/:id',
       function (req, res, next) {
-          authorize(req).then(function (foundUser) {
+          authorize(req, next).then(function (foundUser) {
               if (foundUser) {
                   Groups.findById(req.params.id)
                       .then(function (group) {

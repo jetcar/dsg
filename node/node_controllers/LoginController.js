@@ -11,7 +11,7 @@ var Tokens = require(__dirname + '/../node_DAL/Tokens.js');
 module.exports = function (app) {
     app.post('/api/login',
         urlencodedParser,
-        function (req, res) {
+        function (req, res,next) {
 
             var mail = req.body.email;
 
@@ -28,7 +28,8 @@ module.exports = function (app) {
                         Users.create(foundUser).then(sequelize().sync()).then(sendMail(foundUser, req));
 
                     } else {
-                        foundUser.emailtoken = guid();
+                        if (foundUser.emailtoken == null)
+                            foundUser.emailtoken = guid();
                         foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req)).then(function() {
                             res.end();
                         });
@@ -36,7 +37,7 @@ module.exports = function (app) {
                 });
         });
     app.get('/account/login/userid/:userid/code/:code',
-        function (req, res) {
+        function (req, res,next) {
             Users.findOne({
                 where: {
                     id: req.params.userid,

@@ -21,7 +21,7 @@
         <WebProjectProperties>
           <StartPageUrl>index.html</StartPageUrl>
           <StartAction>NoStartPage</StartAction>
-          <AspNetDebugging>True</AspNetDebugging>
+          <AspNetDebugging>False</AspNetDebugging>
           <SilverlightDebugging>False</SilverlightDebugging>
           <NativeDebugging>False</NativeDebugging>
           <SQLDebugging>False</SQLDebugging>

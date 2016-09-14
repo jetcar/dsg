@@ -9,8 +9,8 @@ var Sequences = require(__dirname + '/../node_DAL/Sequences.js');
 
 module.exports = function (app) {
     app.get('/api/sequences',
-        function (req, res) {
-            authorize(req).then(function (foundUser) {
+        function (req, res, next) {
+            authorize(req, next).then(function (foundUser) {
                 if (foundUser) {
                     Sequences.findAll({ where: { userid: foundUser.id } })
                         .then(function (sequences) {
@@ -27,7 +27,7 @@ module.exports = function (app) {
         });
     app.post('/api/sequences', urlencodedParser,
        function (req, res, next) {
-           authorize(req).then(function (foundUser) {
+           authorize(req, next).then(function (foundUser) {
                if (foundUser) {
                    var sequence = req.body;
                    sequence.userid = foundUser.id;
@@ -55,7 +55,7 @@ module.exports = function (app) {
 
     app.delete('/api/sequences/:id',
       function (req, res, next) {
-          authorize(req).then(function (foundUser) {
+          authorize(req, next).then(function (foundUser) {
               if (foundUser) {
                   Sequences.findById(req.params.id)
                           .then(function(sequence) {

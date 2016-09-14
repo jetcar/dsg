@@ -10,8 +10,8 @@ var authorize = require(__dirname + '/authorize.js');
 
 module.exports = function (app) {
     app.get('/api/records',
-        function (req, res) {
-            authorize(req).then(function (foundUser) {
+        function (req, res,next) {
+            authorize(req,next).then(function (foundUser) {
                 if (foundUser) {
                     Records.findAll({ where: { userid: foundUser.id } })
                         .then(function (records) {
@@ -21,7 +21,7 @@ module.exports = function (app) {
                     res.status(401).end();
                 }
 
-            }).error(function (error) {
+            }).catch(function (error) {
                 res.status(401).end();
 
             });
@@ -29,10 +29,10 @@ module.exports = function (app) {
 
     app.post('/api/records', urlencodedParser,
         function (req, res, next) {
-            authorize(req, next).then(function (foundUser) {
+            authorize(req,next).then(function (foundUser) {
                 if (!foundUser) {
                     res.status(401).end();
-                    return next("unauthorized");
+                    return;
                 }
 
                 var record = req.body;
@@ -60,7 +60,7 @@ module.exports = function (app) {
 
     app.delete('/api/records/:id',
         function (req, res, next) {
-            authorize(req).then(function (foundUser) {
+            authorize(req, next).then(function (foundUser) {
                 if (foundUser) {
                     Records.findById(req.params.id)
                         .then(function (record) {
