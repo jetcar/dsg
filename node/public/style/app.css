@@ -54,6 +54,6 @@
 }*/
 
 body {
-    padding-bottom: 400px; /* This should be equal to the height of your header */
+    padding-bottom: 160px; /* This should be equal to the height of your header */
     padding-top: 60px
 }

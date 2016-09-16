@@ -48,7 +48,9 @@
             <tr style="height:41px">
                 <td><button class="btn btn-info btn-sm pull-left" ng-hide="hideEdit" ng-click="editRecord(group,true)">Edit</button></td>
                 <td style="text-align:center">
-                       {{group.name}}
+                       <button  ng-hide="group.visible" ng-click="expand(group)"><span class="glyphicon glyphicon-expand"></span></button>
+                    <button  ng-show="group.visible" ng-click="collapse(group)"><span class="glyphicon glyphicon-collapse-up"></span></button>
+                    {{group.name}}
                 </td>
                 <td><button class="btn btn-info btn-sm pull-right" ng-if="!hideEdit && group.sequenceid" ng-click="editSequence(group,true)">Edit All</button></td>
             </tr>
@@ -61,7 +63,7 @@
                     Left:                    {{group.leftAmount}}
                 </td>
             </tr>
-            <tr >
+            <tr ng-show="group.visible" >
                 <td colspan="5">
                     <div class="table-responsive">
                         <table class="table  table-striped table-condensed">
@@ -86,7 +88,7 @@
                     </div>
                 </td>
             </tr>
-            <tr>
+            <tr ng-show="group.visible">
                 <td colspan="5">
                     <form name="groupForm">
                         <div class="table-responsive">
@@ -96,7 +98,7 @@
                                         <input class="form-control" type="number" placeholder="Amount" required ng-model="group.recordAmount">
                                     </td>
                                     <td>
-                                        <input class="form-control" type="text" placeholder="Name" required ng-model="group.recordName">
+                                        <input class="form-control" ng-click="clearTextBox(group)" type="text" placeholder="Name" required ng-model="group.recordName">
 
                                     </td>
                                     <td>
@@ -146,13 +148,13 @@
             <table class="table">
                 <tr>
                     <td class="col-md-2">
-                        <input class="form-control" type="number" placeholder="Amount" required="" ng-model="editableRecord.amount">
+                        <input class="form-control" name="amount" type="number" placeholder="Amount" required="" ng-model="editableRecord.amount">
                     </td>
                     <td class="col-md-2">
-                        <input class="form-control" type="text" required="" placeholder="Name" ng-model="editableRecord.name">
+                        <input class="form-control" name="desc" type="text" required="" placeholder="Name" ng-model="editableRecord.name">
                     </td>
                     <td class="col-md-2">
-                        <input class="form-control" type="number" required="" min="1" max="31" placeholder="Day" integer ng-model="editableRecord.day">
+                        <input class="form-control" name="day" type="number" required="" min="1" max="31" placeholder="Day" integer ng-model="editableRecord.day">
                     </td>
 
                 </tr>
@@ -174,8 +176,8 @@
                         </label>
                     </td>
                     <td class="col-md-2">
-                        <button class="btn btn-primary btn-sm" ng-click="myForm.$valid && save()">Save</button>
-                        <button class="btn btn-danger btn-sm" ng-if="editableRecord.id" ng-click="delete()">Delete</button>
+                        <button class="btn btn-success btn-sm" ng-click="myForm.$valid && save()"><span class="glyphicon glyphicon-ok"></span></button>
+                        <button class="btn btn-danger btn-sm" ng-if="editableRecord.id" ng-click="delete()"><span class="glyphicon glyphicon-remove"></span></button>
                     </td>
                 </tr>
             </table>

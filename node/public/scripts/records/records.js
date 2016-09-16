@@ -307,7 +307,10 @@ config(['$routeProvider', function ($routeProvider) {
         });
     }
 
-
+    $scope.clearTextBox = function(group)
+    {
+        group.recordName = '';
+    }
 
     $scope.save = function () {
         if (!$scope.editableRecord.amount)
@@ -421,13 +424,24 @@ config(['$routeProvider', function ($routeProvider) {
             }, logError);
 
         }
+        $scope.myForm.$setPristine();
+        $scope.myForm.$setUntouched();
+
         $scope.editableRecord = {};
         $scope.editableRecord.day = new Date().getDate();
-
         $scope.updateView();
+    }
+    $scope.collapse = function(group)
+    {
+        group.visible = false;
+    }
+    $scope.expand = function(group)
+    {
+        group.visible = true;
     }
 
     $scope.saveFromFroup = function (group) {
+        group.groupForm.$setPristine();
         if (group.id < 0) {
 
             var newgroup = {
@@ -471,7 +485,7 @@ config(['$routeProvider', function ($routeProvider) {
         group.recordName = group.name;
         group.recordPaid = false;
         group.recordDay = day;
-
+        group.groupForm.$setUntouched();
         $scope.updateView();
     }
 
