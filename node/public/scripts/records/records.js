@@ -109,9 +109,9 @@ config(['$routeProvider', function ($routeProvider) {
 
         var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
-                if ($scope.currentTime > new Date()) {
-        $scope.currentAmount = calculateCurrentForFuture($scope.currentRecords, $scope.currentGroups);
-}
+        if ($scope.currentTime > new Date()) {
+            $scope.currentAmount = calculateCurrentForFuture($scope.currentRecords, $scope.currentGroups);
+        }
         $scope.leftAmount = calculateLeft($scope.currentRecords, $scope.currentGroups);
         if (expectedExpences > 0)
             $scope.expectedExpences = expectedExpences;
@@ -130,13 +130,9 @@ config(['$routeProvider', function ($routeProvider) {
         $location.path("/login");
     }
 
-    function getGroups(data) {
 
-
-    }
-
-    $http.get("api/records", { withCredentials: true })
-    .then(function (data) {
+    var recordsget = $http.get("api/records", { withCredentials: true });
+    var recordsResponce = recordsget.then(function (data) {
         $scope.records = data.data.map(function (item) {
             item.amount = parseFloat(item.amount);
             item.time = new Date(item.time);
@@ -144,39 +140,39 @@ config(['$routeProvider', function ($routeProvider) {
         });
 
 
-    })
-    .then(function () {
+    });
+
+    var groupsGet = recordsResponce.then(function () {
         return $http.get("api/groups", {
             withCredentials: true
         });
 
-    })
-    .then(function(data)
-            {
-            $scope.groups = data.data.map(function (item) {
-                        item.amount = parseFloat(item.amount);
-                        item.time = new Date(item.time);
-                        item.group = true;
-                        return item;
-                    });
-            })
-    .then(function () {
-       return $http.get("api/sequences", {
+    });
+    var groupsResponce = groupsGet.then(function (data) {
+        $scope.groups = data.data.map(function (item) {
+            item.amount = parseFloat(item.amount);
+            item.time = new Date(item.time);
+            item.group = true;
+            return item;
+        });
+    });
+    var sequenceGet = groupsResponce.then(function () {
+        return $http.get("api/sequences", {
             withCredentials: true
-        })
+        });
 
+    });
+    sequenceGet.then(function (data) {
+        $scope.sequences = data.data.map(function (item) {
+            item.amount = parseFloat(item.amount);
+            item.time = new Date(item.time);//problem here need to convert to local timep
+            item.repeat = true;
+
+            return item;
+        });
+
+        $scope.updateView();
     })
-    .then(function (data) {
-                      $scope.sequences = data.data.map(function (item) {
-                          item.amount = parseFloat(item.amount);
-                          item.time = new Date(item.time);//problem here need to convert to local timep
-                          item.repeat = true;
-
-                          return item;
-                      });
-
-                      $scope.updateView();
-                  })
                   .catch(error);
 
     $scope.pay = function (record) {
@@ -298,7 +294,7 @@ config(['$routeProvider', function ($routeProvider) {
 
 
     $scope.deleteSequence = function (sequence) {
-        sequences = removeItem(sequence, sequences);
+        $scope.sequences = removeItem(sequence, sequences);
         $http.delete("api/sequences/" + sequence.id,
         {
             withCredentials: true
@@ -307,8 +303,7 @@ config(['$routeProvider', function ($routeProvider) {
         });
     }
 
-    $scope.clearTextBox = function(group)
-    {
+    $scope.clearTextBox = function (group) {
         group.recordName = '';
     }
 
@@ -424,24 +419,19 @@ config(['$routeProvider', function ($routeProvider) {
             }, logError);
 
         }
-        $scope.myForm.$setPristine();
-        $scope.myForm.$setUntouched();
 
         $scope.editableRecord = {};
         $scope.editableRecord.day = new Date().getDate();
         $scope.updateView();
     }
-    $scope.collapse = function(group)
-    {
+    $scope.collapse = function (group) {
         group.visible = false;
     }
-    $scope.expand = function(group)
-    {
+    $scope.expand = function (group) {
         group.visible = true;
     }
 
     $scope.saveFromFroup = function (group) {
-        group.groupForm.$setPristine();
         if (group.id < 0) {
 
             var newgroup = {
@@ -458,16 +448,16 @@ config(['$routeProvider', function ($routeProvider) {
             }).then(function (item) {
                 group.id = item.data.id;
                 $scope.groups.push(group);
-                saveRecord(group, $scope.currentYear, $scope.currentMonth, group.recordDay);
+                $scope.saveRecord(group, $scope.currentYear, $scope.currentMonth, group.recordDay);
             }, logError);
         } else {
-            saveRecord(group, $scope.currentYear, $scope.currentMonth, group.recordDay);
+            $scope.saveRecord(group, $scope.currentYear, $scope.currentMonth, group.recordDay);
         }
 
 
     }
 
-    function saveRecord(group, currentYear, currentMonth, day) {
+    $scope.saveRecord = function (group, currentYear, currentMonth, day) {
         var record = {
             amount: parseInt(group.recordAmount),
             name: group.recordName,
@@ -485,7 +475,6 @@ config(['$routeProvider', function ($routeProvider) {
         group.recordName = group.name;
         group.recordPaid = false;
         group.recordDay = day;
-        group.groupForm.$setUntouched();
         $scope.updateView();
     }
 

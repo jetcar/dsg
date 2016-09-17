@@ -27,7 +27,7 @@ describe('myApp.records', function () {
             expect(scope.editableRecord.id).toBe(record.id);
             expect(scope.editableRecord.amount).toBe(-100);
             expect(scope.editableRecord.repeat).toBe(undefined);
-            expect(scope.hideEdit).toBe(true);
+            expect(scope.hideEdit).toBe(false);
             expect(scope.editableRecord.name).toBe('test');
             expect(scope.editableRecord.paid).toBe(true);
             expect(scope.editableRecord.day).toBe(record.time.getDate());
@@ -105,7 +105,7 @@ describe('myApp.records', function () {
             expect(scope.editableRecord.amount).toBe(-100);
             expect(scope.editableRecord.group).toBe(true);
             expect(scope.editableRecord.repeat).toBe(undefined);
-            expect(scope.hideEdit).toBe(true);
+            expect(scope.hideEdit).toBe(false);
             expect(scope.editableRecord.name).toBe('test');
             expect(scope.editableRecord.paid).toBe(undefined);
             expect(scope.editableRecord.day).toBe(new Date().getDate());

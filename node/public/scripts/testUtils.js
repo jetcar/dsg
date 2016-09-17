@@ -28,7 +28,7 @@
             if (method === 'DELETE') {
                 if (url.indexOf('api/records') === 0) {
                     var id = parseInt(url.split('/')[2]);
-                    var recordIndex = records.findIndex(function(item) {
+                    var recordIndex = records.findIndex(function (item) {
                         return item.id === id;
                     });
                     if (recordIndex > -1) {
@@ -72,12 +72,12 @@
                 var args = json;
                 if (url === 'api/records') {
                     if (args.id) {
-                        var recordIndex = records.findIndex(function(item) {
+                        var recordIndex = records.findIndex(function (item) {
                             return item.id === args.id;
                         });
                         records.splice(recordIndex, 1);
                     } else {
-                        recordLastId += Math.round(Math.random()*100)+1;
+                        recordLastId += Math.round(Math.random() * 100) + 1;
                         args.id = recordLastId;
                     }
                     records.push(args);
@@ -91,7 +91,7 @@
                         });
                         groups.splice(recordIndex, 1);
                     } else {
-                        groupId += Math.round(Math.random()*100)+1;
+                        groupId += Math.round(Math.random() * 100) + 1;
                         args.id = groupId;
                     }
                     groups.push(args);
@@ -103,7 +103,7 @@
                         });
                         sequences.splice(recordIndex, 1);
                     } else {
-                        sequenceid += Math.round(Math.random()*100)+1;
+                        sequenceid += Math.round(Math.random() * 100) + 1;
                         args.id = sequenceid;
                     }
                     sequences.push(args);
@@ -135,16 +135,16 @@
             });
             return item;
         },
-        'createRecord': function (name,amount,paid,time,groupid) {
+        'createRecord': function (name, amount, paid, time, groupid) {
             var item = {};
-            core.ajax('POST', 'api/records', ({name : name,amount:amount,paid:paid,time:time,groupid:groupid})).then(function (data) {
+            core.ajax('POST', 'api/records', ({ name: name, amount: amount, paid: paid, time: time, groupid: groupid })).then(function (data) {
                 item = data.data;
             });
             return item;
         },
-        'createSequence': function (name, amount, time,group) {
+        'createSequence': function (name, amount, time, group) {
             var item = {};
-            core.ajax('POST', 'api/sequences', ({ name: name, amount: amount, time: time,group:group })).then(function (data) {
+            core.ajax('POST', 'api/sequences', ({ name: name, amount: amount, time: time, group: group })).then(function (data) {
                 item = data.data;
             });
             return item;
@@ -169,6 +169,10 @@ function responce(initialdata) {
         // Method that performs the ajax request
         ajax: function (method) {
 
+            if (data == undefined)
+                return method(data);
+
+
             method(data);
             return new responce();
 
@@ -179,8 +183,9 @@ function responce(initialdata) {
         'then': function (method) {
             return core.ajax(method);
         },
-        'error': function (method) {
+        'catch': function (method) {
             return core.ajax(method);
-        }
+        },
+        'data': this.data,
     };
 };
