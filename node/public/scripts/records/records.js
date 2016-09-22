@@ -11,7 +11,7 @@ config(['$routeProvider', function ($routeProvider) {
 
     var browserId = $cookies.get('deviceid');
     if (!browserId)
-        $cookies.put('deviceid', Math.random());
+        $cookies.put('deviceid', Math.random(), { 'expires': new Date(Date.now() + 1209600000) });
     $scope.records = [];
     $scope.groups = [];
     $scope.sequences = [];

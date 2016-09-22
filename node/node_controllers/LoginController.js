@@ -57,13 +57,13 @@ module.exports = function (app) {
 					            .then(function() {
 					                res.cookie('token',
 					                    token,
-					                    { httpOnly: true });
+					                    { expires: new Date(Date.now() + 1209600000), httpOnly: true });
 					                res.cookie('id',
 					                    foundUser.id,
-					                    { httpOnly: true });
+					                    { expires: new Date(Date.now() + 1209600000), httpOnly: true });
 					                res.cookie('mail',
 					                    foundUser.email,
-					                    { httpOnly: true });
+					                    { expires: new Date(Date.now() + 1209600000), httpOnly: true });
 					                res.redirect('/index.html#!/records');
 					            });
 					    });
