@@ -46,7 +46,7 @@ module.exports = function (app) {
                 }
                 createorUpdate.then(sequelize().sync())
                     .then(function (data) {
-                        res.end(JSON.stringify(data));
+                        res.end(JSON.stringify({id : record.id}));
                     }).catch(function data(err) {
                         return next(err);
                     });

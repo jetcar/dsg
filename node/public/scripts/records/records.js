@@ -327,6 +327,8 @@ config(['$routeProvider', function ($routeProvider) {
                 sequence.amount = $scope.editableRecord.amount;
                 sequence.name = $scope.editableRecord.name;
                 sequence.time = new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day);
+                $scope.sequences = removeItem(sequence.id, $scope.sequences);
+
             }
             else {
                 sequence = {
@@ -337,10 +339,8 @@ config(['$routeProvider', function ($routeProvider) {
                     group: $scope.editableRecord.group,
                     repeat: true,
                 };
-                $scope.sequences.push(
-                    sequence
-                );
             }
+            $scope.sequences.push(sequence);
 
             $http.post("api/sequences", (sequence), {
                 withCredentials: true
@@ -364,6 +364,8 @@ config(['$routeProvider', function ($routeProvider) {
                 group.amount = $scope.editableRecord.amount;
                 group.name = $scope.editableRecord.name;
                 group.time = new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day);
+                $scope.groups = removeItem(group.id, $scope.groups);
+
             }
             else {
                 group = {
@@ -374,8 +376,8 @@ config(['$routeProvider', function ($routeProvider) {
                     sequenceid: $scope.editableRecord.sequenceid,
                     time: new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day)
                 };
-                $scope.groups.push(group);
             }
+            $scope.groups.push(group);
 
             $http.post("api/groups", (group), {
                 withCredentials: true
@@ -393,12 +395,14 @@ config(['$routeProvider', function ($routeProvider) {
                     userid: "null",
                     sequenceid: $scope.editableRecord.sequenceid,
                     repeat: $scope.editableRecord.repeat,
+                    groupid: $scope.editableRecord.groupid,
                 };
 
                 record.amount = $scope.editableRecord.amount;
                 record.name = $scope.editableRecord.name;
                 record.paid = $scope.editableRecord.paid;
                 record.time = new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day);
+                $scope.records = removeItem(record.id, $scope.records);
             }
             else {
                 record = {
@@ -410,8 +414,9 @@ config(['$routeProvider', function ($routeProvider) {
                     repeat: $scope.editableRecord.repeat,
                     time: new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day)
                 };
-                $scope.records.push(record);
             }
+            $scope.records.push(record);
+
             $http.post("api/records", (record), {
                 withCredentials: true
             }).then(function (item) {

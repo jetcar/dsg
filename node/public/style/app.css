@@ -57,3 +57,12 @@ body {
     padding-bottom: 160px; /* This should be equal to the height of your header */
     padding-top: 60px
 }
+
+.table-responsive > .table > thead > tr > th,
+  .table-responsive > .table > tbody > tr > th,
+  .table-responsive > .table > tfoot > tr > th,
+  .table-responsive > .table > thead > tr > td,
+  .table-responsive > .table > tbody > tr > td,
+  .table-responsive > .table > tfoot > tr > td {
+    white-space: initial;
+  }

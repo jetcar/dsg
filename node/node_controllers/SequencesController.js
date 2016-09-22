@@ -39,8 +39,8 @@ module.exports = function (app) {
                        createorUpdate = Sequences.update(sequence, { where: { id: sequence.id } });
                    }
                    createorUpdate.then(sequelize().sync())
-                       .then(function (sequence) {
-                           res.end(JSON.stringify(sequence));
+                       .then(function (data) {
+                           res.end(JSON.stringify({ id: sequence.id }));
                        }).catch(function data(err) {
                            return next(err);
                        });;

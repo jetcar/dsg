@@ -323,13 +323,13 @@ describe('myApp.records', function () {
 
             scope.currentGroups[0].recordAmount = 1;
             scope.currentGroups[0].recordName = 'test1';
-            scope.saveFromFroup(scope.currentGroups[0])
+            scope.saveFromFroup(scope.currentGroups[0]);
             scope.currentGroups[1].recordAmount = 2;
             scope.currentGroups[1].recordName = 'test2';
-            scope.saveFromFroup(scope.currentGroups[1])
+            scope.saveFromFroup(scope.currentGroups[1]);
             scope.currentGroups[2].recordAmount = 3;
             scope.currentGroups[2].recordName = 'test2';
-            scope.saveFromFroup(scope.currentGroups[2])
+            scope.saveFromFroup(scope.currentGroups[2]);
 
             //act
 

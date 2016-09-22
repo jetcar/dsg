@@ -72,7 +72,7 @@ describe('myApp.records', function () {
             expect(scope.currentRecords[0].amount).toBe(-10);
             expect(scope.currentRecords[0].name).toBe('new name');
             expect(scope.currentRecords[0].paid).toBe(false);
-            expect(scope.currentRecords[0].time.getDate()).toBe(new Date().getDate());
+            expect(scope.currentRecords[0].time.getDate()).toBe(1);
             expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
@@ -599,6 +599,40 @@ describe('myApp.records', function () {
             expect(scope.expectedExpences).toBe(0);
             expect(scope.currentAmount).toBe(0);
             expect(scope.leftAmount).toBe(0);
+
+
+
+        }));
+
+        it('edit record from group sequence', inject(function ($rootScope, $controller, $cookies) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+            var sequence = http.createSequence('test', 1,new Date(),true);
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http,$cookies:$cookies });
+            scope.edit();
+            scope.currentGroups[0].recordAmount = 1;
+            scope.currentGroups[0].recordName = 'record';
+            scope.currentGroups[0].recordDay = 1;
+            scope.saveFromFroup(scope.currentGroups[0]);
+            expect(scope.currentGroups[0].records.length).toBe(1);
+
+            scope.editRecord(scope.currentGroups[0].records[0]);
+
+            scope.editableRecord.day = 2;
+            scope.save();
+
+
+            expect(scope.currentRecords.length).toBe(0);
+            expect(scope.currentGroups.length).toBe(1);
+            expect(scope.currentGroups[0].records.length).toBe(1);
+
+            expect(scope.currentGroups[0].records[0].id).toBeGreaterThan(1);
+            expect(scope.currentGroups[0].records[0].time.getDate()).toBe(2);
+            expect(scope.currentGroups[0].records[0].time.getMonth()).toBe(new Date().getMonth());
+
 
 
 

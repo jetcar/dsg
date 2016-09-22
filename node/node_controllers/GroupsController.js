@@ -41,8 +41,8 @@ module.exports = function (app) {
                         createorUpdate = Groups.update(group, { where: { id: group.id } });
                     }
                     createorUpdate.then(sequelize().sync())
-                        .then(function (group) {
-                            res.end(JSON.stringify(group));
+                        .then(function (data) {
+                            res.end(JSON.stringify({ id: group.id }));
                         }).catch(function data(err) {
                             return next(err);
                         });
