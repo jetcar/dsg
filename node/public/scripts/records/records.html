@@ -118,7 +118,7 @@
 
     <div class="table-responsive" >
         <table class="table  table-striped" style="table-layout: fixed; width: 100%">
-            <tr  style="height:41px" ng-repeat="record in currentRecords">
+            <tr style="height: 41px" ng-repeat="record in currentRecords | limitTo:filter ">
                 <td class="col-md-2">
                     {{record.amount}}
                 </td>
@@ -130,12 +130,15 @@
                 </td>
                 <td class="col-md-2">
                     <button class="btn btn-primary btn-sm" style="margin-bottom: 5px" ng-hide="record.paid" value="Pay" ng-click="pay(record);">Pay</button>
-                    <br  ng-hide="record.paid"/>
+                    <br ng-hide="record.paid"/>
                     <button class="btn btn-info btn-sm" style="margin-right: 10px" ng-click="editRecord(record)">Edit</button>
                 </td>
                 <td class="col-md-2" ng-if="!hideEdit">
                     <button class="btn btn-info btn-sm pull-right" ng-if="!hideEdit && record.sequence" ng-click="editSequence(record)">Edit All</button>
                 </td>
+            </tr>
+            <tr style="height: 41px" ng-click="showMore()">
+                <td colspan="4" ng-if="filter < currentRecords.length" style="text-align: center"><a  >More</a></td>
             </tr>
         </table>
     </div>

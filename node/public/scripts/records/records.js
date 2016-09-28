@@ -28,7 +28,7 @@ config(['$routeProvider', function ($routeProvider) {
     $scope.currentAmount = 0;
     $scope.leftAmount = 0;
     $scope.loading = true;
-
+    $scope.filter = 10;
 
     $scope.updateView = function () {
         var sequencesWithoutGroups = $scope.sequences.filter(function (item) {
@@ -43,23 +43,19 @@ config(['$routeProvider', function ($routeProvider) {
 
         var recordsWithSequences = processSequences(filteredSequences, $scope.records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
-            if (a.id == undefined)
-                return 1;
 
-            if (b.id == undefined)
+            if (!a.paid && b.paid)
                 return -1;
 
-            if (a.sequenceid === b.sequenceid) {
-                if (a.id === b.id) {
-                    return a.name.localeCompare(b.name);
-                }
-                return a.id > b.id;
+            if (!b.paid && a.paid)
+                return 1;
+
+
+            if (a.time === b.time) {
+                return a.name.localeCompare(b.name);
             }
-            if (a.sequenceid == undefined && b.sequenceid != undefined)
-                return 1;
-            if (a.sequenceid != undefined && b.sequenceid == undefined)
-                return -1;
-            return a.sequenceid - b.sequenceid;
+            return b.time - a.time;
+
         });
 
         var recordsWithGroups = filterByDate($scope.records, $scope.currentTime, addMonths($scope.currentTime, 1));
@@ -80,22 +76,22 @@ config(['$routeProvider', function ($routeProvider) {
 
         $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function (a, b) {
             if (a.id == undefined)
-                return 1;
+                return -1;
 
             if (b.id == undefined)
-                return -1;
+                return 1;
 
             if (a.sequenceid === b.sequenceid) {
                 if (a.id === b.id) {
-                    return a.name.localeCompare(b.name);
+                    return b.name.localeCompare(a.name);
                 }
-                return a.id > b.id;
+                return b.id - a.id;
             }
             if (a.sequenceid == undefined && b.sequenceid != undefined)
-                return 1;
-            if (a.sequenceid != undefined && b.sequenceid == undefined)
                 return -1;
-            return a.sequenceid - b.sequenceid;
+            if (a.sequenceid != undefined && b.sequenceid == undefined)
+                return 1;
+            return b.sequenceid - a.sequenceid;
         });
 
         if ($scope.currentTime > new Date()) {
@@ -174,6 +170,10 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.updateView();
     })
                   .catch(error);
+
+    $scope.showMore = function () {
+        $scope.filter += 10;
+    }
 
     $scope.pay = function (record) {
         $scope.editRecord(record);
