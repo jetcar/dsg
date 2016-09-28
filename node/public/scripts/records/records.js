@@ -210,6 +210,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.currentTime = addMonths($scope.currentTime, -1);
         $scope.currentYear = $scope.currentTime.getFullYear();
         $scope.currentMonth = $scope.currentTime.getMonth();
+        $scope.filter = 10;
 
         $scope.updateView();
     }
@@ -218,6 +219,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.currentTime = new Date(date.getFullYear(), date.getMonth());
         $scope.currentYear = $scope.currentTime.getFullYear();
         $scope.currentMonth = $scope.currentTime.getMonth();
+        $scope.filter = 10;
 
         $scope.updateView();
     }
@@ -226,6 +228,7 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.currentTime = addMonths($scope.currentTime, 1);
         $scope.currentYear = $scope.currentTime.getFullYear();
         $scope.currentMonth = $scope.currentTime.getMonth();
+        $scope.filter = 10;
 
         $scope.updateView();
     }
