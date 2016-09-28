@@ -36,6 +36,7 @@ config(['$routeProvider', function ($routeProvider) {
                 return false;
             return true;
         });
+       
 
 
         var filteredSequences = filterByDate(sequencesWithoutGroups, new Date(1970), addMonths($scope.currentTime, 1));
@@ -74,7 +75,7 @@ config(['$routeProvider', function ($routeProvider) {
             group.recordName = group.name;
         });
 
-        $scope.currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function (a, b) {
+        currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function(a, b) {
             if (a.id == undefined)
                 return -1;
 
@@ -93,6 +94,27 @@ config(['$routeProvider', function ($routeProvider) {
                 return 1;
             return b.sequenceid - a.sequenceid;
         });
+
+        for (var i = 0; i < currentGroups.length; i++) {
+            currentGroups[i].records = currentGroups[i].records.sort(function (a, b) {
+
+                if (!a.paid && b.paid)
+                    return -1;
+
+                if (!b.paid && a.paid)
+                    return 1;
+
+
+                if (a.time - b.time === 0) {
+                    return a.name.localeCompare(b.name);
+                }
+                return b.time - a.time;
+
+            });
+        }
+
+        $scope.currentGroups = currentGroups;
+
 
         if ($scope.currentTime > new Date()) {
             var record = recordWithPrevMonthsMoney(recordsWithSequences,
@@ -173,6 +195,9 @@ config(['$routeProvider', function ($routeProvider) {
 
     $scope.showMore = function () {
         $scope.filter += 10;
+    }
+    $scope.showMoreInGroup = function (group) {
+        group.filter += 10;
     }
 
     $scope.pay = function (record) {
@@ -434,6 +459,7 @@ config(['$routeProvider', function ($routeProvider) {
     }
     $scope.expand = function (group) {
         group.visible = true;
+        group.filter = 10;
     }
 
     $scope.saveFromFroup = function (group) {
