@@ -36,7 +36,7 @@ config(['$routeProvider', function ($routeProvider) {
                 return false;
             return true;
         });
-       
+
 
 
         var filteredSequences = filterByDate(sequencesWithoutGroups, new Date(1970), addMonths($scope.currentTime, 1));
@@ -45,6 +45,12 @@ config(['$routeProvider', function ($routeProvider) {
         var recordsWithSequences = processSequences(filteredSequences, $scope.records, $scope.currentTime);
         $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
 
+            if (a.paid === b.paid) {
+                if (a.time - b.time === 0) {
+                    return a.name.localeCompare(b.name);
+                }
+                return b.time - a.time;
+            }
             if (!a.paid && b.paid)
                 return -1;
 
@@ -52,7 +58,7 @@ config(['$routeProvider', function ($routeProvider) {
                 return 1;
 
 
-            if (a.time === b.time) {
+            if (a.time - b.time === 0) {
                 return a.name.localeCompare(b.name);
             }
             return b.time - a.time;
@@ -75,29 +81,25 @@ config(['$routeProvider', function ($routeProvider) {
             group.recordName = group.name;
         });
 
-        currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function(a, b) {
-            if (a.id == undefined)
-                return -1;
+        currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function (a, b) {
 
-            if (b.id == undefined)
-                return 1;
-
-            if (a.sequenceid === b.sequenceid) {
-                if (a.id === b.id) {
-                    return b.name.localeCompare(a.name);
-                }
-                return b.id - a.id;
+            if (a.time - b.time === 0) {
+                return a.name.localeCompare(b.name);
             }
-            if (a.sequenceid == undefined && b.sequenceid != undefined)
-                return -1;
-            if (a.sequenceid != undefined && b.sequenceid == undefined)
-                return 1;
-            return b.sequenceid - a.sequenceid;
+            return b.time - a.time;
         });
 
         for (var i = 0; i < currentGroups.length; i++) {
             currentGroups[i].records = currentGroups[i].records.sort(function (a, b) {
 
+                if (a.paid === b.paid) {
+                    if (a.time - b.time === 0) {
+                        if (a.name.localeCompare(b.name) === 0)
+                            return a.id - b.id;
+                        return a.name.localeCompare(b.name);
+                    }
+                    return b.time - a.time;
+                }
                 if (!a.paid && b.paid)
                     return -1;
 
@@ -105,10 +107,6 @@ config(['$routeProvider', function ($routeProvider) {
                     return 1;
 
 
-                if (a.time - b.time === 0) {
-                    return a.name.localeCompare(b.name);
-                }
-                return b.time - a.time;
 
             });
         }
@@ -116,20 +114,20 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.currentGroups = currentGroups;
 
 
-        if ($scope.currentTime > new Date()) {
+        /*if ($scope.currentTime > new Date()) {
             var record = recordWithPrevMonthsMoney(recordsWithSequences,
                 groupsWithSequences,
                 $scope.currentTime);
             if (record) {
                 $scope.currentRecords.push(record);
             }
-        }
+        }*/
 
         var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
-        if ($scope.currentTime > new Date()) {
+        /*if ($scope.currentTime > new Date()) {
             $scope.currentAmount = calculateCurrentForFuture($scope.currentRecords, $scope.currentGroups);
-        }
+        }*/
         $scope.leftAmount = calculateLeft($scope.currentRecords, $scope.currentGroups);
         if (expectedExpences > 0)
             $scope.expectedExpences = expectedExpences;

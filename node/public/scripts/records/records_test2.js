@@ -19,9 +19,9 @@ describe('myApp.records', function () {
 
             //act
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
-            expect(scope.currentRecords[0].id).toBe(record.id);
+            expect(scope.currentRecords[1].id).toBe(record.id);
 
-            scope.editRecord(scope.currentRecords[0]);
+            scope.editRecord(scope.currentRecords[1]);
 
             expect(scope.currentRecords.length).toBe(3);
             expect(scope.editableRecord.id).toBe(record.id);
@@ -52,9 +52,9 @@ describe('myApp.records', function () {
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
 
-            expect(scope.currentRecords[0].id).toBe(record.id);
+            expect(scope.currentRecords[1].id).toBe(record.id);
 
-            scope.editRecord(scope.currentRecords[0]);
+            scope.editRecord(scope.currentRecords[1]);
             scope.editableRecord.amount = -10;
             scope.editableRecord.name = 'new name';
             scope.editableRecord.paid = false;
@@ -68,12 +68,12 @@ describe('myApp.records', function () {
 
 
             expect(scope.currentRecords.length).toBe(3);
-            expect(scope.currentRecords[0].id).toBe(record.id);
-            expect(scope.currentRecords[0].amount).toBe(-10);
-            expect(scope.currentRecords[0].name).toBe('new name');
-            expect(scope.currentRecords[0].paid).toBe(false);
-            expect(scope.currentRecords[0].time.getDate()).toBe(1);
-            expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
+            expect(scope.currentRecords[1].id).toBe(record.id);
+            expect(scope.currentRecords[1].amount).toBe(-10);
+            expect(scope.currentRecords[1].name).toBe('new name');
+            expect(scope.currentRecords[1].paid).toBe(false);
+            expect(scope.currentRecords[1].time.getDate()).toBe(1);
+            expect(scope.currentRecords[1].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
             expect(scope.expectedExpences).toBe(1);

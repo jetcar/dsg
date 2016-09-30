@@ -33,14 +33,14 @@ describe('myApp.records', function () {
 
 
             expect(scope.currentRecords.length).toBe(3);
-            expect(scope.currentRecords[0].id).toBe(record.id);
-            expect(scope.currentRecords[1].id).toBe(record2.id);
+            expect(scope.currentRecords[0].id).toBe(record2.id);
+            expect(scope.currentRecords[1].id).toBe(record.id);
             expect(scope.currentRecords[2].id).toBe(record3.id);
-            expect(scope.currentRecords[0].amount).toBe(-100);
-            expect(scope.currentRecords[0].name).toBe('test');
-            expect(scope.currentRecords[0].paid).toBe(true);
-            expect(scope.currentRecords[0].time.getDate()).toBe(new Date().getDate());
-            expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
+            expect(scope.currentRecords[1].amount).toBe(-100);
+            expect(scope.currentRecords[1].name).toBe('test');
+            expect(scope.currentRecords[1].paid).toBe(true);
+            expect(scope.currentRecords[1].time.getDate()).toBe(new Date().getDate());
+            expect(scope.currentRecords[1].time.getMonth()).toBe(new Date().getMonth());
 
             expect(scope.expectedExpences).toBe(1);
             expect(scope.currentAmount).toBe(99);
@@ -196,20 +196,25 @@ describe('myApp.records', function () {
 
             //act
             scope.next();
+            scope.next();
+            scope.next();
+            scope.next();
+            scope.next();
+            scope.next();
 
 
-            expect(scope.currentRecords.length).toBe(3);
+            expect(scope.currentRecords.length).toBe(2);
             expect(scope.currentRecords[0].id).toBe(-1);
             expect(scope.currentRecords[0].amount).toBe(1);
             expect(scope.currentRecords[0].sequenceid).toBe(sequence.id);
             expect(scope.currentRecords[0].sequence.id).toBe(sequence.id);
             expect(scope.currentRecords[0].name).toBe('test');
-            expect(scope.currentRecords[0].time.getDate()).toBe(1);
-            expect(scope.currentRecords[0].time.getMonth()).toBe(addMonths(new Date(), 1).getMonth());
+            //expect(scope.currentRecords[0].time.getDate()).toBe(1);
+            //expect(scope.currentRecords[0].time.getMonth()).toBe(addMonths(new Date(), 5).getMonth());
 
             expect(scope.expectedExpences).toBe(3);
-            expect(scope.currentAmount).toBe(-6);
-            expect(scope.leftAmount).toBe(-6);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(-3);
 
         }));
 
@@ -234,18 +239,18 @@ describe('myApp.records', function () {
             //act
             scope.next();
 
-            expect(scope.currentRecords.length).toBe(2);
+            expect(scope.currentRecords.length).toBe(1);
             expect(scope.expectedExpences).toBe(50);
-            expect(scope.currentAmount).toBe(-50);
+            expect(scope.currentAmount).toBe(0);
             expect(scope.leftAmount).toBe(-50);
 
             scope.next();
 
 
-            expect(scope.currentRecords.length).toBe(2);
+            expect(scope.currentRecords.length).toBe(1);
             expect(scope.expectedExpences).toBe(50);
-            expect(scope.currentAmount).toBe(-100);
-            expect(scope.leftAmount).toBe(-100);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(-50);
 
         }));
 
@@ -284,7 +289,7 @@ describe('myApp.records', function () {
 
             var http = new myHttp([], [], []);
 
-            http.createRecord('record',1,true,new Date());
+            http.createRecord('record',1,false,new Date());
             http.createRecord('record',1,false,new Date());
 
 
@@ -301,9 +306,7 @@ describe('myApp.records', function () {
 
 
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
-            scope.editRecord(scope.currentRecords[3]);
-            scope.editableRecord.paid = true;
-            scope.save();
+
             scope.editRecord(scope.currentRecords[0]);
             scope.save();
             scope.editRecord(scope.currentRecords[1]);
@@ -320,6 +323,9 @@ describe('myApp.records', function () {
             scope.save();
             scope.editRecord(scope.currentGroups[2]);
             scope.save();
+            scope.editRecord(scope.currentRecords[5]);
+            scope.editableRecord.paid = true;
+            scope.save();
 
             scope.currentGroups[0].recordAmount = 1;
             scope.currentGroups[0].recordName = 'test1';
@@ -333,34 +339,31 @@ describe('myApp.records', function () {
 
             //act
 
-            expect(scope.expectedExpences).toBe(7);
-            expect(scope.currentAmount).toBe(93);
+            expect(scope.expectedExpences).toBe(8);
+            expect(scope.currentAmount).toBe(94);
             expect(scope.leftAmount).toBe(86);
 
 
             scope.next();
 
-            expect(scope.currentRecords.length).toBe(5);
-            expect(scope.currentRecords[0].name).toBe('test');
-            expect(scope.currentRecords[1].name).toBe('1');
+            expect(scope.currentRecords.length).toBe(4);
+            expect(scope.currentRecords[0].name).toBe('1');
+            expect(scope.currentRecords[1].name).toBe('test');
             expect(scope.currentRecords[2].name).toBe('test3');
             expect(scope.currentRecords[3].name).toBe('zp');
-            expect(scope.currentRecords[4].name).toBe('from prev month');
-            expect(scope.currentRecords[4].amount).toBe(-80);
 
-            expect(scope.currentGroups[0].name).toBe('gtest');
-            expect(scope.currentGroups[1].name).toBe('g1');
+            expect(scope.currentGroups[0].name).toBe('g1');
+            expect(scope.currentGroups[1].name).toBe('gtest');
             expect(scope.currentGroups[2].name).toBe('gtest3');
 
             expect(scope.expectedExpences).toBe(12);
-            expect(scope.currentAmount).toBe(177);
-            expect(scope.leftAmount).toBe(168);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(88);
             scope.next();
 
             expect(scope.expectedExpences).toBe(12);
-            expect(scope.currentAmount).toBe(265);
-            expect(scope.leftAmount).toBe(256);
-            expect(scope.currentRecords[4].amount).toBe(-168);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(88);
 
 
 
@@ -395,25 +398,18 @@ describe('myApp.records', function () {
             //act
             scope.next();
 
-            expect(scope.currentRecords.length).toBe(5);
-            expect(scope.currentRecords[0].name).toBe('test');
-            expect(scope.currentRecords[1].name).toBe('1');
-            expect(scope.currentRecords[2].name).toBe('test3');
-            expect(scope.currentRecords[3].name).toBe('zp');
-            //expect(scope.currentRecords[4].name).toBe('test3');
+            expect(scope.currentRecords.length).toBe(4);
 
-            expect(scope.currentGroups[0].name).toBe('gtest');
-            expect(scope.currentGroups[1].name).toBe('g1');
-            expect(scope.currentGroups[2].name).toBe('gtest3');
+            expect(scope.currentGroups.length).toBe(3);
 
             expect(scope.expectedExpences).toBe(6);
-            expect(scope.currentAmount).toBe(11);
-            expect(scope.leftAmount).toBe(8);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(4);
             scope.next();
 
             expect(scope.expectedExpences).toBe(6);
-            expect(scope.currentAmount).toBe(15);
-            expect(scope.leftAmount).toBe(12);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(4);
 
 
 
