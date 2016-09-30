@@ -47,11 +47,15 @@
         <table class="table table-condensed" style="table-layout: fixed; width: 100%">
             <tr style="height:41px">
                 <td><button class="btn btn-info btn-sm pull-left" ng-hide="hideEdit" ng-click="editRecord(group,true)">Edit</button></td>
-                <td colspan="3" style="text-align:center">
-                       <button  ng-hide="group.visible" ng-click="expand(group)"><span class="glyphicon glyphicon-expand"></span></button>
-                    <button  ng-show="group.visible" ng-click="collapse(group)"><span class="glyphicon glyphicon-collapse-up"></span></button>
+                <td>
+                    <button ng-hide="group.visible" class="pull-right" ng-click="expand(group)"><span class="glyphicon glyphicon-expand"></span></button>
+                    <button ng-show="group.visible" class="pull-right" ng-click="collapse(group)"><span class="glyphicon glyphicon-collapse-up"></span></button>
+
+                </td>
+                <td >
                     {{group.name}}
                 </td>
+                <td></td>
                 <td><button class="btn btn-info btn-sm pull-right" ng-if="!hideEdit && group.sequenceid" ng-click="editSequence(group,true)">Edit All</button></td>
             </tr>
             <tr>
@@ -59,7 +63,9 @@
                     Limit:                    {{group.amount}}
                 </td>
                 <td></td>
-                <td>
+                <td></td>
+                <td></td>
+                <td class="pull-right">
                     Left:                    {{group.leftAmount}}
                 </td>
             </tr>
