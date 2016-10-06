@@ -42,7 +42,7 @@ module.exports = function (app) {
                     }
                     createorUpdate.then(sequelize().sync())
                         .then(function (data) {
-                            res.end(JSON.stringify({ id: group.id }));
+                            res.end(JSON.stringify({ id: data.dataValues.id }));
                         }).catch(function data(err) {
                             return next(err);
                         });
