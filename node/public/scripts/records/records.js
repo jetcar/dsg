@@ -30,42 +30,26 @@ config(['$routeProvider', function ($routeProvider) {
     $scope.loading = true;
     $scope.filter = 10;
 
-    $scope.updateView = function () {
-        var sequencesWithoutGroups = $scope.sequences.filter(function (item) {
+    $scope.updateView = function (fromPrevMonth) {
+        
+        var filteredSequences = filterByDate($scope.sequences, new Date(1970), addMonths($scope.currentTime, 1));
+        var filteredRecords = filterByDate($scope.records, $scope.currentTime, addMonths($scope.currentTime, 1));
+        var filteredGroups = filterByDate($scope.groups, $scope.currentTime, addMonths($scope.currentTime, 1));
+
+        var recordSequences = filteredSequences.filter(function (item) {
             if (item.group)
                 return false;
             return true;
         });
 
-
-
-        var filteredSequences = filterByDate(sequencesWithoutGroups, new Date(1970), addMonths($scope.currentTime, 1));
-
-
-        var recordsWithSequences = processSequences(filteredSequences, $scope.records, $scope.currentTime);
-        $scope.currentRecords = setCurrentRecords(recordsWithSequences, $scope.currentTime).sort(function (a, b) {
-
-            if (a.paid === b.paid) {
-                if (a.time - b.time === 0) {
-                    return a.name.localeCompare(b.name);
-                }
-                return b.time - a.time;
-            }
-            if (!a.paid && b.paid)
-                return -1;
-
-            if (!b.paid && a.paid)
-                return 1;
-
-
-            if (a.time - b.time === 0) {
-                return a.name.localeCompare(b.name);
-            }
-            return b.time - a.time;
-
+        var recordsNotFromGroup = filteredRecords.filter(function (item) {
+            if (item.groupid > 0)
+                return false;
+            return true;
         });
 
-        var recordsWithGroups = filterByDate($scope.records, $scope.currentTime, addMonths($scope.currentTime, 1));
+        var recordsWithSequences = addSequencesToRecords(recordSequences, recordsNotFromGroup, $scope.currentTime);
+        $scope.currentRecords = sortRecords(recordsWithSequences, $scope.currentTime);
 
         var groupSequences = $scope.sequences.filter(function (item) {
             if (item.group)
@@ -73,15 +57,10 @@ config(['$routeProvider', function ($routeProvider) {
             return false;
         });
 
-        var filteredGroupSequences = filterByDate(groupSequences, new Date(1970), addMonths($scope.currentTime, 1));
 
-        var groupsWithSequences = processSequences(filteredGroupSequences, $scope.groups, $scope.currentTime);
-        var currentGroups = filterByDate(groupsWithSequences, $scope.currentTime, addMonths($scope.currentTime, 1));
-        currentGroups.map(function (group) {
-            group.recordName = group.name;
-        });
+        var currentGroups = addSequencesToRecords(groupSequences, filteredGroups, $scope.currentTime);
 
-        currentGroups = assignRecordsIntoGroups(recordsWithGroups, currentGroups).sort(function (a, b) {
+        var sortedGroups = currentGroups.sort(function(a, b) {
 
             if (a.time - b.time === 0) {
                 return a.name.localeCompare(b.name);
@@ -89,45 +68,28 @@ config(['$routeProvider', function ($routeProvider) {
             return b.time - a.time;
         });
 
-        for (var i = 0; i < currentGroups.length; i++) {
-            currentGroups[i].records = currentGroups[i].records.sort(function (a, b) {
+        var recordsInsideGroups = filteredRecords.filter(function (item) {
+            if (item.groupid > 0)
+                return true;
+            return false;
+        });
 
-                if (a.paid === b.paid) {
-                    if (a.time - b.time === 0) {
-                        if (a.name.localeCompare(b.name) === 0)
-                            return a.id - b.id;
-                        return a.name.localeCompare(b.name);
-                    }
-                    return b.time - a.time;
-                }
-                if (!a.paid && b.paid)
-                    return -1;
+        assignRecordsIntoGroups(recordsInsideGroups, sortedGroups);
 
-                if (!b.paid && a.paid)
-                    return 1;
-
-
-
-            });
+        for (var i = 0; i < sortedGroups.length; i++) {
+            sortedGroups[i].records = sortRecords(sortedGroups[i].records);
         }
 
-        $scope.currentGroups = currentGroups;
+        $scope.currentGroups = sortedGroups;
 
 
-        /*if ($scope.currentTime > new Date()) {
-            var record = recordWithPrevMonthsMoney(recordsWithSequences,
-                groupsWithSequences,
-                $scope.currentTime);
-            if (record) {
-                $scope.currentRecords.push(record);
-            }
-        }*/
+        if (fromPrevMonth) {
+            $scope.currentRecords.push(fromPrevMonth);
+        }
 
         var expectedExpences = calculateExpences($scope.currentRecords, $scope.currentGroups);
         $scope.currentAmount = calculateCurrent($scope.currentRecords, $scope.currentGroups);
-        /*if ($scope.currentTime > new Date()) {
-            $scope.currentAmount = calculateCurrentForFuture($scope.currentRecords, $scope.currentGroups);
-        }*/
+        
         $scope.leftAmount = calculateLeft($scope.currentRecords, $scope.currentGroups);
         if (expectedExpences > 0)
             $scope.expectedExpences = expectedExpences;
@@ -228,7 +190,15 @@ config(['$routeProvider', function ($routeProvider) {
         $scope.currentMonth = $scope.currentTime.getMonth();
         $scope.filter = 10;
 
-        $scope.updateView();
+        var record = {
+            name: "from prev month",
+            amount: -1*calculateLeft($scope.currentRecords, $scope.currentGroups),
+            paid: true,
+            time: $scope.currentTime
+
+        }
+
+        $scope.updateView(record);
     }
 
     $scope.edit = function () {
@@ -400,7 +370,8 @@ config(['$routeProvider', function ($routeProvider) {
                     userid: "null",
                     group: true,
                     sequenceid: $scope.editableRecord.sequenceid,
-                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day)
+                    time: new Date($scope.currentYear, $scope.currentMonth, $scope.editableRecord.day),
+                    repeat: $scope.editableRecord.repeat,
                 };
             }
             $scope.groups.push(group);

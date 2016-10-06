@@ -11,7 +11,7 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-            var record = http.createRecord('test', -100, true, new Date());
+            var record = http.createRecord('test1', -100, true, new Date());
             http.createRecord('test2', 1, false, new Date());
             http.createRecord('test3', 1, true, new Date());
             http.createRecord('test4', 1, true, addMonths(new Date(),1));
@@ -19,16 +19,16 @@ describe('myApp.records', function () {
 
             //act
             var controller = $controller('RecordsCtrl', { $scope: scope, $http: http });
-            expect(scope.currentRecords[1].id).toBe(record.id);
+            expect(scope.currentRecords[1].name).toBe(record.name);
 
             scope.editRecord(scope.currentRecords[1]);
 
             expect(scope.currentRecords.length).toBe(3);
-            expect(scope.editableRecord.id).toBe(record.id);
+            expect(scope.editableRecord.name).toBe(record.name);
             expect(scope.editableRecord.amount).toBe(-100);
             expect(scope.editableRecord.repeat).toBe(undefined);
             expect(scope.hideEdit).toBe(false);
-            expect(scope.editableRecord.name).toBe('test');
+            expect(scope.editableRecord.name).toBe('test1');
             expect(scope.editableRecord.paid).toBe(true);
             expect(scope.editableRecord.day).toBe(record.time.getDate());
 
@@ -44,7 +44,7 @@ describe('myApp.records', function () {
             var scope = $rootScope.$new();
             var http = new myHttp([], [], []);
 
-            var record = http.createRecord('test', -100, true, new Date());
+            var record = http.createRecord('test1', -100, true, new Date());
             http.createRecord('test2', 1, false, new Date());
             http.createRecord('test3', 1, true, new Date());
             http.createRecord('test4', 1, false, addMonths(new Date(),1));
@@ -68,12 +68,12 @@ describe('myApp.records', function () {
 
 
             expect(scope.currentRecords.length).toBe(3);
-            expect(scope.currentRecords[1].id).toBe(record.id);
-            expect(scope.currentRecords[1].amount).toBe(-10);
-            expect(scope.currentRecords[1].name).toBe('new name');
-            expect(scope.currentRecords[1].paid).toBe(false);
-            expect(scope.currentRecords[1].time.getDate()).toBe(1);
-            expect(scope.currentRecords[1].time.getMonth()).toBe(new Date().getMonth());
+            expect(scope.currentRecords[0].id).toBe(record.id);
+            expect(scope.currentRecords[0].amount).toBe(-10);
+            expect(scope.currentRecords[0].name).toBe('new name');
+            expect(scope.currentRecords[0].paid).toBe(false);
+            expect(scope.currentRecords[0].time.getDate()).toBe(1);
+            expect(scope.currentRecords[0].time.getMonth()).toBe(new Date().getMonth());
             expect(scope.id).toBe(undefined);
 
             expect(scope.expectedExpences).toBe(1);
@@ -390,12 +390,14 @@ describe('myApp.records', function () {
 
             scope.edit();
             scope.editRecord(scope.currentGroups[0]);
+            expect(scope.editableRecord.repeat).toBe(true);
             scope.editableRecord.name = "new Name";
             scope.editableRecord.amount = -10;
             scope.save();
 
             //act
             scope.editRecord(scope.currentGroups[0]);
+            expect(scope.editableRecord.repeat).toBe(true);
             scope.editableRecord.name = "new Name2";
             scope.editableRecord.amount = -11;
             scope.save();
