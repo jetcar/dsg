@@ -14,13 +14,19 @@ function logError(data) {
 
 
 function sortRecords(records) {
-    return records.sort(function(a, b) {
+    return records.sort(function (a, b) {
 
-        if (a.paid === b.paid) {
+        if (!a.paid && !b.paid) {
             if (a.time - b.time === 0) {
                 return a.name.localeCompare(b.name);
             }
             return a.time - b.time;
+        }
+        if (a.paid === b.paid && a.paid === true) {
+            if (a.time - b.time === 0) {
+                return a.name.localeCompare(b.name);
+            }
+            return b.time - a.time;
         }
         if (!a.paid && b.paid)
             return -1;
@@ -32,7 +38,7 @@ function sortRecords(records) {
         if (a.time - b.time === 0) {
             return a.name.localeCompare(b.name);
         }
-        return a.time - b.time;
+        return b.time - a.time;
 
     });
 }
@@ -52,22 +58,22 @@ function addSequencesToRecords(sequences, records, date) {
         return item;
     });
 
-        for (var i = 0; i < sequences.length; i++) {
-            var seq = sequences[i];
-            if (!containsSequenceRecord(records, seq, date)) {
-                newRecords.push({
-                    id:-1,
-                    amount: seq.amount,
-                    name: seq.name,
-                    time: new Date(date.getFullYear(), date.getMonth(), seq.time.getDate()),
-                    sequence: seq,
-                    group: seq.group,
-                    repeat:true,
-                    sequenceid:seq.id
+    for (var i = 0; i < sequences.length; i++) {
+        var seq = sequences[i];
+        if (!containsSequenceRecord(records, seq, date)) {
+            newRecords.push({
+                id: -1,
+                amount: seq.amount,
+                name: seq.name,
+                time: new Date(date.getFullYear(), date.getMonth(), seq.time.getDate()),
+                sequence: seq,
+                group: seq.group,
+                repeat: true,
+                sequenceid: seq.id
 
-                });
-            }
+            });
         }
+    }
     return newRecords;
 }
 
@@ -139,7 +145,7 @@ function calculateExpences(records, groups) {
 function calculateLeft(records, groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
-            result += records[i].amount;
+        result += records[i].amount;
     }
     if (groups) {
 
@@ -177,7 +183,7 @@ function calculateCurrent(records, groups) {
 function calculateCurrentForFuture(records, groups) {
     var result = 0;
     for (var i = 0; i < records.length; i++) {
-            result += -records[i].amount;
+        result += -records[i].amount;
     }
     if (groups) {
 
