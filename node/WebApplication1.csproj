@@ -88,7 +88,9 @@
     <Content Include="public\style\bootstrap.css" />
     <Content Include="server.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="public\style\bootstrap.css.map" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
   </ItemGroup>
@@ -97,6 +99,9 @@
     <Content Include="public\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="public\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="public\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="public\style\bootstrap-theme.css.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

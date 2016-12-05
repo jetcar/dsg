@@ -5,12 +5,21 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var methodOverride = require('method-override');
+var compression = require('compression');
 
 
 var urlencodedParser = bodyParser.json();
 
 var app = express();
-
+app.use(compression({
+    threshold : 0, // or whatever you want the lower threshold to be
+    filter    : function(req, res) {
+        var ct = res.get('content-type');
+        // return `true` for content types that you want to compress,
+        // `false` otherwise
+        return true;
+    }
+}));
 
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser());
