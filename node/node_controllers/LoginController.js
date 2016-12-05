@@ -4,6 +4,9 @@ var Users = require(__dirname + '/../node_DAL/Users.js');
 var sequelize = require(__dirname + '/../db.js');
 var transporter = require(__dirname + '/../mail.js');
 var Tokens = require(__dirname + '/../node_DAL/Tokens.js');
+var crypto = require('crypto');
+var secret = require(__dirname + '/mycrypto.js');
+
 
 
 
@@ -11,7 +14,7 @@ var Tokens = require(__dirname + '/../node_DAL/Tokens.js');
 module.exports = function (app) {
     app.post('/api/login',
         urlencodedParser,
-        function (req, res,next) {
+        function (req, res, next) {
 
             var mail = req.body.email;
 
@@ -30,14 +33,14 @@ module.exports = function (app) {
                     } else {
                         if (foundUser.emailtoken == null)
                             foundUser.emailtoken = guid();
-                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req)).then(function() {
+                        foundUser.save().then(sequelize().sync()).then(sendMail(foundUser, req)).then(function () {
                             res.end();
                         });
                     }
                 });
         });
     app.get('/account/login/userid/:userid/code/:code',
-        function (req, res,next) {
+        function (req, res, next) {
             Users.findOne({
                 where: {
                     id: req.params.userid,
@@ -46,31 +49,27 @@ module.exports = function (app) {
             })
                 .then(function (foundUser) {
                     if (foundUser) {
-                        var token = guid();
-					    Tokens.create({
-					        userid: foundUser.id,
-					        token: token,
-					    }).then(sequelize().sync()).then(function() {
-					        foundUser.emailtoken = null;
-					        foundUser.save()
-					            .then(sequelize().sync())
-					            .then(function() {
-					                res.cookie('token',
-					                    token,
-					                    { expires: new Date(Date.now() + 1209600000), httpOnly: true });
-					                res.cookie('id',
-					                    foundUser.id,
-					                    { expires: new Date(Date.now() + 1209600000), httpOnly: true });
-					                res.cookie('mail',
-					                    foundUser.email,
-					                    { expires: new Date(Date.now() + 1209600000), httpOnly: true });
-					                res.redirect('/index.html#!/records');
-					            });
-					    });
-					}
-					else{
-						res.redirect('/index.html#!/login');
-					}
+                        {
+                            var str = foundUser.id + foundUser.email;
+                            var encrypted = crypto.createHmac('sha256', secret())
+                                .update(str)
+                                .digest('hex');
+                            res.cookie('signature',
+                                encrypted,
+                                { expires: new Date(Date.now() + 1209600000), httpOnly: true });
+                            res.cookie('id',
+                                foundUser.id,
+                                { expires: new Date(Date.now() + 1209600000), httpOnly: true });
+                            res.cookie('mail',
+                                foundUser.email,
+                                { expires: new Date(Date.now() + 1209600000), httpOnly: true });
+                            res.redirect('/index.html#!/records');
+                        }
+
+                    }
+                    else {
+                        res.redirect('/index.html#!/login');
+                    }
 
                 });
         });

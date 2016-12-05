@@ -50,6 +50,7 @@
     <Content Include="karma.conf.js" />
     <Content Include="mail.js" />
     <Content Include="node_controllers\authorize.js" />
+    <Content Include="node_controllers\mycrypto.js" />
     <Content Include="node_controllers\SequencesController.js" />
     <Content Include="node_controllers\LoginController.js" />
     <Content Include="node_controllers\GroupsController.js" />
