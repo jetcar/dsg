@@ -6,3 +6,5 @@ tmp
 .DS_Store
 .idea
 /packages
+/core/bin/Debug/netcoreapp1.0
+/core/obj/Debug/netcoreapp1.0
