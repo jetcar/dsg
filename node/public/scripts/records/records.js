@@ -224,20 +224,7 @@ config(['$routeProvider', function ($routeProvider) {
     }
 
     $scope.delete = function () {
-        if ($scope.editableRecord.group) {
-            $scope.groups = removeItem($scope.editableRecord.id, $scope.groups);
-            $http.delete("api/groups/" + $scope.editableRecord.id,
-                {
-                    withCredentials: true
-                })
-                .then(function () {
-                    $scope.editableRecord = {};
-                    $scope.editableRecord.day = new Date().getDate();
-                    $scope.updateView();
-                });
-
-        }
-        else if ($scope.editableRecord.repeat) {
+        if ($scope.editableRecord.repeat) {
             if ($scope.editableRecord.sequenceid != undefined) {
                 $scope.records = removeItem($scope.editableRecord.id, $scope.records);
                 $http.delete("api/records/" + $scope.editableRecord.id,
@@ -273,7 +260,22 @@ config(['$routeProvider', function ($routeProvider) {
                     });
             }
 
-        } else {
+        }
+        else if ($scope.editableRecord.group) {
+            $scope.groups = removeItem($scope.editableRecord.id, $scope.groups);
+            $http.delete("api/groups/" + $scope.editableRecord.id,
+                {
+                    withCredentials: true
+                })
+                .then(function () {
+                    $scope.editableRecord = {};
+                    $scope.editableRecord.day = new Date().getDate();
+                    $scope.updateView();
+                });
+
+        }
+         
+        else {
             $scope.records = removeItem($scope.editableRecord.id, $scope.records);
             $http.delete("api/records/" + $scope.editableRecord.id,
                 {

@@ -606,6 +606,41 @@ describe('myApp.records', function () {
 
         }));
 
+        it('delete sequence group', inject(function ($rootScope, $controller, $cookies) {
+            //spec body
+            var scope = $rootScope.$new();
+            var http = new myHttp([], [], []);
+
+            var sequence = http.createSequence('test', 1, new Date(),true);
+
+            var controller = $controller('RecordsCtrl', { $scope: scope, $http: http,$cookies:$cookies });
+            scope.edit();
+            scope.editSequence(scope.currentGroups[0]);
+            //act
+            scope.delete();
+
+
+
+            expect(scope.currentRecords.length).toBe(0);
+            expect(scope.currentGroups.length).toBe(0);
+            expect(scope.id).toBe(undefined);
+
+            expect(scope.editableRecord.id).toBe(undefined);
+            expect(scope.editableRecord.amount).toBe(undefined);
+            expect(scope.editableRecord.group).toBe(undefined);
+            expect(scope.editableRecord.repeat).toBe(undefined);
+            expect(scope.editableRecord.name).toBe(undefined);
+            expect(scope.editableRecord.paid).toBe(undefined);
+            expect(scope.editableRecord.day).toBe(new Date().getDate());
+            expect(scope.hideEdit).toBe(false);
+            expect(scope.expectedExpences).toBe(0);
+            expect(scope.currentAmount).toBe(0);
+            expect(scope.leftAmount).toBe(0);
+
+
+
+        }));
+
         it('edit record from group sequence', inject(function ($rootScope, $controller, $cookies) {
             //spec body
             var scope = $rootScope.$new();
